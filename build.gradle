@@ -1,0 +1,104 @@
+buildscript {
+	ext {
+		springBootVersion = '2.1.0.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.1.0.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+apply plugin: 'eclipse'
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+group = 'com.seat'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz:2.2.2.RELEASE'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.4.RELEASE'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
+
+	//html 파일이 resource에 있어 핫로딩이 불가한데 devtools가 이를 지원함(재빌링만 진행하면 된다.)
+	implementation 'org.springframework.boot:spring-boot-devtools'
+
+	compile("org.springframework.boot:spring-boot-starter-aop")
+	compile("org.springframework.boot:spring-boot-starter-batch")
+
+	compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.2.RELEASE'
+	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'
+	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
+	compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-hateoas'
+
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
+	compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+
+	//compile('mysql:mysql-connector-java')
+	runtimeOnly 'com.h2database:h2'
+	compileOnly('org.projectlombok:lombok')
+	compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation("org.junit.vintage:junit-vintage-engine") {
+		exclude group: "org.hamcrest", module: "hamcrest-core"
+	}
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5' //querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa' //querydsl 추가
+	implementation 'com.querydsl:querydsl-apt' //querydsl 추가
+}
+
+//querydsl 추가
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslDir]
+		}
+	}
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+test {
+	useJUnitPlatform()
+}

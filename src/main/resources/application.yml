@@ -1,0 +1,24 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: local
+  batch:
+    initialize-schema: always
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:../test #jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+
+logging.level:
+  org.hibernate.SQL: debug #SQL log? ??.
+  org.hibernate.type: trace #SQL parameters ?? ??
