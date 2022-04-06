@@ -21,7 +21,7 @@ public class Item {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "ITEM_SEQ"
+            generator = "ITEM_SEQ_GENERATE"
     )
     private Long id;
 
