@@ -4,22 +4,18 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Table
 @Entity
 @Builder
-@Setter
-@Getter
-@NoArgsConstructor
+@Setter @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@ToString
 @EntityListeners(value = {AuditingEntityListener.class})
-public class User implements Serializable {
+public class User {
     @Id
-    @GeneratedValue
-    private Long id;
-
-    private String username;
+    private String userid;
 
     private String password;
 
@@ -30,4 +26,16 @@ public class User implements Serializable {
     private String birth;
 
     private String address;
+
+    private int age;
+
+    private String snsType;
+
+    private int loginFailCount;
+
+    private boolean isLocked;
+
+    private String roll;
+
+
 }
