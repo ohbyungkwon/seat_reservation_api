@@ -25,9 +25,9 @@ public class Seat {
             strategy = GenerationType.SEQUENCE,
             generator = "SEAT_SEQ_GENERATE"
     )
-    private Long seatNo;
-    @Id
     private Long id;
+    @Id
+    private Long seatNo;
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
