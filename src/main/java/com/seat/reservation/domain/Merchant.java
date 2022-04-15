@@ -1,41 +1,52 @@
 package com.seat.reservation.domain;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table
 @Entity
 public class Merchant {
 
     @Id
-    private int merchant_reg_number; // 사업자 등록 번호
+    private int merchant_reg_number; // 사업자 등록 번호 8자리?
+
+    // 사장님 계정 -> 이걸 바탕으로 업종에 연결시켜야 한다.
 
     @JoinColumn
-    //@OneToMany(fetch = FetchType.LAZY)
-    private int user_id; // 자리 등록한 유저
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User userid; // 자리 등록한 유저 -> long / string ?
 
-    private String rep_phone; // 가맹점 사장님 번호
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Item> item; // 메뉴 (가맹점 삭제 시 메뉴 전체 삭제를 위해 cascade 사용)
 
-    private String rep_name; // 가맹점 사장님 이름
+    private String repPhone; // 가맹점 사장님 번호
 
-    private String merchant_tel; // 가맹점 번호
+    private String repName; // 가맹점 사장님 이름
 
-    private String merchant_name; // 가맹점 상호
+    private String merChantTel; // 가맹점 번호
 
-    private String category; // 업종 카테고리 ex. Pc방, cafe
+    private String merChantName; // 가맹점 상호
 
-    private String register_flag; // 등록 및 해지여부
+    // private Enum category; // 업종 카테고리 ex. Pc방, cafe, motel etc... -> UPJONG ;;;;;;;
+
+    private boolean registerFlag; // 등록 및 해지여부
 
     private String address; // 가맹점 주소
 
-    private String zipcode; // 가맹점 우편번호
+    private String zipCode; // 가맹점 우편번호
 
+    @CreatedDate
     private Date register_date;  // 가맹점 등록일자
 
-    private Date modify_date; // 가맹점 수정일자
+    @LastModifiedDate
+    private Date modify_date; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
 
-
+    // 히스토리 추가
 
 
 
