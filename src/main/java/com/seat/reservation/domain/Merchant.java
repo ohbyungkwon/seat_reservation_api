@@ -1,5 +1,6 @@
 package com.seat.reservation.domain;
 
+import com.seat.reservation.domain.enums.RegisterCode;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -32,9 +33,12 @@ public class Merchant {
 
     private String merChantName; // 가맹점 상호
 
-    // private Enum category; // 업종 카테고리 ex. Pc방, cafe, motel etc... -> UPJONG ;;;;;;;
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Upzong upzong; // 업종 코드
 
-    private boolean registerFlag; // 등록 및 해지여부
+    @Enumerated(EnumType.STRING)
+    private RegisterCode registerCode; // 등록 코드
 
     private String address; // 가맹점 주소
 

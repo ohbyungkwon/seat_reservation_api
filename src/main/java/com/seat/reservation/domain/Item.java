@@ -1,6 +1,7 @@
 package com.seat.reservation.domain;
 
 import com.seat.reservation.domain.enums.Category;
+import com.seat.reservation.domain.enums.RegisterCode;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -28,6 +29,9 @@ public class Item {
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
     private Merchant merchant;
+
+    @Enumerated(EnumType.STRING)
+    private RegisterCode registerCode; // 등록 코드
 
     private String menuName;
 

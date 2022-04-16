@@ -35,7 +35,7 @@ public class Seat {
     @ManyToOne(fetch = FetchType.LAZY)
     private Merchant Merchant; // 좌석을 가진 가맹점
 
-    private int reservation_cost; // 좌석 예약 비용
+    private int reservationCost; // 좌석 예약 비용
 
     private boolean isUse; // 사용중
 
