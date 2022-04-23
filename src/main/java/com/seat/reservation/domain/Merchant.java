@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -45,10 +46,10 @@ public class Merchant {
     private String zipCode; // 가맹점 우편번호
 
     @CreatedDate
-    private Date register_date;  // 가맹점 등록일자
+    private LocalDateTime register_date;  // 가맹점 등록일자
 
     @LastModifiedDate
-    private Date modify_date; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
+    private LocalDateTime modify_date; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
 
     // 히스토리 추가
 
