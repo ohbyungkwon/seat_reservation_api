@@ -1,41 +1,33 @@
 package com.seat.reservation.common.listener;
 
 import com.seat.reservation.common.domain.*;
-import com.seat.reservation.common.exception.NotFoundUserException;
-import com.seat.reservation.common.repository.CommonRepository;
-import com.seat.reservation.common.repository.service.SeatService;
-import com.seat.reservation.common.repository.service.Service;
-import com.seat.reservation.common.service.SecurityService;
-import com.seat.reservation.common.exception.NotSupportHistoryException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import com.seat.reservation.common.service.SeatService;
+import com.seat.reservation.common.service.impl.HistoryService;
+import com.seat.reservation.common.support.ApplicationContextProvider;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PreDestroy;
-import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
-import java.time.LocalDateTime;
 
 @Component
-public class AuditHistoryEntityListener  {
-    @PrePersist
+public class AuditHistoryEntityListener {
     @PreUpdate
     @PreRemove
     public void preUpdateAndDestroy(Object entity) {
-        Service service;
+        ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
 
+        HistoryService historyService = null;
         if(entity instanceof Seat){
-            service = new SeatService();
+            historyService = applicationContext.getBean(SeatService.class);
         }
         else if(entity instanceof  Merchant){
-           // service = new MerchantService();
-            service = null;
+            historyService = null;
         }
         else{
-            service = null;
+            historyService = null;
         }
 
-        service.historySave(entity);
+        historyService.historySave(entity);
     }
 }

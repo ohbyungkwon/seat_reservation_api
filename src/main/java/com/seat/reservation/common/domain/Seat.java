@@ -1,7 +1,9 @@
 package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.domain.enums.RegisterCode;
+import com.seat.reservation.common.listener.AuditHistoryEntityListener;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,7 +16,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(value = {AuditingEntityListener.class, AuditingEntityListener.class})
+@EntityListeners(value = { AuditHistoryEntityListener.class, AuditingEntityListener.class})
 @SequenceGenerator(
         name = "SEAT_SEQ_GENERATE",
         sequenceName = "SEAT_SEQ"
@@ -42,6 +44,9 @@ public class Seat {
     @Enumerated(EnumType.STRING)
     private RegisterCode registerCode; // 등록 코드
 
+    @CreatedDate
+    private LocalDateTime registerDate; // 데이터가 바뀐날짜
+
     @LastModifiedDate
-    private LocalDateTime ChangeDate; // 데이터가 바뀐날짜
+    private LocalDateTime changeDate; // 데이터가 바뀐날짜
 }
