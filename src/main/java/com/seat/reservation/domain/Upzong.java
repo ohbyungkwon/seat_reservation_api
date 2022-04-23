@@ -1,11 +1,11 @@
 package com.seat.reservation.domain;
 
 import com.seat.reservation.domain.enums.Category;
-import com.seat.reservation.domain.enums.RegisterCode;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table
 @Entity
@@ -15,28 +15,23 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = AuditingEntityListener.class)
 @SequenceGenerator(
-        name = "ITEM_SEQ_GENERATE",
-        sequenceName = "ITEM_SEQ"
+        name = "UPZONG_SEQ_GENERATE",
+        sequenceName = "UPZONG_SEQ"
 )
-public class Item {
+public class Upzong {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "ITEM_SEQ_GENERATE"
+            generator = "UPZONG_SEQ_GENERATE"
     )
-    private Long id;
+    private Long id; // sequence
+
+    private String code; // 업종 코드
 
     @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Merchant merchant;
-
-    @Enumerated(EnumType.STRING)
-    private RegisterCode registerCode; // 등록 코드
-
-    private String menuName;
-
-    private int price;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Merchant> merchant;
 
     @Enumerated(value = EnumType.STRING)
-    private Category category;
+    private Category category; // 카테고리 ex) pc방, cafe, hotel ...
 }
