@@ -7,6 +7,7 @@ import static com.seat.reservation.common.domain.QItem.item;
 import com.seat.reservation.common.repository.custom.ReservationItemRepositoryCustom;
 import com.seat.reservation.common.dto.QReservationItemDto_show;
 import com.seat.reservation.common.dto.ReservationItemDto;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

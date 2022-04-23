@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(value = AuditingEntityListener.class)
+@EntityListeners(value = {AuditingEntityListener.class, AuditingEntityListener.class})
 @SequenceGenerator(
         name = "SEAT_SEQ_GENERATE",
         sequenceName = "SEAT_SEQ"
