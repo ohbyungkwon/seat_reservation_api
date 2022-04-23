@@ -4,6 +4,6 @@ import com.seat.reservation.common.dto.ReservationItemDto;
 
 import java.util.List;
 
-public interface ReservationItemCustomRepository {
+public interface ReservationItemRepositoryCustom {
     List<ReservationItemDto.show> findItemInReservationItem(Long reservationId);
 }

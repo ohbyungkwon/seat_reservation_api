@@ -20,7 +20,6 @@ public class AuditHistoryEntityListener extends SecurityService {
     private CommonRepository commonRepository;
 
     @PreUpdate
-    @PreDestroy
     public void preUpdate(Object entity) {
         Object id = this.getId(entity);
         Object currentObj = commonRepository.findById(entity.getClass(), id);
