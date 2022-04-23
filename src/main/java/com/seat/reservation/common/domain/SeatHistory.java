@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
 @EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
-        name = "HISTORY_SEQ_GENERATE",
-        sequenceName = "HISTORY_SEQ"
+        name = "SEAT_HISTORY_SEQ_GENERATE",
+        sequenceName = "SEAT_HISTORY_SEQ"
 )
 public class SeatHistory {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "HISTORY_SEQ_GENERATE"
+            generator = "SEAT_HISTORY_SEQ_GENERATE"
     )
     private Long id;
 

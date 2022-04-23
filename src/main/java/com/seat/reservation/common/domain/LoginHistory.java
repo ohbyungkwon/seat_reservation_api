@@ -1,6 +1,7 @@
 package com.seat.reservation.common.domain;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -15,14 +16,14 @@ import java.util.Date;
 @AllArgsConstructor
 @EntityListeners(value = {AuditingEntityListener.class})
 @SequenceGenerator(
-        name = "LOGIN-HISTORY_SEQ_GENERATE",
-        sequenceName = "LOGIN-HISTORY_SEQ"
+        name = "LOGIN_HISTORY_SEQ_GENERATE",
+        sequenceName = "LOGIN_HISTORY_SEQ"
 )
 public class LoginHistory {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "LOGIN-HISTORY_SEQ_GENERATE"
+            generator = "LOGIN_HISTORY_SEQ_GENERATE"
     )
     private Long id;
 
@@ -32,6 +33,6 @@ public class LoginHistory {
 
     private boolean isSuccess;
 
-    @LastModifiedDate
+    @CreatedDate
     private Date loginDate;
 }

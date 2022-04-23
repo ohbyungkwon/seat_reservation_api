@@ -14,15 +14,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
-        name = "HISTORY_SEQ_GENERATE",
-        sequenceName = "HISTORY_SEQ"
+        name = "MERCHANT_HISTORY_SEQ_GENERATE",
+        sequenceName = "MERCHANT_HISTORY_SEQ"
 )
 public class MerchantHistory {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "HISTORY_SEQ_GENERATE"
+            generator = "MERCHANT_HISTORY_SEQ_GENERATE"
     )
     private Long id;
 
