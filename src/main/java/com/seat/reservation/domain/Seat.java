@@ -1,5 +1,6 @@
 package com.seat.reservation.domain;
 
+import com.seat.reservation.domain.enums.RegisterCode;
 import lombok.*;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -40,6 +41,9 @@ public class Seat {
     private int reservationCost; // 좌석 예약 비용
 
     private boolean isUse; // 사용중
+
+    @Enumerated(EnumType.STRING)
+    private RegisterCode registerCode; // 등록 코드
 
     @LastModifiedDate
     private LocalDateTime ChangeDate; // 데이터가 바뀐날짜

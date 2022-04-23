@@ -11,7 +11,6 @@ import java.util.Optional;
 @Configuration
 @EnableJpaAuditing
 public class SpringSecurityAuditorAware implements AuditorAware<String> {
-
     @Override
     public Optional<String> getCurrentAuditor() {
         return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())

@@ -11,7 +11,11 @@ import java.util.Date;
 import java.util.List;
 
 @Table
+@Getter
 @Entity
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Merchant {
 
     @Id

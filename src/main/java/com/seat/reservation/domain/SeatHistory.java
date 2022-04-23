@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
         name = "HISTORY_SEQ_GENERATE",
         sequenceName = "HISTORY_SEQ"
 )
-
 public class SeatHistory {
     @Id
     @GeneratedValue(

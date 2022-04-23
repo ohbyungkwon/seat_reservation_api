@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Table
 @Entity
+@Builder
 @Setter @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
