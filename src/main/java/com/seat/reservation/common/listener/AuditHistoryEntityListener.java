@@ -2,7 +2,7 @@ package com.seat.reservation.common.listener;
 
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.service.SeatService;
-import com.seat.reservation.common.service.impl.HistoryService;
+import com.seat.reservation.common.service.HistoryService;
 import com.seat.reservation.common.support.ApplicationContextProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;

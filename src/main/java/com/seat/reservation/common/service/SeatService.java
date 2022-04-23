@@ -6,7 +6,6 @@ import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.repository.SeatHistoryRepository;
 import com.seat.reservation.common.repository.SeatRepository;
-import com.seat.reservation.common.service.impl.HistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
