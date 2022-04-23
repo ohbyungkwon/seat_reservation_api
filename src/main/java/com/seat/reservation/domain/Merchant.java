@@ -15,7 +15,7 @@ import java.util.List;
 public class Merchant {
 
     @Id
-    private int merchant_reg_number; // 사업자 등록 번호 8자리?
+    private int merchantRegNumber; // 사업자 등록 번호 8자리?
 
     // 사장님 계정 -> 이걸 바탕으로 업종에 연결시켜야 한다.
 
@@ -46,13 +46,9 @@ public class Merchant {
     private String zipCode; // 가맹점 우편번호
 
     @CreatedDate
-    private LocalDateTime register_date;  // 가맹점 등록일자
+    private LocalDateTime registerDate;  // 가맹점 등록일자
 
     @LastModifiedDate
-    private LocalDateTime modify_date; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
-
+    private LocalDateTime modifyDate; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
     // 히스토리 추가
-
-
-
 }

@@ -11,5 +11,7 @@ import org.springframework.lang.Nullable;
 import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    Page<Item> findByMerchantAndCategory(Merchant merchant, Pageable pageable, @Nullable Category category);
+    Page<Item> findByMerchant(Merchant merchant, Pageable pageable);
+
+    Page<Item> findByMerchantAndCategory(Merchant merchant, Category category, Pageable pageable);
 }

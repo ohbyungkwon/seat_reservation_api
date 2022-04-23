@@ -6,7 +6,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Table
 @Entity
@@ -35,15 +37,19 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Merchant merchant;
+
     private int totalPrice;
 
     private boolean isPreOrder;
 
-    private Date reservationDate;
+    private LocalDateTime reservationDate;
 
     @CreatedDate
-    private Date registerDate;
+    private LocalDateTime registerDate;
 
     @LastModifiedDate
-    private Date changeDate;
+    private LocalDateTime changeDate;
 }
