@@ -1,12 +1,12 @@
 package com.seat.reservation.common.repository.Impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import static com.seat.reservation.domain.QReservation.reservation;
-import static com.seat.reservation.domain.QSeat.seat;
-import static com.seat.reservation.domain.QMerchant.merchant;
+import static com.seat.reservation.common.domain.QReservation.reservation;
+import static com.seat.reservation.common.domain.QSeat.seat;
+import static com.seat.reservation.common.domain.QMerchant.merchant;
 
 import com.seat.reservation.common.repository.custom.ReservationCustomRepository;
-import com.seat.reservation.dto.QReservationDto_show;
+import com.seat.reservation.common.dto.QReservationDto_show;
 import com.seat.reservation.common.dto.ReservationDto;
 import org.springframework.stereotype.Repository;
 
