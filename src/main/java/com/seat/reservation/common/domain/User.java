@@ -15,7 +15,7 @@ import javax.persistence.*;
 @EntityListeners(value = {AuditingEntityListener.class})
 public class User {
     @Id
-    private String userid;
+    private String userid; // userid. PK
 
     private String password;
 
@@ -27,15 +27,13 @@ public class User {
 
     private String address;
 
-    private int age;
+    private int age; // birth로부터 계산. 따로 입력 받지는 않음.
 
-    private String snsType;
+    private String snsType; // 로그인: sns 기반. ex ) kakao, apple, google, etc.
 
-    private int loginFailCount;
+    private int loginFailCount; // 로그인 실패 횟수. 5회 이상 실패 시 계정 잠김 등 처리.
 
-    private boolean isLocked;
+    private boolean isLocked; // 계정의 잠김 여부. ex) 비밀번호 다회 오입력 시 계정 잠김
 
-    private String roll;
-
-
+    private String roll; // 관리자/사용자
 }
