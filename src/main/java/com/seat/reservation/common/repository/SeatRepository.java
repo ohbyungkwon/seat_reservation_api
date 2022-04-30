@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
-    /* 가맹점에 등록된 좌석 조회 쿼리 */
+    /* 가맹점에 등록된 좌석 조회 쿼리 */ //-> 쿼리 DSL 변경
     List<Seat> findByMerchant(Merchant merchant);
 
     /* 좌석 삭제 쿼리 */

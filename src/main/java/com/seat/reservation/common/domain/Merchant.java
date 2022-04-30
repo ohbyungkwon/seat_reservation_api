@@ -26,7 +26,7 @@ public class Merchant {
     @ManyToOne(fetch = FetchType.LAZY)
     private User userid; // 자리 등록한 유저 -> long / string ?
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "merchant")
     private List<Item> item; // 메뉴 (가맹점 삭제 시 메뉴 전체 삭제를 위해 cascade 사용)
 
     private String repPhone; // 가맹점 사장님 번호

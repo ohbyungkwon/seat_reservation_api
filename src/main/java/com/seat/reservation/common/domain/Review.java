@@ -1,14 +1,31 @@
 package com.seat.reservation.common.domain;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.springframework.data.util.Lazy;
 
+import javax.persistence.*;
+
+@Table
+@Getter
+@Entity
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@SequenceGenerator(
+        name = "REVIEW_SEQ_GENERATE",
+        sequenceName = "REVIEW_SEQ"
+)
 public class Review {
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "REVIEW_SEQ_GENERATE"
+    )
     private Long id;
 
     @JoinColumn
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Merchant merchant; // 리뷰를 단 가맹점
 
     private String title; // 리뷰 제목
@@ -16,6 +33,6 @@ public class Review {
     private String comment; // 리얼 리뷰
 
     @JoinColumn
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Reservation reservation; // 예약 당 하나의 리뷰만 작성한다.
 }

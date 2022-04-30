@@ -1,4 +1,4 @@
-package com.seat.reservation.common.service;
+package com.seat.reservation.common.service.impl;
 
 import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.SeatHistory;
@@ -6,6 +6,8 @@ import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.repository.SeatHistoryRepository;
 import com.seat.reservation.common.repository.SeatRepository;
+import com.seat.reservation.common.service.HistoryService;
+import com.seat.reservation.common.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,11 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class SeatService extends SecurityService implements HistoryService {
+public class SeatServiceImpl extends SecurityService implements HistoryService {
     private final SeatRepository seatRepository;
     private final SeatHistoryRepository seatHistoryRepository;
 
-    public SeatService(SeatRepository seatRepository, SeatHistoryRepository seatHistoryRepository) {
+    public SeatServiceImpl(SeatRepository seatRepository, SeatHistoryRepository seatHistoryRepository) {
         this.seatRepository = seatRepository;
         this.seatHistoryRepository = seatHistoryRepository;
     }
