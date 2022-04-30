@@ -2,6 +2,7 @@ package com.seat.reservation.common.repository.Impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import static com.seat.reservation.common.domain.QReservation.reservation;
+import static com.seat.reservation.common.domain.QReservationItem.reservationItem;
 import static com.seat.reservation.common.domain.QSeat.seat;
 import static com.seat.reservation.common.domain.QMerchant.merchant;
 
@@ -44,6 +45,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 .from(reservation)
                 .join(reservation.seat, seat).fetchJoin()
                 .join(reservation.merchant, merchant).fetchJoin()
+                .where(reservationItem.id.eq(reservationId))
                 .fetchOne();
     }
 }
