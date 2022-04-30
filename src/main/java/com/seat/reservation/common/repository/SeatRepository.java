@@ -12,7 +12,7 @@ import java.util.List;
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
     /* 가맹점에 등록된 좌석 조회 쿼리 */
-    Page<Seat> findByMerchant(Merchant merchant, Pageable pageable);
+    List<Seat> findByMerchant(Merchant merchant);
 
     /* 좌석 삭제 쿼리 */
     void deleteBySeatCode(String seatCode);
