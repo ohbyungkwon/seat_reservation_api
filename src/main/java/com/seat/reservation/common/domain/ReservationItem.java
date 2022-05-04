@@ -25,7 +25,7 @@ public class ReservationItem {
     private Long id;
 
     @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Reservation reservation;
 
     @JoinColumn
