@@ -18,13 +18,13 @@ import java.util.List;
 public class Merchant {
 
     @Id
-    private int merchantRegNumber; // 사업자 등록 번호 8자리?
+    private Integer merchantRegNumber; // 사업자 등록 번호 8자리?
 
     // 사장님 계정 -> 이걸 바탕으로 업종에 연결시켜야 한다.
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
-    private User userid; // 자리 등록한 유저 -> long / string ?
+    private User user; // 자리 등록한 유저 -> long / string ?
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "merchant")
     private List<Item> item; // 메뉴 (가맹점 삭제 시 메뉴 전체 삭제를 위해 cascade 사용)
