@@ -2,6 +2,7 @@ package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.domain.enums.Category;
+import com.seat.reservation.common.dto.ItemDto;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -37,6 +38,16 @@ public class Item {
 
     private int price;
 
-    @Enumerated(value = EnumType.STRING)
-    private Category category;
+    //양방향 관계는 create와 별개로 따로 설정하는게 안전함.
+    public void setMerchant(Merchant merchant){
+        this.merchant = merchant;
+        merchant.getItem().add(this);
+    }
+
+    public static Item createItem(ItemDto.create itemDto){
+        return Item.builder()
+                .menuName(itemDto.getMenuName())
+                .price(itemDto.getPrice())
+                .build();
+    }
 }

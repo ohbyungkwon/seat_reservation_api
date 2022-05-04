@@ -4,6 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ReservationDto {
     @Getter
@@ -48,11 +49,10 @@ public class ReservationDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class create{
-        private Long reservationId;
+        private Integer merchantRegNum;
         private Long seatId;
         private String userId;
-        private int totalPrice;
-        private boolean isPreOrder;
+        private List<Long> itemIdList;
         private LocalDateTime reservationDate;
     }
 
