@@ -31,4 +31,13 @@ public class ReservationItem {
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
+
+
+    public static ReservationItem createReservationItem(Reservation reservation,
+                                                        Item item){
+        return ReservationItem.builder()
+                .reservation(reservation)
+                .item(item)
+                .build();
+    }
 }

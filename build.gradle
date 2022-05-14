@@ -50,7 +50,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-aop")
 	compile("org.springframework.boot:spring-boot-starter-batch")
 
-	compile group: 'joda-time', name: 'joda-time', version: '2.10.1'
+	implementation group: 'joda-time', name: 'joda-time', version: '2.10.10'
 	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.2.RELEASE'
 	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'
 	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'

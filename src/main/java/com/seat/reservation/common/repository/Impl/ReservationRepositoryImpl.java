@@ -35,8 +35,8 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                             reservation.reservationDate,
                             reservation.seat.seatCode,
                             reservation.merchant.repPhone,
-                            reservation.merchant.merChantTel,
-                            reservation.merchant.merChantName,
+                            reservation.merchant.merchantTel,
+                            reservation.merchant.merchantName,
                             reservation.merchant.address,
                             reservation.merchant.zipCode,
                             reservation.seat.reservationCost

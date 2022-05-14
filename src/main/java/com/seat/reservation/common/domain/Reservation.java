@@ -1,5 +1,6 @@
 package com.seat.reservation.common.domain;
 
+import com.seat.reservation.common.dto.ReservationDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table
 @Entity
@@ -51,4 +53,24 @@ public class Reservation {
 
     @LastModifiedDate
     private LocalDateTime changeDate;
+
+    public static Reservation createReservation(ReservationDto.create dto,
+                                                Merchant merchant, Seat seat, User user){
+        return Reservation.builder()
+                .seat(seat)
+                .user(user)
+                .merchant(merchant)
+                .isPreOrder(!dto.getItemIdList().isEmpty())
+                .reservationDate(dto.getReservationDate())
+                .build();
+    }
+
+    public void setIsPreOrder(List<Item> items){
+        this.isPreOrder = !items.isEmpty();
+    }
+
+    public void setTotalPrice(List<Item> items){
+        for(Item item : items)
+            this.totalPrice += item.getPrice();
+    }
 }

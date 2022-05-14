@@ -33,8 +33,7 @@ public class ReservationItemRepositoryImpl implements ReservationItemRepositoryC
         return jpaQueryFactory.select(
                     new QReservationItemDto_show(
                             reservationItem.item.menuName,
-                            reservationItem.item.price,
-                            reservationItem.item.category
+                            reservationItem.item.price
                     )
                 )
                 .from(reservationItem)
