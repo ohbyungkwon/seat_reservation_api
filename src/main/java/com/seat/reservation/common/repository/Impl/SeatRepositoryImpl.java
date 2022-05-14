@@ -20,7 +20,7 @@ public class SeatRepositoryImpl implements SeatRepositoryCustom {
     }
 
     @Override
-    public List<SeatDto.show> findSeatInMerchant(int merchantRegNumber) {
+    public List<SeatDto.show> findSeatInMerchant(int merchantRegNum) {
         QMerchant merchant = QMerchant.merchant;
         QSeat seat = QSeat.seat;
 
@@ -29,12 +29,12 @@ public class SeatRepositoryImpl implements SeatRepositoryCustom {
                             seat.seatCode,
                             seat.reservationCost,
                             seat.isUse,
-                            merchant.merchantRegNumber
+                            merchant.merchantRegNum
                     )
                 )
                 .from(seat)
                 .join(seat.merchant, merchant).fetchJoin()
-                .where(merchant.merchantRegNumber.eq(merchantRegNumber)
+                .where(merchant.merchantRegNum.eq(merchantRegNum)
                         , seat.registerCode.ne(RegisterCode.DELETE))
                 .fetch();
     }
