@@ -34,11 +34,13 @@ public class ReservationRepositoryTest {
     public void save() {
         this.workBeforeReservation();
         Reservation reservation = getReservation();
+        //7. 예약 등록
         reservationRepository.save(reservation);
 
         List<Item> itemList = reservation.getMerchant().getItem();
         for(Item item: itemList) { //Merchant 모든 ITEM 에약
             ReservationItem reservationItem = this.createReservationItem(item, reservation);
+            //8. 예약상품 저장
             reservationItemRepository.save(reservationItem);
         }
     }
@@ -47,10 +49,12 @@ public class ReservationRepositoryTest {
         System.out.println("=====================================");
         System.out.println("=====================================");
 
+        //5. 예약 User 등록
         User customer = User.createUserSimple("obk");
         entityManager.persist(customer);
         entityManager.flush();
 
+        //6. 가맹점 및 좌석 찾기(조인하여 한방 쿼리 가능)
         Merchant merchant = entityManager.find(Merchant.class, 1);
         Seat seat = entityManager.find(Seat.class, 1L);
         return this.createReservation(seat, customer, merchant);
@@ -72,17 +76,20 @@ public class ReservationRepositoryTest {
     }
 
     public void workBeforeReservation(){
+        //1. 가맹점 등록 User 생성
         User merchantUser = User.createUserSimple("SPC-Coworker");
         entityManager.persist(merchantUser);
         entityManager.flush();
 
-        //Merchant 미구현으로 임시 사용
+        //2.Merchant 등록(Merchant 미구현으로 임시 사용)
         Merchant merchant = this.createMerchant(1, merchantUser);
         entityManager.persist(merchant);
-        //Seat 미구현으로 임시 사용
+
+        //3. 좌석 등록(Seat 미구현으로 임시 사용)
         Seat seat = this.createSeat(merchant);
         entityManager.persist(seat);
 
+        //4. item 등록(2 loop)
         int itemCnt = 2;
         for(int i = 0; i < itemCnt; i ++) {
             ItemDto.create create = ItemDto.create
@@ -96,6 +103,7 @@ public class ReservationRepositoryTest {
         }
         entityManager.flush();
 
+        //양방향 연관 관계 체크
         Assertions.assertThat(merchant.getItem().size()).isEqualTo(itemCnt);
     }
 
