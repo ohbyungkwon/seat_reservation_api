@@ -1,6 +1,7 @@
 package com.seat.reservation.common.listener;
 
 import com.seat.reservation.common.domain.*;
+import com.seat.reservation.common.service.impl.MerchantServiceImpl;
 import com.seat.reservation.common.service.impl.SeatServiceImpl;
 import com.seat.reservation.common.service.HistoryService;
 import com.seat.reservation.common.support.ApplicationContextProvider;
@@ -22,7 +23,7 @@ public class AuditHistoryEntityListener {
             historyService = applicationContext.getBean(SeatServiceImpl.class);
         }
         else if(entity instanceof  Merchant){
-            historyService = null;
+            historyService = applicationContext.getBean(MerchantServiceImpl.class);
         }
         else{
             historyService = null;
