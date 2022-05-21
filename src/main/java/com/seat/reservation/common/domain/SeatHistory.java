@@ -27,8 +27,9 @@ public class SeatHistory {
     )
     private Long id;
 
+    /* seat id 로 변경 */
     @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private Seat seat; // 등록한 좌석
 
     @CreatedDate

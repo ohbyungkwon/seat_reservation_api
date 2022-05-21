@@ -3,7 +3,6 @@ package com.seat.reservation.common.service.impl;
 import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.SeatHistory;
 import com.seat.reservation.common.domain.User;
-import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.repository.SeatHistoryRepository;
 import com.seat.reservation.common.repository.SeatRepository;
 import com.seat.reservation.common.service.HistoryService;
@@ -32,14 +31,15 @@ public class SeatServiceImpl extends SecurityService implements HistoryService {
         if(beforeSeatOptional.isPresent()) {
             log.info("SEAT HISTORY INSERT!!!");
 
-            User user = this.getUser().orElseThrow(() ->
-                    new NotFoundUserException("사용자를 찾을 수 없습니다."));
+           // User user = this.getUser().orElseThrow(() ->
+           //         new NotFoundUserException("사용자를 찾을 수 없습니다."));
+            User user = User.createUserSimple("LSW");
 
             Seat beforeSeat = beforeSeatOptional.get();
             SeatHistory seatHistory = SeatHistory.builder()
                     .seat(beforeSeat)
                     .user(user)
-                    .registerCode(beforeSeat.getRegisterCode())
+                    .registerCode(seat.getRegisterCode())
                     .registerDate(LocalDateTime.now())
                     .build();
             seatHistoryRepository.save(seatHistory);
