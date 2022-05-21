@@ -1,10 +1,11 @@
 package com.seat.reservation.common.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.seat.reservation.common.domain.enums.RegisterCode;
+import lombok.*;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 
 public class SeatDto {
@@ -12,6 +13,7 @@ public class SeatDto {
     @Setter
     @Builder
     @NoArgsConstructor
+    @ToString
     public static class show{
         private String seatCode; // 좌석 번호
 
@@ -27,5 +29,47 @@ public class SeatDto {
             this.isUse = isUse;
             this.merchantRegNumber = merchantRegNumber;
         }
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class create{
+        private Integer merchantRegNum; // 사업자 등록 번호 8자리?
+
+        private String seatCode; // 좌석 번호
+
+        private int reservationCost; // 좌석 예약 비용
+        private boolean isUse; // 사용중
+
+        @Enumerated(EnumType.STRING)
+        private RegisterCode registerCode; // 등록 코드
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class update{
+        private Long id;
+
+        private int reservationCost; // 좌석 예약 비용
+        private boolean isUse; // 사용중
+
+        @Enumerated(EnumType.STRING)
+        private RegisterCode registerCode; // 등록 코드
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class updateIsUse{
+        private Long id;
+        private boolean isUse;
     }
 }

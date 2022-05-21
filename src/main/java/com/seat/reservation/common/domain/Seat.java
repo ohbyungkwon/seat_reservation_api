@@ -16,12 +16,13 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(value = { AuditHistoryEntityListener.class, AuditingEntityListener.class})
+@EntityListeners(value = {AuditHistoryEntityListener.class, AuditingEntityListener.class})
 @SequenceGenerator(
+        allocationSize = 1,
         name = "SEAT_SEQ_GENERATE",
         sequenceName = "SEAT_SEQ"
 )
-
+@ToString
 /* 주석 추가 */
 public class Seat {
     @Id
@@ -35,6 +36,7 @@ public class Seat {
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Merchant merchant; // 좌석을 가진 가맹점
 
     private int reservationCost; // 좌석 예약 비용
@@ -49,4 +51,19 @@ public class Seat {
 
     @LastModifiedDate
     private LocalDateTime changeDate; // 데이터가 바뀐날짜
+
+    public static Seat createSeat(String seatCode, Merchant merchant, boolean isUse, RegisterCode registerCode){
+        return Seat.builder()
+               .seatCode(seatCode)
+               .merchant(merchant)
+               .isUse(isUse)
+               .registerCode(registerCode)
+               .build();
+    }
+
+    public void setIsUse(boolean isUse){ this.isUse = isUse; }
+
+    public void setRegisterCode(RegisterCode registerCode){
+        this.registerCode = registerCode;
+    }
 }

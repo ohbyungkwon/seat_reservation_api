@@ -33,7 +33,7 @@ public class SeatRepositoryImpl implements SeatRepositoryCustom {
                     )
                 )
                 .from(seat)
-                .join(seat.merchant, merchant).fetchJoin()
+                .join(seat.merchant, merchant)
                 .where(merchant.merchantRegNum.eq(merchantRegNum)
                         , seat.registerCode.ne(RegisterCode.DELETE))
                 .fetch();

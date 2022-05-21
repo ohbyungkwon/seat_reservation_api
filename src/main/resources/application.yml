@@ -7,7 +7,7 @@ spring:
     initialize-schema: always
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://125.129.2.104:3306/WEBDB?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://125.129.2.104:3306/WEBDB?serverTimezone=Asia/Seoul&useSSL=false&autoReconnection=true
     username: web_user
     password: web123!
     initialization-mode: always
@@ -18,7 +18,7 @@ spring:
         format_sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     open-in-view: false
 
 logging.level:

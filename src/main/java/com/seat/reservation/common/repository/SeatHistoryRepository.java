@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public interface SeatHistoryRepository extends JpaRepository<SeatHistory, Long> {
 
     /* 좌석의 등록, 수정, 삭제 이력을 가져오는 쿼리 */
-    Page<SeatHistory> findBySeat(Seat seat, Pageable pageable);
+    Page<SeatHistory> findBySeatId(Long seatId, Pageable pageable);
 
     /* 유저가 등록, 수정, 삭제한 이력을 가져오는 쿼리 */
     Page<SeatHistory> findByUser(User user, Pageable pageable);
