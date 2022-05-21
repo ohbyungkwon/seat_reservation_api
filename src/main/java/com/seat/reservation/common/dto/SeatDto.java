@@ -13,6 +13,7 @@ public class SeatDto {
     @Setter
     @Builder
     @NoArgsConstructor
+    @ToString
     public static class show{
         private String seatCode; // 좌석 번호
 

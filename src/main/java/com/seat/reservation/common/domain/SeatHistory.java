@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
+        allocationSize = 1,
         name = "SEAT_HISTORY_SEQ_GENERATE",
         sequenceName = "SEAT_HISTORY_SEQ"
 )
@@ -27,10 +28,7 @@ public class SeatHistory {
     )
     private Long id;
 
-    /* seat id 로 변경 */
-    @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    private Seat seat; // 등록한 좌석
+    private Long seatId; // 등록한 좌석
 
     @CreatedDate
     @Column(updatable = false)

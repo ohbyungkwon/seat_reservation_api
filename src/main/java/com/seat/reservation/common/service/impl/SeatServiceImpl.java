@@ -3,6 +3,7 @@ package com.seat.reservation.common.service.impl;
 import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.SeatHistory;
 import com.seat.reservation.common.domain.User;
+import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.repository.SeatHistoryRepository;
 import com.seat.reservation.common.repository.SeatRepository;
 import com.seat.reservation.common.service.HistoryService;
@@ -37,9 +38,9 @@ public class SeatServiceImpl extends SecurityService implements HistoryService {
 
             Seat beforeSeat = beforeSeatOptional.get();
             SeatHistory seatHistory = SeatHistory.builder()
-                    .seat(beforeSeat)
+                    .seatId(beforeSeat.getId())
                     .user(user)
-                    .registerCode(seat.getRegisterCode())
+                    .registerCode(RegisterCode.CHANGE)
                     .registerDate(LocalDateTime.now())
                     .build();
             seatHistoryRepository.save(seatHistory);

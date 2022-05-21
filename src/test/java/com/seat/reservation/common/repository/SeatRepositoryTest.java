@@ -3,13 +3,14 @@ package com.seat.reservation.common.repository;
 import com.seat.reservation.common.domain.Merchant;
 import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.enums.RegisterCode;
+import com.seat.reservation.common.dto.SeatDto;
+import com.seat.reservation.common.repository.Impl.SeatRepositoryImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @SpringBootTest
@@ -22,6 +23,9 @@ public class SeatRepositoryTest {
     @Autowired
     MerchantRepository merchantRepository;
 
+    @Autowired
+    SeatRepositoryImpl seatRepositoryImpl;
+
     @Test
     public void findSeatTest(){
         System.out.println("TEST TEST TEST");
@@ -33,7 +37,7 @@ public class SeatRepositoryTest {
 
     @Test
     public void saveSeatTest(){
-        Seat seat = Seat.createSeat(new String("A6222")
+        Seat seat = Seat.createSeat("A6222"
                 , getMerchant(8828100)
                 , true
                 , RegisterCode.REGISTER);
@@ -43,7 +47,7 @@ public class SeatRepositoryTest {
         List<Seat> seats = seatRepository.findAll();
 
         System.out.println("======ALL SEATS======");
-        seats.forEach((entity)-> System.out.println(entity));
+        seats.forEach(System.out::println);
     }
 
     public Merchant getMerchant(Integer merchantRegNum){
@@ -57,7 +61,7 @@ public class SeatRepositoryTest {
         System.out.println("============");
         System.out.println("BEFORE" + seat);
 
-        seat.setIsUse(true);
+        seat.setIsUse(false);
         seat.setRegisterCode(RegisterCode.CHANGE);
 
         System.out.println("============");
@@ -67,7 +71,7 @@ public class SeatRepositoryTest {
 
         List<Seat> seats = seatRepository.findAll();
 
-        seats.forEach((entity)-> System.out.println(entity));
+        seats.forEach(System.out::println);
     }
 
     @Test
@@ -76,7 +80,7 @@ public class SeatRepositoryTest {
         /* 2. SEAT_HISTORY 테이블에 SEAT FORIGN KEY가 걸려있어서 DELETE가 안됨 ????? 이거 확인 */
 
         Seat seat = seatRepository.findById(102L).orElse
-                (Seat.createSeat(new String("V222")
+                (Seat.createSeat("V222"
                         , null
                         , true
                         , RegisterCode.REGISTER));
@@ -86,17 +90,22 @@ public class SeatRepositoryTest {
         System.out.println("============");
         System.out.println(seat);
 
-        seatRepository.delete(seat);
+        seatRepository.save(seat);
     }
 
     public Seat getSeat(Long seatId){
-        Seat seat = seatRepository.findById(seatId).orElse
-                (Seat.createSeat(new String("V222")
+        return seatRepository.findById(seatId).orElse
+                (Seat.createSeat("V222"
                         , null
                         , true
                         , RegisterCode.REGISTER));
+    }
 
-        return seat;
+    @Test
+    public void findSeatByMerchantRegNumTest(){
+        List<SeatDto.show>  seats = seatRepositoryImpl.findSeatInMerchant(8828100);
+
+        seats.forEach(System.out::println);
     }
 
 }
