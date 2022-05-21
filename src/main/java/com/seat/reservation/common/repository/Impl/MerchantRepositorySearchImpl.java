@@ -54,5 +54,6 @@ import static com.seat.reservation.common.domain.QUpzong.upzong;
     public BooleanExpression eqMerchantRegNum(Integer merchantRegNum){
         return StringUtils.isEmpty(merchantRegNum) ? null : merchant.merchantRegNum.eq(merchantRegNum);
     }
+
 }
 

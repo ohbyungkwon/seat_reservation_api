@@ -2,11 +2,12 @@ package com.seat.reservation.common.repository;
 
 import com.seat.reservation.common.domain.Item;
 import com.seat.reservation.common.domain.Merchant;
+import com.seat.reservation.common.repository.custom.MerchantRepositorySearch;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface MerchantRepository extends JpaRepository<Merchant, Integer> {
+public interface MerchantRepository extends JpaRepository<Merchant, Integer>, MerchantRepositorySearch {
 
     // 가맹점 정보 상세조회 : 업종, 지역 ,날짜 , 인원
 
@@ -22,14 +23,6 @@ public interface MerchantRepository extends JpaRepository<Merchant, Integer> {
 
     // 업종, 지역 , 날짜 , 인원 수 에 맞는 값을 들고 와야 하지 않나?
 
-    /**
-     *  SELECT *
-     *  FROM MERCHANT
-     *  WHERE 1 = 1
-     *  AND 업종 = 업종
-     *  AND 지역 = 지역
-     *  AND 날짜 = 날짜
-     *  AND 인원 = 인원
-     */
+
 
 }

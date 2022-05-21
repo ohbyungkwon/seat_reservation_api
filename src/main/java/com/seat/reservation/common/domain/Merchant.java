@@ -59,4 +59,14 @@ public class Merchant {
     // 히스토리 추가
 
     //TODO {@link User#createUser} {@link User#createUserSimple(String)}참고하여 Merchant 생성
+
+
+    // create user 참고해서 메서드로 2개 빼기 -> 전역으로 만들어서 다른곳에섣 사용 가능하게
+    // merchantDto 처럼 또 선언해서 땡겨갈 수 있도록
+    // 업종 코드
+
+    public void setUpzong(Upzong upzong){
+        this.upzong = upzong;
+        upzong.getMerchant().add(this);
+    }
 }
