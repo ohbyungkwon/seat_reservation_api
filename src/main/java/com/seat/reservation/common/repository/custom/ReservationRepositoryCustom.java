@@ -1,7 +1,7 @@
 package com.seat.reservation.common.repository.custom;
 
-import com.seat.reservation.common.dto.ReservationDto;
+import com.seat.reservation.common.domain.Reservation;
 
 public interface ReservationRepositoryCustom {
-    ReservationDto.show findReservationDetail(Long reservationId);
+    Reservation findReservationDetail(Long reservationId);
 }

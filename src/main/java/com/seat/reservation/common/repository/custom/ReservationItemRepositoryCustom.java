@@ -1,9 +1,8 @@
 package com.seat.reservation.common.repository.custom;
 
-import com.seat.reservation.common.dto.ReservationItemDto;
-
+import com.seat.reservation.common.domain.ReservationItem;
 import java.util.List;
 
 public interface ReservationItemRepositoryCustom {
-    List<ReservationItemDto.show> findItemInReservationItem(Long reservationId);
+    List<ReservationItem> findItemInReservationItem(Long reservationId);
 }

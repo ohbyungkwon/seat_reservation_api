@@ -1,16 +1,14 @@
 package com.seat.reservation.common.repository.Impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import static com.seat.reservation.common.domain.QReservationItem.reservationItem;
-import static com.seat.reservation.common.domain.QItem.item;
-
+import com.seat.reservation.common.domain.ReservationItem;
 import com.seat.reservation.common.repository.custom.ReservationItemRepositoryCustom;
-import com.seat.reservation.common.dto.QReservationItemDto_show;
-import com.seat.reservation.common.dto.ReservationItemDto;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+
+import static com.seat.reservation.common.domain.QItem.item;
+import static com.seat.reservation.common.domain.QReservationItem.reservationItem;
 
 @Repository
 public class ReservationItemRepositoryImpl implements ReservationItemRepositoryCustom {
@@ -29,14 +27,8 @@ public class ReservationItemRepositoryImpl implements ReservationItemRepositoryC
      * {@link ReservationRepositoryImpl#findReservationDetail(Long)}과 함게 사용
      */
     @Override
-    public List<ReservationItemDto.show> findItemInReservationItem(Long reservationId) {
-        return jpaQueryFactory.select(
-                    new QReservationItemDto_show(
-                            reservationItem.item.menuName,
-                            reservationItem.item.price
-                    )
-                )
-                .from(reservationItem)
+    public List<ReservationItem> findItemInReservationItem(Long reservationId) {
+        return jpaQueryFactory.selectFrom(reservationItem)
                 .join(reservationItem.item, item).fetchJoin()
                 .where(reservationItem.id.eq(reservationId))
                 .fetch();

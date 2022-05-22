@@ -73,4 +73,19 @@ public class Reservation {
         for(Item item : items)
             this.totalPrice += item.getPrice();
     }
+
+    public ReservationDto.show convertReservationDtoShow(){
+        return ReservationDto.show.builder()
+                .totalPrice(this.totalPrice)
+                .isPreOrder(this.isPreOrder)
+                .reservationDate(this.reservationDate)
+                .seatCode(this.seat.getSeatCode())
+                .repPhone(this.merchant.getRepPhone())
+                .merchantTel(this.merchant.getMerchantTel())
+                .merchantName(this.merchant.getMerchantName())
+                .address(this.merchant.getAddress())
+                .zipCode(this.merchant.getZipCode())
+                .reservationCost(this.seat.getReservationCost())
+                .build();
+    }
 }

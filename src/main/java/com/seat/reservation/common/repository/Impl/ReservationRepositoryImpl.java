@@ -1,15 +1,14 @@
 package com.seat.reservation.common.repository.Impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.seat.reservation.common.domain.Reservation;
+import com.seat.reservation.common.repository.custom.ReservationRepositoryCustom;
+import org.springframework.stereotype.Repository;
+
+import static com.seat.reservation.common.domain.QMerchant.merchant;
 import static com.seat.reservation.common.domain.QReservation.reservation;
 import static com.seat.reservation.common.domain.QReservationItem.reservationItem;
 import static com.seat.reservation.common.domain.QSeat.seat;
-import static com.seat.reservation.common.domain.QMerchant.merchant;
-
-import com.seat.reservation.common.repository.custom.ReservationRepositoryCustom;
-import com.seat.reservation.common.dto.QReservationDto_show;
-import com.seat.reservation.common.dto.ReservationDto;
-import org.springframework.stereotype.Repository;
 
 @Repository
 public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
@@ -27,22 +26,8 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
      * {@link ReservationItemRepositoryImpl#findItemInReservationItem(Long)}과 함게 사용
      */
     @Override
-    public ReservationDto.show findReservationDetail(Long reservationId) {
-        return jpaQueryFactory.select(
-                    new QReservationDto_show(
-                            reservation.totalPrice,
-                            reservation.isPreOrder,
-                            reservation.reservationDate,
-                            reservation.seat.seatCode,
-                            reservation.merchant.repPhone,
-                            reservation.merchant.merchantTel,
-                            reservation.merchant.merchantName,
-                            reservation.merchant.address,
-                            reservation.merchant.zipCode,
-                            reservation.seat.reservationCost
-                            )
-                )
-                .from(reservation)
+    public Reservation findReservationDetail(Long reservationId) {
+        return jpaQueryFactory.selectFrom(reservation)
                 .join(reservation.seat, seat).fetchJoin()
                 .join(reservation.merchant, merchant).fetchJoin()
                 .where(reservationItem.id.eq(reservationId))
