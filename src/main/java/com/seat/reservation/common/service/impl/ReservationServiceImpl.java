@@ -4,6 +4,7 @@ import com.seat.reservation.common.domain.ReservationItem;
 import com.seat.reservation.common.dto.ReservationDetailDto;
 import com.seat.reservation.common.dto.ReservationDto;
 import com.seat.reservation.common.dto.ReservationItemDto;
+import com.seat.reservation.common.repository.Impl.ReservationRepositoryImpl;
 import com.seat.reservation.common.repository.ReservationItemRepository;
 import com.seat.reservation.common.repository.ReservationRepository;
 import com.seat.reservation.common.service.ReservationService;
@@ -19,6 +20,11 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
     private final ReservationItemRepository reservationItemRepository;
 
+    /**
+     * Reservation 상세 조회
+     * @param reservationId
+     * @return ReservationDetailDto
+     */
     @Override
     public ReservationDetailDto selectReservationDetail(Long reservationId) {
         ReservationDto.show reservation = reservationRepository.findReservationDetail(reservationId)
