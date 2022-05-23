@@ -7,11 +7,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Transactional
@@ -132,5 +137,38 @@ public class ReservationRepositoryTest {
         entityManager.persist(seat);
         entityManager.flush();
         return seat;
+    }
+
+
+    @Test
+    @Rollback(value = false)
+    public void findByUser(){
+        User my = entityManager.find(User.class, "obk");
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Reservation> reservationPage = reservationRepository.findByUser(my, pageable);
+
+        System.out.println("==============================================");
+        System.out.println(reservationPage.toString());
+        System.out.println("==============================================");
+
+        Assertions.assertThat(reservationPage.getTotalPages()).isEqualTo(3);
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void findByUserAndRegisterDateBetween() {
+        User my = entityManager.find(User.class, "obk");
+        Pageable pageable = PageRequest.of(0, 10);
+
+        DateTimeFormatter dt =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDateTime = LocalDateTime.parse("2022-05-21 00:00:00", dt);
+        LocalDateTime endDateTime = LocalDateTime.parse("2022-05-25 00:00:00", dt);
+        Page<Reservation> reservationPage1 = reservationRepository.findByUserAndRegisterDateBetween(my, startDateTime, endDateTime, pageable);
+        Assertions.assertThat(reservationPage1.getTotalPages()).isEqualTo(3);
+
+        startDateTime = LocalDateTime.parse("2021-05-21 00:00:00", dt);
+        endDateTime = LocalDateTime.parse("2021-05-25 00:00:00", dt);
+        Page<Reservation> reservationPage2 = reservationRepository.findByUserAndRegisterDateBetween(my, startDateTime, endDateTime, pageable);
+        Assertions.assertThat(reservationPage2.getTotalPages()).isEqualTo(0);
     }
 }
