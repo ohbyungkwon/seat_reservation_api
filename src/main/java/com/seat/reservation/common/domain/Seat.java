@@ -26,7 +26,7 @@ public class Seat {
     private String seatCode; // 좌석 번호
 
     @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @ToString.Exclude
     private Merchant merchant; // 좌석을 가진 가맹점
 
