@@ -18,7 +18,7 @@ spring:
         format_sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     open-in-view: false
 
 logging.level:

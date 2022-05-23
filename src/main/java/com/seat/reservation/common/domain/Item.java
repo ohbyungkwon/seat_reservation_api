@@ -15,16 +15,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = AuditingEntityListener.class)
-@SequenceGenerator(
-        name = "ITEM_SEQ_GENERATE",
-        sequenceName = "ITEM_SEQ"
-)
 public class Item {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "ITEM_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn

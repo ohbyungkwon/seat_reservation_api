@@ -12,16 +12,9 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SequenceGenerator(
-        name = "REVIEW_SEQ_GENERATE",
-        sequenceName = "REVIEW_SEQ"
-)
 public class Review {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "REVIEW_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn

@@ -4,7 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.dto.QMerchantDto_show;
-import com.seat.reservation.common.repository.custom.MerchantRepositorySearch;
+import com.seat.reservation.common.repository.custom.MerchantRepositoryCustom;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -14,10 +14,10 @@ import static com.seat.reservation.common.domain.QMerchant.merchant;
 import static com.seat.reservation.common.domain.QUpzong.upzong;
 
 @Repository
-    public class MerchantRepositorySearchImpl implements MerchantRepositorySearch {
+    public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public MerchantRepositorySearchImpl(JPAQueryFactory jpaQueryFactory){
+    public MerchantRepositoryImpl(JPAQueryFactory jpaQueryFactory){
         this.jpaQueryFactory = jpaQueryFactory;
     }
 

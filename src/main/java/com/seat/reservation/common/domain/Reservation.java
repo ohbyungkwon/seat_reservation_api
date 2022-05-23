@@ -18,16 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = AuditingEntityListener.class)
-@SequenceGenerator(
-        name = "RESERVATION_SEQ_GENERATE",
-        sequenceName = "RESERVATION_SEQ"
-)
 public class Reservation {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "RESERVATION_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn

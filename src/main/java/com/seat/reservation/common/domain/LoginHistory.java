@@ -15,16 +15,9 @@ import java.util.Date;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(value = {AuditingEntityListener.class})
-@SequenceGenerator(
-        name = "LOGIN_HISTORY_SEQ_GENERATE",
-        sequenceName = "LOGIN_HISTORY_SEQ"
-)
 public class LoginHistory {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "LOGIN_HISTORY_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JoinColumn

@@ -15,17 +15,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners(value = AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(
-        allocationSize = 1,
-        name = "SEAT_HISTORY_SEQ_GENERATE",
-        sequenceName = "SEAT_HISTORY_SEQ"
-)
 public class SeatHistory {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "SEAT_HISTORY_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long seatId; // 등록한 좌석

@@ -13,17 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(
-        name = "MERCHANT_HISTORY_SEQ_GENERATE",
-        sequenceName = "MERCHANT_HISTORY_SEQ"
-)
 public class MerchantHistory {
 
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "MERCHANT_HISTORY_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreatedDate

@@ -1,13 +1,10 @@
 package com.seat.reservation.common.repository;
 
-import com.seat.reservation.common.domain.Item;
 import com.seat.reservation.common.domain.Merchant;
-import com.seat.reservation.common.repository.custom.MerchantRepositorySearch;
+import com.seat.reservation.common.repository.custom.MerchantRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface MerchantRepository extends JpaRepository<Merchant, Integer>, MerchantRepositorySearch {
+public interface MerchantRepository extends JpaRepository<Merchant, Integer>, MerchantRepositoryCustom {
 
     // 가맹점 정보 상세조회 : 업종, 지역 ,날짜 , 인원
 

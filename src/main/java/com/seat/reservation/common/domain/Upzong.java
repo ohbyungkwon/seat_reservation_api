@@ -14,16 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = AuditingEntityListener.class)
-@SequenceGenerator(
-        name = "UPZONG_SEQ_GENERATE",
-        sequenceName = "UPZONG_SEQ"
-)
 public class Upzong {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "UPZONG_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // sequence
 
     private String code; // 업종 코드

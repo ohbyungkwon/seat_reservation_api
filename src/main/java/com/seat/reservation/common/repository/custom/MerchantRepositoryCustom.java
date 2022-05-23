@@ -4,7 +4,7 @@ import com.seat.reservation.common.dto.MerchantDto;
 
 import java.util.List;
 
-public interface MerchantRepositorySearch {
+public interface MerchantRepositoryCustom {
 
     List<MerchantDto.show> findMerchant(Integer merchantRegNum);
 

@@ -17,19 +17,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = {AuditHistoryEntityListener.class, AuditingEntityListener.class})
-@SequenceGenerator(
-        allocationSize = 1,
-        name = "SEAT_SEQ_GENERATE",
-        sequenceName = "SEAT_SEQ"
-)
 @ToString
-/* 주석 추가 */
 public class Seat {
     @Id
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "SEAT_SEQ_GENERATE"
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Auto Increment를 사용한 PK
 
     private String seatCode; // 좌석 번호
