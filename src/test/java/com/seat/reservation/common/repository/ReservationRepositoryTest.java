@@ -103,7 +103,6 @@ public class ReservationRepositoryTest {
         }
         //4. 좌석 등록(Seat 미구현으로 임시 사용)
         this.createSeat(merchant);
-        entityManager.flush();
         System.out.println("==============================================");
 
 
@@ -130,6 +129,7 @@ public class ReservationRepositoryTest {
                 .merchant(merchant)
                 .build();
         entityManager.persist(seat);
+        entityManager.flush();
         return seat;
     }
 }
