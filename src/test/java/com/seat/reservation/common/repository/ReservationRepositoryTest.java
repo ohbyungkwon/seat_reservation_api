@@ -33,6 +33,7 @@ public class ReservationRepositoryTest {
 
     /**
      * SAVE 테스트
+     * 사용자 한명이 같은 가맹점 같은 상품을 20번 예약해봄
      */
     @Test
     @Rollback(value = false)
