@@ -2,6 +2,8 @@ package com.seat.reservation.common.repository;
 
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.ItemDto;
+import com.seat.reservation.common.dto.ReservationDto;
+import com.seat.reservation.common.dto.ReservationItemDto;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +20,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @SpringBootTest
@@ -170,5 +173,23 @@ public class ReservationRepositoryTest {
         endDateTime = LocalDateTime.parse("2021-05-25 00:00:00", dt);
         Page<Reservation> reservationPage2 = reservationRepository.findByUserAndRegisterDateBetween(my, startDateTime, endDateTime, pageable);
         Assertions.assertThat(reservationPage2.getTotalPages()).isEqualTo(0);
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void findReservationDetail(){
+        ReservationDto.show reservationDtoShow = reservationRepository.findReservationDetail(1L)
+                .convertReservationDtoShow();
+        System.out.println(reservationDtoShow.toString());
+    }
+
+    @Test
+    @Rollback(value = false)
+    public void findItemInReservationItem(){
+        List<ReservationItemDto.show> reservationItemDtoShow = reservationItemRepository.findItemInReservationItem(1L)
+                        .stream()
+                        .map(ReservationItem::convertReservationItemDtoShow)
+                        .collect(Collectors.toList());
+        Assertions.assertThat(reservationItemDtoShow.size()).isEqualTo(2);
     }
 }

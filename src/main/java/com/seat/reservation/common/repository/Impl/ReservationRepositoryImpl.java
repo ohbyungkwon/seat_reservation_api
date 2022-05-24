@@ -30,7 +30,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
         return jpaQueryFactory.selectFrom(reservation)
                 .join(reservation.seat, seat).fetchJoin()
                 .join(reservation.merchant, merchant).fetchJoin()
-                .where(reservationItem.id.eq(reservationId))
+                .where(reservation.id.eq(reservationId))
                 .fetchOne();
     }
 }

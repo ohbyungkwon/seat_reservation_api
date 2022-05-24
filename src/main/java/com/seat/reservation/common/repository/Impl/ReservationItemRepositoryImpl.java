@@ -9,6 +9,7 @@ import java.util.List;
 
 import static com.seat.reservation.common.domain.QItem.item;
 import static com.seat.reservation.common.domain.QReservationItem.reservationItem;
+import static com.seat.reservation.common.domain.QReservation.reservation;
 
 @Repository
 public class ReservationItemRepositoryImpl implements ReservationItemRepositoryCustom {
@@ -30,7 +31,8 @@ public class ReservationItemRepositoryImpl implements ReservationItemRepositoryC
     public List<ReservationItem> findItemInReservationItem(Long reservationId) {
         return jpaQueryFactory.selectFrom(reservationItem)
                 .join(reservationItem.item, item).fetchJoin()
-                .where(reservationItem.id.eq(reservationId))
+                .join(reservationItem.reservation, reservation).fetchJoin()
+                .where(reservationItem.reservation.id.eq(reservationId))
                 .fetch();
     }
 }
