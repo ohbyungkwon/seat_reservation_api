@@ -56,10 +56,11 @@ public class ReservationRepositoryTest {
 
         for(int i = 0; i < RESERVATION_CNT; i++) {
             Reservation reservation = this.getReservation(customer);
-            //7. 예약 등록
-            reservationRepository.save(reservation);
-
             List<Item> itemList = reservation.getMerchant().getItem();
+
+            //7. 예약 등록
+            reservation.setTotalPrice(itemList);
+            reservationRepository.save(reservation);
             for (Item item : itemList) { //Merchant 모든 ITEM 에약
                 ReservationItem reservationItem = this.createReservationItem(item, reservation);
                 //8. 예약상품 저장

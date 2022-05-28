@@ -39,10 +39,10 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
         Merchant merchant = merchantRepository.findByMerchantRegNum(dto.getMerchantRegNum());
         Optional<Seat> seat = seatRepository.findById(dto.getSeatId());
         if(seat.isPresent()){
-            Reservation reservation = Reservation.createReservation(dto, merchant, seat.get(), user);
-            reservationRepository.save(reservation);
-
             List<Item> itemList = itemRepository.findByIdIn(dto.getItemIdList());
+            Reservation reservation = Reservation.createReservation(dto, merchant, seat.get(), user);
+            reservation.setTotalPrice(itemList);
+            reservationRepository.save(reservation);
             for(Item item : itemList){
                 ReservationItem reservationItem = ReservationItem.createReservationItem(reservation, item);
                 reservationItemRepository.save(reservationItem);
