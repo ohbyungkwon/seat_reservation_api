@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
+
     /* 좌석 삭제 쿼리 */
     void deleteBySeatCode(String seatCode);
 

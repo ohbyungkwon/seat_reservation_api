@@ -38,6 +38,7 @@ public class MerchantDto {
     }
 
 
+    @Builder
     @Data
     public static class create{
         private Integer merchantRegNum;

@@ -1,6 +1,8 @@
 package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.domain.enums.RegisterCode;
+import com.seat.reservation.common.dto.MerchantDto;
+import com.seat.reservation.common.dto.ReservationDto;
 import com.seat.reservation.common.repository.Impl.ReservationItemRepositoryImpl;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -60,7 +62,6 @@ public class Merchant {
 
     //TODO {@link User#createUser} {@link User#createUserSimple(String)}참고하여 Merchant 생성
 
-
     // create user 참고해서 메서드로 2개 빼기 -> 전역으로 만들어서 다른곳에섣 사용 가능하게
     // merchantDto 처럼 또 선언해서 땡겨갈 수 있도록
     // 업종 코드
@@ -69,4 +70,27 @@ public class Merchant {
         this.upzong = upzong;
         upzong.getMerchant().add(this);
     }
+
+
+    // Merchant를 만드는 것
+    public static Merchant createMerchant(MerchantDto.create dto,
+                                             User user, List<Item> itemList){
+        return Merchant.builder() // 값을 받을 생성자를 선언한다.
+                .merchantRegNum(dto.getMerchantRegNum())
+                .user(user)
+                .item(itemList)
+                .repPhone(dto.getRepPhone())
+                .repName(dto.getRepName())
+                .merchantTel(dto.getMerchantTel())
+                .merchantName(dto.getMerchantName())
+                .registerCode(RegisterCode.REGISTER) // enum
+                .address(dto.getAddress())
+                .zipCode(dto.getZipCode())
+                .build();
+    }
+
+
+
+
+
 }

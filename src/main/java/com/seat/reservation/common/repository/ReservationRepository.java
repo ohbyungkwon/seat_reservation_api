@@ -13,4 +13,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long>,
     Page<Reservation> findByUser(User user, Pageable pageable);
 
     Page<Reservation> findByUserAndRegisterDateBetween(User user, LocalDateTime start, LocalDateTime end, Pageable pageable) ;
+    Boolean existsByIdAndUser(Long reservationId, User user);
 }
