@@ -19,6 +19,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * [메타 정책]
+ * 예약은 30분 단위로 가능하다.
+ * 1시30분 예약 가능
+ * 1시10분, 20분 예약 불가능
+ * 가맹점주는 가맹점관리에서 이용시간 설정 가능하다.
+ * 예를 들어 2시간 이용시간 가맹점이 있다면 아래와 같이 예약이 가능하다.
+ * 1. 10:00~12:00
+ * 2. 10:30~12:30
+ * 3. 11:00~13:00
+ * ...
+ * I. 12:00~14:00
+ * 만약 1번이 예약되었다면 다음 예약자는 I번부터 얘약 가능하다.
+ *
+ * [예약 프로세스]
+ * 가맹점 선택
+ * -> 좌석 예약 상황 보여줌(위와 같은 시간으로 조회)
+ * -> 예약하기 클릭시, 메뉴 리스트 출력
+ * -> 메뉴 선택 후, 예약 진행
+ * -> (가맹점 선택사항) 사장님에게 알림, 최종 확인 필요
+ * */
 @Service
 @RequiredArgsConstructor
 public class ReservationServiceImpl extends SecurityService implements ReservationService{
