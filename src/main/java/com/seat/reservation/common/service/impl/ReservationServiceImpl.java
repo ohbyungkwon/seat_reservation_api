@@ -7,10 +7,12 @@ import com.seat.reservation.common.dto.ReservationItemDto;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.exception.NotOwnException;
 import com.seat.reservation.common.repository.*;
-import com.seat.reservation.common.repository.Impl.ReservationRepositoryImpl;
 import com.seat.reservation.common.service.ReservationService;
 import com.seat.reservation.common.service.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
 
     /**
      * Reservation 저장
-     * @param dto dto
+     * @param dto
      * @return Boolean
      */
     @Override
@@ -47,6 +49,21 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
             }
         }
         return Boolean.TRUE;
+    }
+
+    /**
+     * 나의 Reservation 리스트 조회
+     * @param pageable
+     * @return Page<ReservationDto.show>
+     */
+    @Override
+    public Page<ReservationDto.show> selectReservations(Pageable pageable) {
+        User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
+        Page<Reservation> reservations = reservationRepository.findByUser(user, pageable);
+        List<ReservationDto.show> reservationList = reservations.get()
+                .map(Reservation::convertReservationDtoShow)
+                .collect(Collectors.toList());
+        return new PageImpl<>(reservationList, pageable, reservations.getTotalElements());
     }
 
     /**
