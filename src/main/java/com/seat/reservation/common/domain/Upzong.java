@@ -33,11 +33,10 @@ public class Upzong {
 
 
     // Upzong 만드는 것
-    public static Upzong createUpzong(UpzongDto.create dto,
-                                      List<Merchant> merchant, Category category){
+    public static Upzong createUpzong(UpzongDto.create dto){
         return Upzong.builder() // 값을 받을 생성자를 선언한다.
                 .code(dto.getCode())
-                .category(category)
+                .category(dto.getCategory())
                 .build();
     }
 
