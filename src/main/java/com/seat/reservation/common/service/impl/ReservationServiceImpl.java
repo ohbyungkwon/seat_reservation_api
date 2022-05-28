@@ -26,6 +26,11 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     private final SeatRepository seatRepository;
     private final ItemRepository itemRepository;
 
+    /**
+     * Reservation 저장
+     * @param dto dto
+     * @return Boolean
+     */
     @Override
     public Boolean saveReservation(ReservationDto.create dto) {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
