@@ -1,6 +1,7 @@
 package com.seat.reservation.common.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.seat.reservation.common.domain.enums.Category;
 import lombok.*;
 
 public class UpzongDto {
@@ -14,6 +15,7 @@ public class UpzongDto {
         private String code;
 
 
+
         @QueryProjection
         public show(Long id, String code) {
             this.id = id;
@@ -21,10 +23,10 @@ public class UpzongDto {
         }
     }
 
-
+    @Builder
     @Data
     public static class create{
-        private Long id;
+        private Category category;
         private String code;
     }
 
@@ -34,7 +36,8 @@ public class UpzongDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class update{
-        private Long id;
+        private Category category;
+        private String code;
     }
 
 }
