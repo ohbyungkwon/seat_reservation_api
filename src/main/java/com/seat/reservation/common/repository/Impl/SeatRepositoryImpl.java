@@ -1,14 +1,20 @@
 package com.seat.reservation.common.repository.Impl;
 
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.QMerchant;
+import com.seat.reservation.common.domain.QReservation;
 import com.seat.reservation.common.domain.QSeat;
+import com.seat.reservation.common.domain.QTimes;
 import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.dto.QSeatDto_show;
+import com.seat.reservation.common.dto.QSeatDto_showByTime;
 import com.seat.reservation.common.dto.SeatDto;
 import com.seat.reservation.common.repository.custom.SeatRepositoryCustom;
 import org.springframework.stereotype.Repository;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -28,14 +34,32 @@ public class SeatRepositoryImpl implements SeatRepositoryCustom {
                     new QSeatDto_show(
                             seat.seatCode,
                             seat.reservationCost,
-                            seat.isUse,
-                            merchant.merchantRegNum
+                            seat.merchant.merchantRegNum
                     )
                 )
                 .from(seat)
                 .join(seat.merchant, merchant)
                 .where(merchant.merchantRegNum.eq(merchantRegNum)
                         , seat.registerCode.ne(RegisterCode.DELETE))
+                .fetch();
+    }
+
+    @Override
+    public List<SeatDto.showByTime> findSeatByTime(int merchantRegNum, LocalDateTime startTime, LocalDateTime endTime) {
+        QSeat seat = QSeat.seat;
+        QReservation reservation = QReservation.reservation;
+
+        return jpaQueryFactory.select(
+                    new QSeatDto_showByTime(
+                            seat.seatCode,
+                            new CaseBuilder().when(reservation.id.isNull())
+                            .then(false)
+                            .otherwise(true).as("isUse")
+                    )
+               ).from(reservation)
+                .rightJoin(reservation.seat, seat)
+                .on(seat.merchant.merchantRegNum.eq(merchantRegNum)
+                      , reservation.reservationDate.between(startTime, endTime))
                 .fetch();
     }
 }

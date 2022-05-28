@@ -18,16 +18,29 @@ public class SeatDto {
         private String seatCode; // 좌석 번호
 
         private int reservationCost; // 좌석 예약 비용
-        private boolean isUse; // 사용중
 
         private int merchantRegNumber; // 사업자 번호
 
         @QueryProjection
-        public show(String seatCode, int reservationCost, boolean isUse, int merchantRegNumber) {
+        public show(String seatCode, int reservationCost, int merchantRegNumber) {
             this.seatCode = seatCode;
             this.reservationCost = reservationCost;
-            this.isUse = isUse;
             this.merchantRegNumber = merchantRegNumber;
+        }
+    }
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @ToString
+    public static class showByTime{
+        private String seatCode;
+        private boolean isUse;
+
+        @QueryProjection
+        public showByTime(String seatCode, boolean isUse){
+            this.seatCode = seatCode;
+            this.isUse = isUse;
         }
     }
 
@@ -42,7 +55,6 @@ public class SeatDto {
         private String seatCode; // 좌석 번호
 
         private int reservationCost; // 좌석 예약 비용
-        private boolean isUse; // 사용중
 
         @Enumerated(EnumType.STRING)
         private RegisterCode registerCode; // 등록 코드
@@ -57,19 +69,8 @@ public class SeatDto {
         private Long id;
 
         private int reservationCost; // 좌석 예약 비용
-        private boolean isUse; // 사용중
 
         @Enumerated(EnumType.STRING)
         private RegisterCode registerCode; // 등록 코드
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class updateIsUse{
-        private Long id;
-        private boolean isUse;
     }
 }

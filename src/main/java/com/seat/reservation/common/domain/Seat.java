@@ -32,8 +32,6 @@ public class Seat {
 
     private int reservationCost; // 좌석 예약 비용
 
-    private boolean isUse; // 사용중
-
     @Enumerated(EnumType.STRING)
     private RegisterCode registerCode; // 등록 코드
 
@@ -43,16 +41,13 @@ public class Seat {
     @LastModifiedDate
     private LocalDateTime changeDate; // 데이터가 바뀐날짜
 
-    public static Seat createSeat(String seatCode, Merchant merchant, boolean isUse, RegisterCode registerCode){
+    public static Seat createSeat(String seatCode, Merchant merchant, RegisterCode registerCode){
         return Seat.builder()
                .seatCode(seatCode)
                .merchant(merchant)
-               .isUse(isUse)
                .registerCode(registerCode)
                .build();
     }
-
-    public void setIsUse(boolean isUse){ this.isUse = isUse; }
 
     public void setRegisterCode(RegisterCode registerCode){
         this.registerCode = registerCode;

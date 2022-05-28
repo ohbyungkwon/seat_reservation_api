@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
@@ -38,8 +39,7 @@ public class SeatRepositoryTest {
     @Test
     public void saveSeatTest(){
         Seat seat = Seat.createSeat("A6222"
-                , getMerchant(8828100)
-                , true
+                , getMerchant(1)
                 , RegisterCode.REGISTER);
 
         seatRepository.saveAndFlush(seat);
@@ -61,7 +61,6 @@ public class SeatRepositoryTest {
         System.out.println("============");
         System.out.println("BEFORE" + seat);
 
-        seat.setIsUse(false);
         seat.setRegisterCode(RegisterCode.CHANGE);
 
         System.out.println("============");
@@ -82,7 +81,6 @@ public class SeatRepositoryTest {
         Seat seat = seatRepository.findById(102L).orElse
                 (Seat.createSeat("V222"
                         , null
-                        , true
                         , RegisterCode.REGISTER));
 
         seat.setRegisterCode(RegisterCode.DELETE);
@@ -97,7 +95,6 @@ public class SeatRepositoryTest {
         return seatRepository.findById(seatId).orElse
                 (Seat.createSeat("V222"
                         , null
-                        , true
                         , RegisterCode.REGISTER));
     }
 
@@ -107,5 +104,16 @@ public class SeatRepositoryTest {
 
         seats.forEach(System.out::println);
     }
+
+    @Test
+    public void findSeatByReservationTime(){
+        List<SeatDto.showByTime> seats = seatRepositoryImpl.findSeatByTime(1
+                , LocalDateTime.of(2022, 05, 23, 13, 00)
+                , LocalDateTime.of(2022, 05, 23, 14, 00)
+        );
+
+        seats.forEach(System.out::println);
+    }
+
 
 }
