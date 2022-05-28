@@ -36,9 +36,7 @@ public class Upzong {
     public static Upzong createUpzong(UpzongDto.create dto,
                                       List<Merchant> merchant, Category category){
         return Upzong.builder() // 값을 받을 생성자를 선언한다.
-                .id(dto.getId())
                 .code(dto.getCode())
-                .merchant(merchant)
                 .category(category)
                 .build();
     }
