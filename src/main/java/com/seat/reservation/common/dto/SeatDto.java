@@ -1,5 +1,7 @@
 package com.seat.reservation.common.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.querydsl.core.annotations.QueryProjection;
 import com.seat.reservation.common.domain.enums.RegisterCode;
 import lombok.*;
@@ -49,6 +51,7 @@ public class SeatDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class create{
         private Integer merchantRegNum; // 사업자 등록 번호 8자리?
 
@@ -65,6 +68,7 @@ public class SeatDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class update{
         private Long id;
 

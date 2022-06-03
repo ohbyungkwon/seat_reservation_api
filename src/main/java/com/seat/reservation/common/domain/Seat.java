@@ -41,15 +41,17 @@ public class Seat {
     @LastModifiedDate
     private LocalDateTime changeDate; // 데이터가 바뀐날짜
 
-    public static Seat createSeat(String seatCode, Merchant merchant, RegisterCode registerCode){
+    public static Seat createSeat(String seatCode, Merchant merchant, int reservationCost, RegisterCode registerCode){
         return Seat.builder()
-               .seatCode(seatCode)
-               .merchant(merchant)
-               .registerCode(registerCode)
-               .build();
+                .seatCode(seatCode)
+                .merchant(merchant)
+                .reservationCost(reservationCost)
+                .registerCode(registerCode)
+                .build();
     }
 
     public void setRegisterCode(RegisterCode registerCode){
         this.registerCode = registerCode;
     }
+    public void setReservationCost(int reservationCost){this.reservationCost = reservationCost; }
 }

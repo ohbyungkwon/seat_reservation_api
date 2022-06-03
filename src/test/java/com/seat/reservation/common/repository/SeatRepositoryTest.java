@@ -40,6 +40,7 @@ public class SeatRepositoryTest {
     public void saveSeatTest(){
         Seat seat = Seat.createSeat("A6222"
                 , getMerchant(1)
+                , 100
                 , RegisterCode.REGISTER);
 
         seatRepository.saveAndFlush(seat);
@@ -81,6 +82,7 @@ public class SeatRepositoryTest {
         Seat seat = seatRepository.findById(102L).orElse
                 (Seat.createSeat("V222"
                         , null
+                        , 100
                         , RegisterCode.REGISTER));
 
         seat.setRegisterCode(RegisterCode.DELETE);
@@ -95,6 +97,7 @@ public class SeatRepositoryTest {
         return seatRepository.findById(seatId).orElse
                 (Seat.createSeat("V222"
                         , null
+                        , 100
                         , RegisterCode.REGISTER));
     }
 
@@ -108,8 +111,8 @@ public class SeatRepositoryTest {
     @Test
     public void findSeatByReservationTime(){
         List<SeatDto.showByTime> seats = seatRepositoryImpl.findSeatByTime(1
-                , LocalDateTime.of(2022, 05, 23, 13, 00)
-                , LocalDateTime.of(2022, 05, 23, 14, 00)
+                , LocalDateTime.of(2022, 5, 23, 13, 0)
+                , LocalDateTime.of(2022, 5, 23, 14, 0)
         );
 
         seats.forEach(System.out::println);

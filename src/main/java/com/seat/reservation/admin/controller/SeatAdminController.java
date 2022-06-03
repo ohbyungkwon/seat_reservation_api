@@ -1,10 +1,15 @@
 package com.seat.reservation.admin.controller;
 
+import com.seat.reservation.common.domain.Merchant;
 import com.seat.reservation.common.domain.Seat;
+import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.dto.SeatDto;
+import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /* 가맹점 등록 후 좌석 등록, 삭제 기능 */
 /* TODO
@@ -16,34 +21,59 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SeatAdminController {
     private final SeatRepository seatRepository;
+    private final MerchantRepository merchantRepository;
 
     // 좌석 등록
-    @RequestMapping(path = "/create-seat", method = RequestMethod.POST)
+    @PostMapping(path = "/create-seat")
     public String createSeat(@RequestBody SeatDto.create createSeat){
-        String response = new String();
+        Merchant merchant = merchantRepository.findByMerchantRegNum(createSeat.getMerchantRegNum());
 
-       // Seat seat = Seat.createSeat(createSeat.)
+        if(merchant == null){
+            System.out.println("존재하지 않는 가맹점입니다.");
+            return "NO MERCHANT ERROR!";
+        }
 
+        Seat seat = Seat.createSeat(createSeat.getSeatCode()
+                                , merchant
+                                , createSeat.getReservationCost()
+                                , createSeat.getRegisterCode());
 
-        return createSeat.toString();
+        seatRepository.save(seat);
+
+        return "SUCCESS SAVE SEAT!";
     }
 
     // 좌석 업데이트
-    @RequestMapping(path = "/update-seat", method = RequestMethod.PUT)
+    @PutMapping(path = "/update-seat")
     public String updateSeat(@RequestParam SeatDto.update updateSeat){
-        String response = new String();
+        Optional<Seat> seat = seatRepository.findById(updateSeat.getId());
 
+        if(seat.isPresent()){
+            seat.get().setReservationCost(updateSeat.getReservationCost());
+            seat.get().setRegisterCode(updateSeat.getRegisterCode());
+            seatRepository.save(seat.get());
+        }
+        else{
+            return "NO SEAT ERROR!";
+        }
 
-        return updateSeat.toString();
+        return "SUCCESS SAVE SEAT!";
     }
 
 
-    // 좌석 삭제 -- 이거는 강의보고 하자...... 기억이 안나네;;;;
-    @RequestMapping(path = "/delete-seat", method = RequestMethod.DELETE)
-    public String deleteSeat(){
-        String response = new String();
+    @DeleteMapping(path = "/delete-seat/{seat_id}")
+    public String deleteSeat(@PathVariable(value = "seat_id") Long seatId){
+        Optional<Seat> seat = seatRepository.findById(seatId);
 
-        return response;
+        if(seat.isPresent()){
+            seat.get().setRegisterCode(RegisterCode.DELETE);
+            seatRepository.save(seat.get());
+        }
+        else{
+            return "NO SEAT ERROR!";
+        }
+
+        return "SUCCESS DELETE SEAT!";
     }
 
 
