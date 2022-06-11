@@ -3,10 +3,13 @@ package com.seat.reservation.admin.controller;
 import com.seat.reservation.common.domain.Merchant;
 import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.enums.RegisterCode;
+import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.SeatDto;
 import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,12 +28,16 @@ public class SeatAdminController {
 
     // 좌석 등록
     @PostMapping(path = "/create-seat")
-    public String createSeat(@RequestBody SeatDto.create createSeat){
+    public ResponseEntity<ResponseComDto> createSeat(@RequestBody SeatDto.create createSeat){
         Merchant merchant = merchantRepository.findByMerchantRegNum(createSeat.getMerchantRegNum());
 
         if(merchant == null){
             System.out.println("존재하지 않는 가맹점입니다.");
-            return "NO MERCHANT ERROR!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ResponseComDto.builder()
+                    .resultMsg("존재하지 않는 가맹점입니다.")
+                    .resultObj(createSeat).build());
+
         }
 
         Seat seat = Seat.createSeat(createSeat.getSeatCode()
@@ -40,12 +47,15 @@ public class SeatAdminController {
 
         seatRepository.save(seat);
 
-        return "SUCCESS SAVE SEAT!";
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseComDto.builder()
+                .resultMsg(createSeat.getSeatCode() + "가 등록되었습니다.")
+                .resultObj(createSeat).build());
     }
 
     // 좌석 업데이트
     @PutMapping(path = "/update-seat")
-    public String updateSeat(@RequestParam SeatDto.update updateSeat){
+    public ResponseEntity<ResponseComDto> updateSeat(@RequestParam SeatDto.update updateSeat){
         Optional<Seat> seat = seatRepository.findById(updateSeat.getId());
 
         if(seat.isPresent()){
@@ -54,15 +64,21 @@ public class SeatAdminController {
             seatRepository.save(seat.get());
         }
         else{
-            return "NO SEAT ERROR!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ResponseComDto.builder()
+                    .resultObj("존재하지 않는 좌석입니다.")
+                    .resultObj(updateSeat).build());
         }
 
-        return "SUCCESS SAVE SEAT!";
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseComDto.builder()
+                .resultObj(updateSeat.getId() + "가 갱신되었습니다.")
+                .resultObj(updateSeat).build());
     }
 
 
     @DeleteMapping(path = "/delete-seat/{seat_id}")
-    public String deleteSeat(@PathVariable(value = "seat_id") Long seatId){
+    public ResponseEntity<ResponseComDto> deleteSeat(@PathVariable(value = "seat_id") Long seatId){
         Optional<Seat> seat = seatRepository.findById(seatId);
 
         if(seat.isPresent()){
@@ -70,10 +86,16 @@ public class SeatAdminController {
             seatRepository.save(seat.get());
         }
         else{
-            return "NO SEAT ERROR!";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ResponseComDto.builder()
+                    .resultObj("존재하지 않는 좌석입니다.")
+                    .resultObj(seatId).build());
         }
 
-        return "SUCCESS DELETE SEAT!";
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseComDto.builder()
+                        .resultObj(seatId + "가 삭제되었습니다.")
+                        .resultObj(seatId).build());
     }
 
 
