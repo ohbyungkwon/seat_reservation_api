@@ -1,6 +1,7 @@
 package com.seat.reservation.common.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
+import com.seat.reservation.common.domain.Upzong;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -46,7 +47,7 @@ public class MerchantDto {
         private String repName;
         private String merchantTel;
         private String merchantName;
-        private Long upzongId;
+        private Upzong upzongId;
         private String address;
         private String zipCode;
     }
