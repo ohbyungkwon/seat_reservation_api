@@ -9,6 +9,6 @@ import org.springframework.data.domain.Pageable;
 public interface ReservationService {
     Boolean saveReservation(ReservationDto.create dto);
 
-    Page<ReservationDto.show> selectReservations(Pageable pageable);
+    Page<ReservationDto.show> selectReservations(ReservationDto.search search, Pageable pageable);
     ReservationDetailDto selectReservationDetail(Long reservationId);
 }

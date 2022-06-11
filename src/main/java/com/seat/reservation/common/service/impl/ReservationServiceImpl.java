@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,9 +79,11 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
      * @return Page<ReservationDto.show>
      */
     @Override
-    public Page<ReservationDto.show> selectReservations(Pageable pageable) {
+    public Page<ReservationDto.show> selectReservations(ReservationDto.search search, Pageable pageable) {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
-        Page<Reservation> reservations = reservationRepository.findByUser(user, pageable);
+        LocalDateTime startDateTime = search.getStartDateTime();
+        LocalDateTime endDateTime = search.getEndDateTime();
+        Page<Reservation> reservations = reservationRepository.findByUserAndRegisterDateBetween(user, startDateTime, endDateTime, pageable);
         List<ReservationDto.show> reservationList = reservations.get()
                 .map(Reservation::convertReservationDtoShow)
                 .collect(Collectors.toList());
