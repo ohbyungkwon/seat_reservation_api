@@ -53,6 +53,12 @@ public class Merchant {
 
     private String zipCode; // 가맹점 우편번호
 
+    private LocalDateTime openDateTime;
+
+    private LocalDateTime closeDateTime;
+
+    private Integer reservationStdHour;
+
     @CreatedDate
     private LocalDateTime registerDate;  // 가맹점 등록일자
 

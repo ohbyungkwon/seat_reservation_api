@@ -30,7 +30,6 @@ import static com.seat.reservation.common.domain.QUpzong.upzong;
      *  AND 지역 = 지역
      *  AND 상호 = 상호
      */
-
     @Override
     public List<Merchant> findMerchant(Integer merchantRegNum) {
         return jpaQueryFactory.selectFrom(merchant)

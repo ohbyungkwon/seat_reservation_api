@@ -65,14 +65,4 @@ public class ReservationDto {
         private Long seatId;
         private LocalDateTime reservationDate;
     }
-
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class search{
-        private LocalDateTime startDateTime;
-        private LocalDateTime endDateTime;
-    }
 }

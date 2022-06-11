@@ -4,6 +4,7 @@ import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.ReservationDetailDto;
 import com.seat.reservation.common.dto.ReservationDto;
 import com.seat.reservation.common.dto.ReservationItemDto;
+import com.seat.reservation.common.dto.SearchDto;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.exception.NotOwnException;
 import com.seat.reservation.common.repository.*;
@@ -79,7 +80,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
      * @return Page<ReservationDto.show>
      */
     @Override
-    public Page<ReservationDto.show> selectReservations(ReservationDto.search search, Pageable pageable) {
+    public Page<ReservationDto.show> selectReservations(SearchDto.date search, Pageable pageable) {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         LocalDateTime startDateTime = search.getStartDateTime();
         LocalDateTime endDateTime = search.getEndDateTime();
