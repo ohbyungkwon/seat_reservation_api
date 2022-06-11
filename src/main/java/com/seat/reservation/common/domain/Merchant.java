@@ -53,11 +53,30 @@ public class Merchant {
 
     private String zipCode; // 가맹점 우편번호
 
+    private LocalDateTime openDateTime;
+
+    private LocalDateTime closeDateTime;
+
+    private Integer reservationStdHour;
+
     @CreatedDate
     private LocalDateTime registerDate;  // 가맹점 등록일자
 
     @LastModifiedDate
     private LocalDateTime modifyDate; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
+
+
+    // createMerchant
+    public static Merchant createMerchant(Integer merchantRegNum, String repName, String repPhone, String merchantTel, String merchantName, Upzong upzongId, String address, String zipCode) {
+        return Merchant.builder()
+                .repPhone(repPhone)
+                .merchantTel(merchantTel)
+                .merchantName(merchantName)
+                .address(address)
+                .zipCode(zipCode)
+                .upzong(upzongId)
+                .build();
+    }
     // 히스토리 추가
 
     //TODO {@link User#createUser} {@link User#createUserSimple(String)}참고하여 Merchant 생성

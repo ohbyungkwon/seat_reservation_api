@@ -3,6 +3,7 @@ package com.seat.reservation.common.controller;
 import com.seat.reservation.common.dto.ReservationDetailDto;
 import com.seat.reservation.common.dto.ReservationDto;
 import com.seat.reservation.common.dto.ResponseComDto;
+import com.seat.reservation.common.dto.SearchDto;
 import com.seat.reservation.common.service.ReservationService;
 
 import org.springframework.data.domain.Page;
@@ -37,7 +38,7 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<ResponseComDto> selectReservations(ReservationDto.search search, Pageable pageable){
+    public ResponseEntity<ResponseComDto> selectReservations(SearchDto.date search, Pageable pageable){
         Page<ReservationDto.show> reservations = reservationService.selectReservations(search, pageable);
         return new ResponseEntity<>(
                 ResponseComDto.builder()
