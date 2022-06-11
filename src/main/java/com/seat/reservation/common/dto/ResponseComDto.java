@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponseComDto {
-    private String resultCode;
     private String resultMsg;
     private Object resultObj;
 }
