@@ -8,6 +8,7 @@ import com.seat.reservation.common.service.SecurityService;
 import lombok.AllArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,7 @@ public class AdminCheckAop extends SecurityService{
          }
     }
 
+    @Before("adminCheck()")
     private void before(JoinPoint joinPoint){
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
