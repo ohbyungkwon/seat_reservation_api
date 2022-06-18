@@ -12,4 +12,11 @@ public class ItemDto {
         private String menuName;
         private int price;
     }
+
+    @Data
+    @Builder
+    public static class delete{
+        private Integer merchantRegNum;
+        private String menuName;
+    }
 }

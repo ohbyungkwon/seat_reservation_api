@@ -37,10 +37,12 @@ public class Item {
         merchant.getItem().add(this);
     }
 
-    public static Item createItem(ItemDto.create itemDto){
+    public static Item createItem(Merchant merchant, String menuName, int price){
         return Item.builder()
-                .menuName(itemDto.getMenuName())
-                .price(itemDto.getPrice())
+                .merchant(merchant)
+                .registerCode(RegisterCode.REGISTER)
+                .menuName(menuName)
+                .price(price)
                 .build();
     }
 }
