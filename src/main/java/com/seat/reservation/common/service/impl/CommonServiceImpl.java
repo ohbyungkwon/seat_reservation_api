@@ -7,6 +7,7 @@ import com.seat.reservation.common.service.CommonService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,22 +21,22 @@ public class CommonServiceImpl implements CommonService {
     }
 
     @Override
-    public List<SearchDto.date> getReservationAbleHours(Integer merchantRegNum) {
+    public List<SearchDto.time> getReservationAbleHours(Integer merchantRegNum) {
         Merchant merchant = merchantRepository.findByMerchantRegNum(merchantRegNum);
-        LocalDateTime openDateTime = merchant.getOpenDateTime();
-        LocalDateTime closeDateTime = merchant.getCloseDateTime();
+        LocalTime openTime = merchant.getOpenTime();
+        LocalTime closeTime = merchant.getCloseTime();
         int stdHour = merchant.getReservationStdHour();
 
         int cnt = 0;
-        int openHour = openDateTime.getHour();
-        int closeHour = closeDateTime.getHour();
-        List<SearchDto.date> list = new ArrayList<>();
+        int openHour = openTime.getHour();
+        int closeHour = closeTime.getHour();
+        List<SearchDto.time> list = new ArrayList<>();
         for(double i = openHour; i <= closeHour - stdHour; i += 0.5) {
-            SearchDto.date searchDto = new SearchDto.date();
+            SearchDto.time searchDto = new SearchDto.time();
             int interval = RESERVATION_INTERVAL * cnt++;
-            LocalDateTime newDateTime = openDateTime.plusMinutes(interval);
-            searchDto.setStartDateTime(newDateTime);
-            searchDto.setEndDateTime(newDateTime.plusHours(stdHour));
+            LocalTime newDateTime = openTime.plusMinutes(interval);
+            searchDto.setStartTime(newDateTime);
+            searchDto.setEndTime(newDateTime.plusHours(stdHour));
             list.add(searchDto);
         }
 

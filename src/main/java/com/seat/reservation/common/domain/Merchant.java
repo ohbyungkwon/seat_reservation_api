@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,9 +54,9 @@ public class Merchant {
 
     private String zipCode; // 가맹점 우편번호
 
-    private LocalDateTime openDateTime;
+    private LocalTime openTime;
 
-    private LocalDateTime closeDateTime;
+    private LocalTime closeTime;
 
     private Integer reservationStdHour;
 
