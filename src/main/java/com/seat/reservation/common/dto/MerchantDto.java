@@ -1,9 +1,14 @@
 package com.seat.reservation.common.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.querydsl.core.annotations.QueryProjection;
 import com.seat.reservation.common.domain.Upzong;
+import com.seat.reservation.common.domain.enums.RegisterCode;
 import lombok.*;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 public class MerchantDto {
@@ -59,6 +64,11 @@ public class MerchantDto {
     @AllArgsConstructor
     public static class update{
         private Integer merchantRegNum;
+
+        @Enumerated(EnumType.STRING)
+        private RegisterCode registerCode; // 등록 코드
     }
+
+
 
 }

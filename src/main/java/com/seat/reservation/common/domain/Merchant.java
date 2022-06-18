@@ -109,7 +109,9 @@ public class Merchant {
     }
 
 
-
+    public void setRegisterCode(RegisterCode registerCode){
+        this.registerCode = registerCode;
+    }
 
 
 }
