@@ -45,35 +45,40 @@ public class SeatAdminController {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ResponseComDto.builder()
-                .resultMsg(merchantRegNum + "에 대한 가맹점 리스트입니다.")
+                .resultMsg(merchantRegNum + "에 대한 좌석 리스트입니다.")
                 .resultObj(seats).build());
     }
 
     // 좌석 등록
     @PostMapping(path = "/seat")
-    public ResponseEntity<ResponseComDto> createSeat(@RequestBody SeatDto.create createSeat){
-        Merchant merchant = merchantRepository.findByMerchantRegNum(createSeat.getMerchantRegNum());
+    public ResponseEntity<ResponseComDto> createSeat(@RequestBody List<SeatDto.create> createSeats){
+        Merchant merchant = merchantRepository.findByMerchantRegNum(createSeats.get(0).getMerchantRegNum());
+        StringBuilder seatCodes = new StringBuilder();
 
         if(merchant == null){
             System.out.println("존재하지 않는 가맹점입니다.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ResponseComDto.builder()
                     .resultMsg("존재하지 않는 가맹점입니다.")
-                    .resultObj(createSeat).build());
-
+                    .resultObj(createSeats).build());
         }
 
-        Seat seat = Seat.createSeat(createSeat.getSeatCode()
-                                , merchant
-                                , createSeat.getReservationCost()
-                                , createSeat.getRegisterCode());
+        createSeats.forEach((createSeat) -> {
+            Seat seat = Seat.createSeat(createSeat.getSeatCode()
+                    , merchant
+                    , createSeat.getReservationCost()
+                    , createSeat.getRegisterCode());
 
-        seatRepository.save(seat);
+            seatCodes.append(createSeat.getSeatCode());
+            seatCodes.append(", ");
+
+            seatRepository.save(seat);
+        });
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseComDto.builder()
-                .resultMsg(createSeat.getSeatCode() + "가 등록되었습니다.")
-                .resultObj(createSeat).build());
+                .resultMsg(seatCodes.substring(0, seatCodes.length()-2) + "가 등록되었습니다.")
+                .resultObj(createSeats).build());
     }
 
     // 좌석 업데이트

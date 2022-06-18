@@ -43,31 +43,31 @@ public class ReservationRepositoryTest {
      * SAVE 테스트
      * 사용자 한명이 같은 가맹점 같은 상품을 20번 예약해봄
      */
-    @Test
-    @Rollback(value = false)
-    public void save() {
-        User customer = entityManager.find(User.class, "obk");
-        User merchantUser = entityManager.find(User.class, "SPC-Coworker");
-        if(customer == null || merchantUser == null) {
-            this.workBeforeReservation("SPC-Coworker", MERCHANT_REG_NUM);
-            //5. 예약 User 등록
-            customer = this.createUser("obk");
-        }
-
-        for(int i = 0; i < RESERVATION_CNT; i++) {
-            Reservation reservation = this.getReservation(customer);
-            List<Item> itemList = reservation.getMerchant().getItem();
-
-            //7. 예약 등록
-            reservation.setTotalPrice(itemList);
-            reservationRepository.save(reservation);
-            for (Item item : itemList) { //Merchant 모든 ITEM 에약
-                ReservationItem reservationItem = this.createReservationItem(item, reservation);
-                //8. 예약상품 저장
-                reservationItemRepository.save(reservationItem);
-            }
-        }
-    }
+//    @Test
+//    @Rollback(value = false)
+//    public void save() {
+//        User customer = entityManager.find(User.class, "obk");
+//        User merchantUser = entityManager.find(User.class, "SPC-Coworker");
+//        if(customer == null || merchantUser == null) {
+//            this.workBeforeReservation("SPC-Coworker", MERCHANT_REG_NUM);
+//            //5. 예약 User 등록
+//            customer = this.createUser("obk");
+//        }
+//
+//        for(int i = 0; i < RESERVATION_CNT; i++) {
+//            Reservation reservation = this.getReservation(customer);
+//            List<Item> itemList = reservation.getMerchant().getItem();
+//
+//            //7. 예약 등록
+//            reservation.setTotalPrice(itemList);
+//            reservationRepository.save(reservation);
+//            for (Item item : itemList) { //Merchant 모든 ITEM 에약
+//                ReservationItem reservationItem = this.createReservationItem(item, reservation);
+//                //8. 예약상품 저장
+//                reservationItemRepository.save(reservationItem);
+//            }
+//        }
+//    }
 
     public Reservation getReservation(User customer){
         System.out.println("=====================================");
@@ -94,31 +94,32 @@ public class ReservationRepositoryTest {
                 .build();
     }
 
-    public void workBeforeReservation(String merchantUserId, Integer merchantRegNum){
-        //1. 가맹점 등록 User 생성
-        User merchantUser = this.createUser(merchantUserId);
-
-        System.out.println("===========CASCADE, 한번에 PERSIST==============");
-        //2.Merchant 등록(Merchant 미구현으로 임시 사용)
-        Merchant merchant = this.createMerchant(merchantRegNum, merchantUser);
-        //3. item 등록(2 loop)
-        for(int i = 0; i < MERCHANT_ITEM_CNT; i ++) {
-            ItemDto.create create = ItemDto.create
-                    .builder()
-                    .price(1000 + i)
-                    .menuName("Food" + i)
-                    .build();
-            Item item = Item.createItem(create);
-            item.setMerchant(merchant);
-        }
-        //4. 좌석 등록(Seat 미구현으로 임시 사용)
-        this.createSeat(merchant);
-        System.out.println("==============================================");
-
-
-        //양방향 연관 관계 체크
-        Assertions.assertThat(merchant.getItem().size()).isEqualTo(MERCHANT_ITEM_CNT);
-    }
+    /* createItem 메소드 수정으로 주석처리 */
+//    public void workBeforeReservation(String merchantUserId, Integer merchantRegNum){
+//        //1. 가맹점 등록 User 생성
+//        User merchantUser = this.createUser(merchantUserId);
+//
+//        System.out.println("===========CASCADE, 한번에 PERSIST==============");
+//        //2.Merchant 등록(Merchant 미구현으로 임시 사용)
+//        Merchant merchant = this.createMerchant(merchantRegNum, merchantUser);
+//        //3. item 등록(2 loop)
+//        for(int i = 0; i < MERCHANT_ITEM_CNT; i ++) {
+//            ItemDto.create create = ItemDto.create
+//                    .builder()
+//                    .price(1000 + i)
+//                    .menuName("Food" + i)
+//                    .build();
+//            Item item = Item.createItem(create);
+//            item.setMerchant(merchant);
+//        }
+//        //4. 좌석 등록(Seat 미구현으로 임시 사용)
+//        this.createSeat(merchant);
+//        System.out.println("==============================================");
+//
+//
+//        //양방향 연관 관계 체크
+//        Assertions.assertThat(merchant.getItem().size()).isEqualTo(MERCHANT_ITEM_CNT);
+//    }
 
     public User createUser(String userId){
         User user = User.createUserSimple(userId);
