@@ -8,5 +8,4 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, String> {
     // Basic CRUD로 사용. No need to update.
     Optional<User> findByUsername(String email);
-    
 }
