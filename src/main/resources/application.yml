@@ -20,6 +20,10 @@ spring:
     hibernate:
       ddl-auto: none
     open-in-view: false
+  security:
+    user:
+      name: reservation_ad
+      password: 1234
 
 logging.level:
   org.hibernate.SQL: debug #SQL log? ??.
