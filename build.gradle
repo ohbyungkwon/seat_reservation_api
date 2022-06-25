@@ -41,7 +41,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-quartz:2.2.2.RELEASE'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.4.RELEASE'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
 	//html 파일이 resource에 있어 핫로딩이 불가한데 devtools가 이를 지원함(재빌링만 진행하면 된다.)
 	implementation 'org.springframework.boot:spring-boot-devtools'
@@ -78,6 +78,22 @@ dependencies {
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5' //querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa' //querydsl 추가
 	implementation 'com.querydsl:querydsl-apt' //querydsl 추가
+
+
+	/* spring security */
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'org.mariadb.jdbc:mariadb-java-client'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 //querydsl 추가

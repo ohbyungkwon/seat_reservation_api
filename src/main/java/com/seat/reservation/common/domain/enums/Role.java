@@ -1,9 +1,11 @@
 package com.seat.reservation.common.domain.enums;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public enum Role implements GrantedAuthority {
