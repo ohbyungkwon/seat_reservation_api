@@ -84,6 +84,8 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         LocalDateTime startDateTime = search.getStartDateTime();
         LocalDateTime endDateTime = search.getEndDateTime();
+
+        //동적 쿼리로 변경(N+1문제 발생 예상)
         Page<Reservation> reservations = reservationRepository.findByUserAndRegisterDateBetween(user, startDateTime, endDateTime, pageable);
         List<ReservationDto.show> reservationList = reservations.get()
                 .map(Reservation::convertReservationDtoShow)
