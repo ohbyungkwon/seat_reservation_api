@@ -1,8 +1,6 @@
 package com.seat.reservation.common.domain;
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
