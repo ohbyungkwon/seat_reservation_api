@@ -21,11 +21,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Merchant {
-
     @Id
     private Integer merchantRegNum; // 사업자 등록 번호 8자리?
-
-    // 사장님 계정 -> 이걸 바탕으로 업종에 연결시켜야 한다.
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,6 +31,9 @@ public class Merchant {
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "merchant")
     private List<Item> item = new ArrayList<Item>();// 메뉴 (가맹점 삭제 시 메뉴 전체 삭제를 위해 cascade 사용)
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "merchant")
+    private List<Review> review = new ArrayList<Review>();// 메뉴 (가맹점 삭제 시 리뷰 전체 삭제를 위해 cascade 사용)
 
     private String repPhone; // 가맹점 사장님 번호
 

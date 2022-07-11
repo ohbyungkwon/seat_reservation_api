@@ -5,6 +5,8 @@ import org.hibernate.annotations.Fetch;
 import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table
 @Getter
@@ -25,7 +27,20 @@ public class Review {
 
     private String comment; // 리얼 리뷰
 
+    private byte[] image;
+
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Review parent;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "parent", orphanRemoval = true)
+    private List<Review> children = new ArrayList<Review>();
+
+    /**
+     * 예약당 하나의 리뷰만 작성된다
+     * 나의 예약 정보에서 댓글을 달 수 있다.
+     */
     @JoinColumn
     @OneToOne(fetch = FetchType.LAZY)
-    private Reservation reservation; // 예약 당 하나의 리뷰만 작성한다.
+    private Reservation reservation;
 }
