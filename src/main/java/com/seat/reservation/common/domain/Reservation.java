@@ -67,6 +67,20 @@ public class Reservation {
             this.totalPrice += item.getPrice();
     }
 
+    public ReservationDto.show convertSimpleReservationDtoShow(){
+        return ReservationDto.show.builder()
+                .totalPrice(this.totalPrice)
+                .isPreOrder(this.isPreOrder)
+                .reservationDate(this.reservationDate)
+                .repPhone(this.merchant.getRepPhone())
+                .merchantTel(this.merchant.getMerchantTel())
+                .merchantName(this.merchant.getMerchantName())
+                .address(this.merchant.getAddress())
+                .zipCode(this.merchant.getZipCode())
+                .build();
+    }
+
+    //Reservation Cost는 무엇인가?
     public ReservationDto.show convertReservationDtoShow(){
         return ReservationDto.show.builder()
                 .totalPrice(this.totalPrice)

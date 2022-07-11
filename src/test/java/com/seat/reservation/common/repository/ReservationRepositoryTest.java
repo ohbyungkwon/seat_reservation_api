@@ -168,12 +168,12 @@ public class ReservationRepositoryTest {
         DateTimeFormatter dt =  DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime startDateTime = LocalDateTime.parse("2022-05-21 00:00:00", dt);
         LocalDateTime endDateTime = LocalDateTime.parse("2022-05-25 00:00:00", dt);
-        Page<Reservation> reservationPage1 = reservationRepository.findByUserAndRegisterDateBetween(my, startDateTime, endDateTime, pageable);
+        Page<Reservation> reservationPage1 = reservationRepository.findByUserAndRegisterDateBetween(my.getUserid(), startDateTime, endDateTime, pageable);
         Assertions.assertThat(reservationPage1.getTotalPages()).isEqualTo(3);
 
         startDateTime = LocalDateTime.parse("2021-05-21 00:00:00", dt);
         endDateTime = LocalDateTime.parse("2021-05-25 00:00:00", dt);
-        Page<Reservation> reservationPage2 = reservationRepository.findByUserAndRegisterDateBetween(my, startDateTime, endDateTime, pageable);
+        Page<Reservation> reservationPage2 = reservationRepository.findByUserAndRegisterDateBetween(my.getUserid(), startDateTime, endDateTime, pageable);
         Assertions.assertThat(reservationPage2.getTotalPages()).isEqualTo(0);
     }
 

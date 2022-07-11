@@ -12,6 +12,5 @@ import java.time.LocalDateTime;
 public interface ReservationRepository extends JpaRepository<Reservation, Long>, ReservationRepositoryCustom {
     Page<Reservation> findByUser(User user, Pageable pageable);
 
-    Page<Reservation> findByUserAndRegisterDateBetween(User user, LocalDateTime start, LocalDateTime end, Pageable pageable) ;
     Boolean existsByIdAndUser(Long reservationId, User user);
 }
