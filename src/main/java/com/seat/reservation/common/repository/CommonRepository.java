@@ -6,7 +6,7 @@ import javax.persistence.EntityManager;
 
 @Repository
 public class CommonRepository {
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public CommonRepository(EntityManager entityManager) {
         this.entityManager = entityManager;

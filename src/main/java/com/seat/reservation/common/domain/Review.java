@@ -1,5 +1,6 @@
 package com.seat.reservation.common.domain;
 
+import com.seat.reservation.common.dto.ReviewDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,7 +26,9 @@ public class Review {
 
     private String comment; // 리얼 리뷰
 
-    private byte[] image;
+    @JoinColumn
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private File file;
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,4 +44,16 @@ public class Review {
     @JoinColumn
     @OneToOne(fetch = FetchType.LAZY)
     private Reservation reservation;
+
+    public static Review createReview(ReviewDto.create dto, Review parent, File file,
+                                      Merchant merchant, Reservation reservation){
+        return Review.builder()
+                .merchant(merchant)
+                .title(dto.getTitle())
+                .comment(dto.getComment())
+                .file(file)
+                .parent(parent)
+                .reservation(reservation)
+                .build();
+    }
 }
