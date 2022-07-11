@@ -36,7 +36,8 @@ public class ReviewServiceImpl implements ReviewService {
         Reservation reservation = reservationRepository.findById(create.getReservationId())
                 .orElseThrow(() ->  new NotFoundException("예약한 고객만 리뷰 작성 가능합니다."));
 
-        Review review = Review.createReview(create, parentReview, attachedFile, merchant, reservation);
+        Review review = Review.createReview(create, attachedFile, merchant, reservation);
+        review.joinParentReview(parentReview);
         reviewRepository.save(review);
 
         return Boolean.TRUE;

@@ -45,14 +45,23 @@ public class Review {
     @OneToOne(fetch = FetchType.LAZY)
     private Reservation reservation;
 
-    public static Review createReview(ReviewDto.create dto, Review parent, File file,
+    /**
+     * parent가 null이면 최상위 리뷰
+     * parent가 null이 아니면 상위 리뷰가 존재하는 하위 리뷰
+     */
+    public void joinParentReview(Review parent){
+        this.parent = parent;
+        if(parent != null)
+            parent.getChildren().add(this);
+    }
+
+    public static Review createReview(ReviewDto.create dto, File file,
                                       Merchant merchant, Reservation reservation){
         return Review.builder()
                 .merchant(merchant)
                 .title(dto.getTitle())
                 .comment(dto.getComment())
                 .file(file)
-                .parent(parent)
                 .reservation(reservation)
                 .build();
     }
