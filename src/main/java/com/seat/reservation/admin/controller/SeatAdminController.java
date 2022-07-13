@@ -43,7 +43,7 @@ public class SeatAdminController {
 
         List<SeatDto.show> seats = seatRepositoryImpl.findSeatInMerchant(merchantRegNum);
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseComDto.builder()
                 .resultMsg(merchantRegNum + "에 대한 좌석 리스트입니다.")
                 .resultObj(seats).build());
