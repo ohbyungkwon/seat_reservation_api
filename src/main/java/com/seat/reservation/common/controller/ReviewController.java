@@ -45,7 +45,7 @@ public class ReviewController {
             @RequestPart(value = "review") ReviewDto.update update,
             @PathVariable Long id ) throws Exception {
         Long reviewId = update.getReviewId();
-        if(reviewId.equals(id)){
+        if(!reviewId.equals(id)){
             throw new BadReqException("변경 정보가 부정확합니다.");
         }
 
