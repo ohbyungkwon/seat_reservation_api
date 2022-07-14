@@ -11,7 +11,7 @@ public class PayDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class InputPayDto{
+    public static class InputPayDto{
         private PaymentMethod paymentMethod;
         private String cardNo;
         private String expireYear;
@@ -24,7 +24,7 @@ public class PayDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public class OutputPayDto{
+    public static class OutputPayDto{
         private String authNo;
         private PaymentCode paymentCode;
     }
