@@ -28,6 +28,7 @@ public class ReviewDto {
         private Long reviewId;
         private String title;
         private String comment;
+        private Long changeFileId;
     }
 
     @Getter

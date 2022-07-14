@@ -1,7 +1,9 @@
 package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.dto.FileDto;
+import com.seat.reservation.common.dto.ReviewDto;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -24,12 +26,19 @@ public class File {
 
     private String mimeType;
 
-    public static File createImage(FileDto.create create){
+    public static File createImage(FileDto.create dto){
         return File.builder()
-                .filename(create.getFilename())
-                .saveFilename(create.getSaveFilename())
-                .binary(create.getBinary())
-                .mimeType(create.getMimeType())
+                .filename(dto.getFilename())
+                .saveFilename(dto.getSaveFilename())
+                .binary(dto.getBinary())
+                .mimeType(dto.getMimeType())
                 .build();
+    }
+
+    public void changeFile(FileDto.create dto){
+        this.filename = dto.getFilename();
+        this.saveFilename = dto.getSaveFilename();
+        this.mimeType = dto.getMimeType();
+        this.binary = dto.getBinary();
     }
 }

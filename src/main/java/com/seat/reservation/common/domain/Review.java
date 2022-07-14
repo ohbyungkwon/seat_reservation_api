@@ -2,6 +2,7 @@ package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.dto.ReviewDto;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -64,5 +65,17 @@ public class Review {
                 .file(file)
                 .reservation(reservation)
                 .build();
+    }
+
+    public void changeReview(ReviewDto.update dto){
+        String title = dto.getTitle();
+        String comment = dto.getComment();
+
+        if(!StringUtils.isEmpty(title)) {
+            this.title = dto.getTitle();
+        }
+        if(!StringUtils.isEmpty(comment)) {
+            this.comment = dto.getComment();
+        }
     }
 }

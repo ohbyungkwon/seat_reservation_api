@@ -5,6 +5,7 @@ import com.seat.reservation.common.dto.SearchDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CommonService {
     List<SearchDto.time> getReservationAbleHours(Integer merchantRegNum);
@@ -12,4 +13,10 @@ public interface CommonService {
     String renameFile(String filename);
 
     File getFile(MultipartFile file) throws Exception;
+
+    String getSaveFileName(String filename);
+
+    Optional<File> findFile(Long fileId) throws Exception;
+
+    void removeFile(File file) throws Exception ;
 }
