@@ -16,6 +16,9 @@ public class KakaoPayServiceImpl implements PaymentService {
         /*
          * 카카오 페이 로직 추가
          */
+
+        System.out.println("Execute Kakao Pay");
+
         return PayDto.OutputPayDto.builder()
                 .paymentCode(PaymentCode.APPROVE)
                 .authNo("A1234567") // 임시 승인 번호

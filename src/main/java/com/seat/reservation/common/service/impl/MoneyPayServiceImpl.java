@@ -17,6 +17,9 @@ public class MoneyPayServiceImpl implements PaymentService {
         /*
          * 현금 결제 로직 추가
          */
+
+        System.out.println("Execute Money Pay");
+
         return PayDto.OutputPayDto.builder()
                 .paymentCode(PaymentCode.APPROVE)
                 .authNo("A1234567") // 임시 승인 번호

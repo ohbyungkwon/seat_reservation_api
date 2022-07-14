@@ -18,6 +18,8 @@ public class TossPayServiceImpl implements PaymentService {
          * 토스페이 로직 추가
          */
 
+        System.out.println("Execute Toss Pay");
+
         return PayDto.OutputPayDto.builder()
                 .paymentCode(PaymentCode.APPROVE)
                 .authNo("A1234567") // 임시 승인 번호
