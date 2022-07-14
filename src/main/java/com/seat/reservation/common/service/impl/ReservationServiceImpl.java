@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -44,6 +45,7 @@ import java.util.stream.Collectors;
  * */
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReservationServiceImpl extends SecurityService implements ReservationService{
     private final ReservationRepository reservationRepository;
     private final ReservationItemRepository reservationItemRepository;
@@ -57,6 +59,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
      * @return Boolean
      */
     @Override
+    @Transactional
     public Boolean saveReservation(ReservationDto.create dto) {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         Merchant merchant = merchantRepository.findByMerchantRegNum(dto.getMerchantRegNum());
@@ -72,6 +75,13 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
             }
         }
         return Boolean.TRUE;
+    }
+
+    @Override
+    @Transactional
+    public Boolean removeReservation(Long reservationId) {
+        //예약 정보(reservation, reservation_item) 조회 후 삭제
+        return null;
     }
 
     /**

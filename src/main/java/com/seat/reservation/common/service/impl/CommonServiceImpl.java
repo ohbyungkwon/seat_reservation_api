@@ -4,18 +4,22 @@ import com.seat.reservation.common.domain.File;
 import com.seat.reservation.common.domain.Merchant;
 import com.seat.reservation.common.dto.FileDto;
 import com.seat.reservation.common.dto.SearchDto;
+import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.repository.FileRepository;
 import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.service.CommonService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional(readOnly = true)
 public class CommonServiceImpl implements CommonService {
     private static final Integer RESERVATION_INTERVAL = 30;
     private final MerchantRepository merchantRepository;
@@ -60,11 +64,15 @@ public class CommonServiceImpl implements CommonService {
         return sb.toString();
     }
 
+    public String getSaveFileName(String filename){
+        Boolean isExist = fileRepository.existsByFilename(filename);
+        return isExist ? this.renameFile(filename) : filename;
+    }
+
     @Override
     public File getFile(MultipartFile file) throws Exception {
         String filename = file.getOriginalFilename();
-        Boolean isExist = fileRepository.existsByFilename(filename);
-        String saveFilename = isExist ? this.renameFile(filename) : filename;
+        String saveFilename = this.getSaveFileName(filename);
         return File.createImage(
                 FileDto.create.builder()
                         .filename(filename)
@@ -72,5 +80,16 @@ public class CommonServiceImpl implements CommonService {
                         .binary(file.getBytes())
                         .mimeType(file.getContentType())
                         .build());
+    }
+
+    @Override
+    public Optional<File> findFile(Long fileId) throws Exception {
+        return fileRepository.findById(fileId);
+    }
+
+    @Override
+    @Transactional
+    public void removeFile(File file) throws Exception {
+        fileRepository.delete(file);
     }
 }
