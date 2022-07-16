@@ -7,6 +7,7 @@ import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.SeatHistoryRepository;
 import com.seat.reservation.common.repository.SeatRepository;
 import com.seat.reservation.common.service.HistoryService;
+import com.seat.reservation.common.service.MerchantService;
 import com.seat.reservation.common.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class MerchantServiceImpl extends SecurityService implements HistoryService {
+public class MerchantServiceImpl extends SecurityService implements HistoryService, MerchantService {
     private final MerchantRepository merchantRepository;
     private final MerchantHistoryRepository merchantHistoryRepository;
 
@@ -41,4 +42,10 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
             merchantHistoryRepository.save(merchantHistory);
         }
     }
+
+    @Override
+    public void registerMerchant(Merchant merchant) throws Exception {
+    }
+
+
 }

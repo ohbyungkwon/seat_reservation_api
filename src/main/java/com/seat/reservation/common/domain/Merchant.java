@@ -7,6 +7,7 @@ import com.seat.reservation.common.repository.Impl.ReservationItemRepositoryImpl
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,7 +21,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Merchant {
+
     @Id
     private Integer merchantRegNum; // 사업자 등록 번호 8자리?
 
@@ -65,6 +68,7 @@ public class Merchant {
 
     @LastModifiedDate
     private LocalDateTime modifyDate; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
+
 
 
     // createMerchant
