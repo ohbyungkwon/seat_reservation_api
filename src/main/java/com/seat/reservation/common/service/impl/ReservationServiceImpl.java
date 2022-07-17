@@ -80,8 +80,16 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     @Override
     @Transactional
     public Boolean removeReservation(Long reservationId) {
-        //예약 정보(reservation, reservation_item) 조회 후 삭제
-        return null;
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new NotFoundUserException("예약 정보를 찾을 수 없습니다."));
+        List<ReservationItem> reservationItems = reservationItemRepository.findByReservationId(reservationId);
+        if(!reservation.isPreOrder()) {
+            List<Long> reservationItemIdList = reservationItems.stream().map(ReservationItem::getId).collect(Collectors.toList());
+            reservationItemRepository.deleteByIdIn(reservationItemIdList);
+        }
+
+        reservationRepository.delete(reservation);
+        return Boolean.TRUE;
     }
 
     /**
