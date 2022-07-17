@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.lwawt.macosx.CInputMethod;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -98,6 +97,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
         if(!msg.equals("")){
             throw new BadReqException(msg);
         }
+
 
         if(reservation.isPreOrder()) {
             List<Long> reservationItemIdList = reservationItemRepository.findByReservationId(reservationId)
