@@ -26,10 +26,10 @@ public class MerchantUserController {
     }
 
     // 가맹점을 보여주는
-    @GetMapping("/merchant/{id}")
-    public Merchant findById(@PathVariable String id){
-        //return merchantService.findById(id);
-    }
+    //   @GetMapping("/merchant/{id}")
+//    public Merchant findById(@PathVariable String id){
+//        return merchantService.findById(id);
+//    }
 
 
 }

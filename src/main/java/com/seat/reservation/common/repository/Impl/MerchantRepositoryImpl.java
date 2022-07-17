@@ -39,10 +39,6 @@ import static com.seat.reservation.common.domain.QUpzong.upzong;
     }
 
 
-
-
-
-
     public BooleanExpression eqMerchantName(String merchantName){
         return StringUtils.isEmpty(merchantName) ? null : merchant.merchantName.eq(merchantName);
     }

@@ -11,8 +11,8 @@ import java.util.List;
 public interface MerchantHistoryRepository extends JpaRepository<MerchantHistory, Long> {
 
     /* 가게의 등록, 수정, 삭제 이력을 가져오는 쿼리 */
-    //List<MerchantHistory> findBySeat(Merchant merchant);
+    List<MerchantHistory> findBySeat(Merchant merchant);
 
     /* 날짜 범위에 따라 이력을 보는 쿼리 */
-    //List<MerchantHistory> findByRegisterDateBetween(LocalDateTime start, LocalDateTime end);
+    List<MerchantHistory> findByRegisterDateBetween(LocalDateTime start, LocalDateTime end);
 }

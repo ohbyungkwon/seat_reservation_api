@@ -1,8 +1,10 @@
 package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.domain.enums.RegisterCode;
+import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.dto.ReservationDto;
+import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.repository.Impl.ReservationItemRepositoryImpl;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Table
 @Getter
@@ -63,6 +66,9 @@ public class Merchant {
 
     private Integer reservationStdHour;
 
+    @Enumerated(EnumType.STRING)
+    private Role role; // 관리자/사용자
+
     @CreatedDate
     private LocalDateTime registerDate;  // 가맹점 등록일자
 
@@ -72,19 +78,48 @@ public class Merchant {
 
 
     // createMerchant
-    public static Merchant createMerchant(Integer merchantRegNum, String repName, String repPhone, String merchantTel, String merchantName, Upzong upzongId, String address, String zipCode) {
-        return Merchant.builder()
-                .repPhone(repPhone)
-                .merchantTel(merchantTel)
-                .merchantName(merchantName)
-                .address(address)
-                .zipCode(zipCode)
-                .upzong(upzongId)
-                .build();
-    }
+//    public static Merchant createMerchant(Integer merchantRegNum, String repName, String repPhone, String merchantTel, String merchantName, Upzong upzongId, String address, String zipCode) {
+//        return Merchant.builder()
+//                .repPhone(repPhone)
+//                .merchantTel(merchantTel)
+//                .merchantName(merchantName)
+//                .address(address)
+//                .zipCode(zipCode)
+//                .upzong(upzongId)
+//                .build();
+//    }
     // 히스토리 추가
 
     //TODO {@link User#createUser} {@link User#createUserSimple(String)}참고하여 Merchant 생성
+
+    public static Merchant createMerchantSimple(Integer merchantRegNum){
+        return Merchant.builder().merchantRegNum(merchantRegNum).build();
+    }
+
+    public static Merchant createMerchant(MerchantDto.create merchantDto){
+        Role role = Optional.ofNullable(merchantDto.getRole())
+                .orElse(Role.UNAUTHORIZATION_ROLE);
+
+        return Merchant.builder()
+                .repPhone(merchantDto.getRepPhone())
+                .merchantTel(merchantDto.getMerchantTel())
+                .merchantName(merchantDto.getMerchantName())
+                .address(merchantDto.getAddress())
+                .zipCode(merchantDto.getZipCode())
+                .address(merchantDto.getAddress())
+                .upzong(merchantDto.getUpzongId())
+                .role(role)
+                .build();
+    }
+
+
+
+
+
+
+
+
+
 
     // create user 참고해서 메서드로 2개 빼기 -> 전역으로 만들어서 다른곳에섣 사용 가능하게
     // merchantDto 처럼 또 선언해서 땡겨갈 수 있도록

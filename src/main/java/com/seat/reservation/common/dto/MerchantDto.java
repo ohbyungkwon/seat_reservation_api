@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.querydsl.core.annotations.QueryProjection;
 import com.seat.reservation.common.domain.Upzong;
 import com.seat.reservation.common.domain.enums.RegisterCode;
+import com.seat.reservation.common.domain.enums.Role;
 import lombok.*;
 
 import javax.persistence.EnumType;
@@ -55,6 +56,10 @@ public class MerchantDto {
         private Upzong upzongId;
         private String address;
         private String zipCode;
+
+        @Enumerated(EnumType.STRING)
+        private Role role;
+
     }
 
     @Getter
