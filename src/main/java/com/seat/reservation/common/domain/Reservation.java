@@ -2,12 +2,14 @@ package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.dto.ReservationDto;
 import lombok.*;
+import org.apache.tomcat.jni.Local;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -94,5 +96,29 @@ public class Reservation {
                 .zipCode(this.merchant.getZipCode())
                 .reservationCost(this.seat.getReservationCost())
                 .build();
+    }
+
+    public String isPossibleCancel(){
+        String msg = "";
+        LocalDateTime todayDateTime = LocalDateTime.now();
+        LocalDate today = todayDateTime.toLocalDate();
+        LocalDate reservationDate = this.getReservationDate().toLocalDate();
+        LocalDate registerDate = this.getRegisterDate().toLocalDate();
+
+        //당일 예약
+        if(registerDate.equals(reservationDate)){
+            //결제 후 1시간 지남
+            if (this.getRegisterDate().plusHours(1).isBefore(todayDateTime)) {
+                msg = "예약 1시간 이전 취소는 불가합니다.";
+            }
+        } else {
+            //예약 당일
+            if (today.equals(reservationDate)) {
+                if (todayDateTime.plusHours(1).isAfter(this.getReservationDate())) {
+                    msg = "예약 1시간 이전 취소는 불가합니다.";
+                }
+            }
+        }
+        return msg;
     }
 }

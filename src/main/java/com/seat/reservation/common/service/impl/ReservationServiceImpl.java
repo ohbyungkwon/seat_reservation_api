@@ -5,6 +5,7 @@ import com.seat.reservation.common.dto.ReservationDetailDto;
 import com.seat.reservation.common.dto.ReservationDto;
 import com.seat.reservation.common.dto.ReservationItemDto;
 import com.seat.reservation.common.dto.SearchDto;
+import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.exception.NotOwnException;
 import com.seat.reservation.common.repository.*;
@@ -82,12 +83,17 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     public Boolean removeReservation(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NotFoundUserException("예약 정보를 찾을 수 없습니다."));
-        List<ReservationItem> reservationItems = reservationItemRepository.findByReservationId(reservationId);
-        if(!reservation.isPreOrder()) {
-            List<Long> reservationItemIdList = reservationItems.stream().map(ReservationItem::getId).collect(Collectors.toList());
-            reservationItemRepository.deleteByIdIn(reservationItemIdList);
+
+        String msg = reservation.isPossibleCancel();
+        if(!msg.equals("")){
+            throw new BadReqException(msg);
         }
 
+        if(reservation.isPreOrder()) {
+            List<Long> reservationItemIdList = reservationItemRepository.findByReservationId(reservationId)
+                    .stream().map(ReservationItem::getId).collect(Collectors.toList());
+            reservationItemRepository.deleteByIdIn(reservationItemIdList);
+        }
         reservationRepository.delete(reservation);
         return Boolean.TRUE;
     }
