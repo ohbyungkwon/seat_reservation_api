@@ -78,16 +78,16 @@ public class Merchant {
 
 
     // createMerchant
-//    public static Merchant createMerchant(Integer merchantRegNum, String repName, String repPhone, String merchantTel, String merchantName, Upzong upzongId, String address, String zipCode) {
-//        return Merchant.builder()
-//                .repPhone(repPhone)
-//                .merchantTel(merchantTel)
-//                .merchantName(merchantName)
-//                .address(address)
-//                .zipCode(zipCode)
-//                .upzong(upzongId)
-//                .build();
-//    }
+    public static Merchant createMerchant(Integer merchantRegNum, String repName, String repPhone, String merchantTel, String merchantName, Upzong upzongId, String address, String zipCode) {
+        return Merchant.builder()
+                .repPhone(repPhone)
+                .merchantTel(merchantTel)
+                .merchantName(merchantName)
+                .address(address)
+                .zipCode(zipCode)
+                .upzong(upzongId)
+                .build();
+    }
     // 히스토리 추가
 
     //TODO {@link User#createUser} {@link User#createUserSimple(String)}참고하여 Merchant 생성
@@ -96,7 +96,7 @@ public class Merchant {
         return Merchant.builder().merchantRegNum(merchantRegNum).build();
     }
 
-    public static Merchant createMerchant(MerchantDto.create merchantDto){
+    public static Merchant createMerchantUser(MerchantDto.create merchantDto){
         Role role = Optional.ofNullable(merchantDto.getRole())
                 .orElse(Role.UNAUTHORIZATION_ROLE);
 
