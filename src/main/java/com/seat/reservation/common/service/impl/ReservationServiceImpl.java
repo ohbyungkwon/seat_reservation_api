@@ -1,10 +1,8 @@
 package com.seat.reservation.common.service.impl;
 
 import com.seat.reservation.common.domain.*;
-import com.seat.reservation.common.dto.ReservationDetailDto;
-import com.seat.reservation.common.dto.ReservationDto;
-import com.seat.reservation.common.dto.ReservationItemDto;
-import com.seat.reservation.common.dto.SearchDto;
+import com.seat.reservation.common.domain.enums.PaymentCode;
+import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.exception.NotOwnException;
@@ -17,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.lwawt.macosx.CInputMethod;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,6 +52,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     private final MerchantRepository merchantRepository;
     private final SeatRepository seatRepository;
     private final ItemRepository itemRepository;
+    private final PaymentHistoryRepository paymentHistoryRepository;
 
     /**
      * Reservation 저장
@@ -61,7 +61,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
      */
     @Override
     @Transactional
-    public Boolean saveReservation(ReservationDto.create dto) {
+    public Boolean saveReservation(ReservationDto.create dto, PayDto.InputPayDto inputPayDto) {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         Merchant merchant = merchantRepository.findByMerchantRegNum(dto.getMerchantRegNum());
         Optional<Seat> seat = seatRepository.findById(dto.getSeatId());
@@ -69,6 +69,16 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
             List<Item> itemList = itemRepository.findByIdIn(dto.getItemIdList());
             Reservation reservation = Reservation.createReservation(dto, merchant, seat.get(), user);
             reservation.setTotalPrice(itemList);
+
+            PayModule payModule = new PayModule(inputPayDto.getPaymentMethod());
+
+            PaymentHistory paymentHistory = payModule.pay(reservation, user, merchant, inputPayDto);
+            paymentHistoryRepository.save(paymentHistory);
+
+            if(paymentHistory.getPaymentCode() != PaymentCode.APPROVE){
+                return Boolean.FALSE;
+            }
+
             reservationRepository.save(reservation);
             for(Item item : itemList){
                 ReservationItem reservationItem = ReservationItem.createReservationItem(reservation, item);

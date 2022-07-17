@@ -1,9 +1,6 @@
 package com.seat.reservation.common.controller;
 
-import com.seat.reservation.common.dto.ReservationDetailDto;
-import com.seat.reservation.common.dto.ReservationDto;
-import com.seat.reservation.common.dto.ResponseComDto;
-import com.seat.reservation.common.dto.SearchDto;
+import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.service.ReservationService;
 
 import org.springframework.data.domain.Page;
@@ -25,8 +22,8 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public ResponseEntity<ResponseComDto> saveReservation(ReservationDto.create create){
-        Boolean isSuccess = reservationService.saveReservation(create);
+    public ResponseEntity<ResponseComDto> saveReservation(ReservationDto.create create, PayDto.InputPayDto inputPayDto){
+        Boolean isSuccess = reservationService.saveReservation(create, inputPayDto);
 
         Map<String, Boolean> json = new HashMap<>();
         json.put("isSuccess", isSuccess);
