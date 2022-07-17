@@ -31,7 +31,7 @@ public class PayModule {
         }
     }
 
-    private PaymentHistory pay(Reservation reservation
+    public PaymentHistory pay(Reservation reservation
             , User user
             , Merchant merchant
             , PayDto.InputPayDto payDto){
