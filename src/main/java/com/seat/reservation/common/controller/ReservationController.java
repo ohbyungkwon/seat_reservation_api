@@ -25,7 +25,7 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public ResponseEntity<ResponseComDto> save(ReservationDto.create create){
+    public ResponseEntity<ResponseComDto> saveReservation(ReservationDto.create create){
         Boolean isSuccess = reservationService.saveReservation(create);
 
         Map<String, Boolean> json = new HashMap<>();
@@ -33,6 +33,19 @@ public class ReservationController {
         return new ResponseEntity<>(
                 ResponseComDto.builder()
                         .resultMsg("예약 완료되었습니다.")
+                        .resultObj(json)
+                        .build(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/reservation/{id}")
+    public ResponseEntity<ResponseComDto> removeReservation(@PathVariable Long id) {
+        Boolean isSuccess = reservationService.removeReservation(id);
+
+        Map<String, Boolean> json = new HashMap<>();
+        json.put("isSuccess", isSuccess);
+        return new ResponseEntity<>(
+                ResponseComDto.builder()
+                        .resultMsg("예약 취소되었습니다.")
                         .resultObj(json)
                         .build(), HttpStatus.OK);
     }
