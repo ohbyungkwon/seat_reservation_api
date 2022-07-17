@@ -30,6 +30,8 @@ import static com.seat.reservation.common.domain.QUpzong.upzong;
      *  AND 지역 = 지역
      *  AND 상호 = 상호
      */
+
+    // 가맹점 리스트를 가져오는 것
     @Override
     public List<Merchant> findMerchant(Integer merchantRegNum) {
         return jpaQueryFactory.selectFrom(merchant)
@@ -37,6 +39,8 @@ import static com.seat.reservation.common.domain.QUpzong.upzong;
                 .where(eqMerchantName(String.valueOf(merchant.merchantName))) // 상호 = 상호
                 .fetch();
     }
+
+
 
 
     public BooleanExpression eqMerchantName(String merchantName){
