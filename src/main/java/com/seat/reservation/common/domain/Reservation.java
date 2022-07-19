@@ -109,7 +109,7 @@ public class Reservation {
         if(registerDate.equals(reservationDate)){
             //결제 후 1시간 지남
             if (this.getRegisterDate().plusHours(1).isBefore(todayDateTime)) {
-                msg = "예약 1시간 이전 취소는 불가합니다.";
+                msg = "한시간이 지난 결제는 취소할 수 없습니다.";
             }
         } else {
             //예약 당일
