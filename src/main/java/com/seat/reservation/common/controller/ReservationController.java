@@ -35,8 +35,8 @@ public class ReservationController {
     }
 
     @DeleteMapping("/reservation/{id}")
-    public ResponseEntity<ResponseComDto> removeReservation(@PathVariable Long id) {
-        Boolean isSuccess = reservationService.removeReservation(id);
+    public ResponseEntity<ResponseComDto> removeReservation(@PathVariable Long id, PayDto.InputPayDto inputPayDto) {
+        Boolean isSuccess = reservationService.removeReservation(id, inputPayDto);
 
         Map<String, Boolean> json = new HashMap<>();
         json.put("isSuccess", isSuccess);

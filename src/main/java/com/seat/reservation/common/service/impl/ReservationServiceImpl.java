@@ -7,6 +7,7 @@ import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.exception.NotOwnException;
 import com.seat.reservation.common.repository.*;
+import com.seat.reservation.common.service.PaymentService;
 import com.seat.reservation.common.service.ReservationService;
 import com.seat.reservation.common.service.SecurityService;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     private final SeatRepository seatRepository;
     private final ItemRepository itemRepository;
     private final PaymentHistoryRepository paymentHistoryRepository;
+    private final PayModule payModule;
 
     /**
      * Reservation 저장
@@ -70,9 +72,9 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
             Reservation reservation = Reservation.createReservation(dto, merchant, seat.get(), user);
             reservation.setTotalPrice(itemList);
 
-            PayModule payModule = new PayModule(inputPayDto.getPaymentMethod());
+            PaymentService paymentService = payModule.getPayService(inputPayDto.getPaymentMethod());
 
-            PaymentHistory paymentHistory = payModule.pay(reservation, user, merchant, inputPayDto);
+            PaymentHistory paymentHistory = payModule.pay(paymentService, reservation, user, merchant, inputPayDto);
             paymentHistoryRepository.save(paymentHistory);
 
             if(paymentHistory.getPaymentCode() != PaymentCode.APPROVE){
@@ -90,13 +92,27 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
 
     @Override
     @Transactional
-    public Boolean removeReservation(Long reservationId) {
+    public Boolean removeReservation(Long reservationId, PayDto.InputPayDto inputPayDto) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NotFoundUserException("예약 정보를 찾을 수 없습니다."));
 
         String msg = reservation.isPossibleCancel();
         if(!msg.equals("")){
             throw new BadReqException(msg);
+        }
+
+        PaymentService paymentService = payModule.getPayService(inputPayDto.getPaymentMethod());
+
+        PaymentHistory paymentHistory = payModule.pay(paymentService
+                                                   , reservation
+                                                   , reservation.getUser()
+                                                   , reservation.getMerchant()
+                                                   , inputPayDto);
+
+        paymentHistoryRepository.save(paymentHistory);
+
+        if(paymentHistory.getPaymentCode() != PaymentCode.APPROVE){
+            return Boolean.FALSE;
         }
 
         if(reservation.isPreOrder()) {

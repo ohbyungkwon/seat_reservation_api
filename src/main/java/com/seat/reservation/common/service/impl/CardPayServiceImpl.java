@@ -10,17 +10,16 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Component
-public class NaverPayServiceImpl implements PaymentService {
-
-    private final PaymentMethod paymentMethod = PaymentMethod.NAVER;
+public class CardPayServiceImpl implements PaymentService {
+    private final PaymentMethod paymentMethod = PaymentMethod.KAKAO;
 
     @Override
     public PayDto.OutputPayDto pay(Reservation reservation, PayDto.InputPayDto payDto) {
         /*
-         * 네이버페이 로직 추가
+         * 카드 페이 로직 추가
          */
 
-        System.out.println("Execute Naver Pay");
+        System.out.println("Execute Card Pay");
 
         return PayDto.OutputPayDto.builder()
                 .paymentCode(PaymentCode.APPROVE)

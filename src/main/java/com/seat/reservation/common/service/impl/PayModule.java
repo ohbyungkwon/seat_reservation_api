@@ -7,31 +7,40 @@ import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.domain.enums.PaymentMethod;
 import com.seat.reservation.common.dto.PayDto;
 import com.seat.reservation.common.service.PaymentService;
+import com.seat.reservation.common.support.ApplicationContextProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
+// Payment Module Factory
 @AllArgsConstructor
+@Component
 public class PayModule {
-    private PaymentService paymentService;
 
-    public PayModule(PaymentMethod paymentMethod){
+    public PaymentService getPayService(PaymentMethod paymentMethod){
+        ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+
         if(paymentMethod == PaymentMethod.TOSS){
-            paymentService = new TossPayServiceImpl();
+            return applicationContext.getBean(TossPayServiceImpl.class);
         }
         else if(paymentMethod == PaymentMethod.KAKAO){
-            paymentService = new KakaoPayServiceImpl();
+            return applicationContext.getBean(KakaoPayServiceImpl.class);
         }
         else if(paymentMethod == PaymentMethod.MONEY){
-            paymentService = new MoneyPayServiceImpl();
+            return applicationContext.getBean(MoneyPayServiceImpl.class);
         }
         else if(paymentMethod == PaymentMethod.NAVER){
-            paymentService = new NaverPayServiceImpl();
+            return applicationContext.getBean(NaverPayServiceImpl.class);
+        }
+        else if(paymentMethod == PaymentMethod.CARD){
+            return applicationContext.getBean(CardPayServiceImpl.class);
         }
         else{
-            paymentService = new MoneyPayServiceImpl();
+            return applicationContext.getBean(CardPayServiceImpl.class);
         }
     }
 
-    public PaymentHistory pay(Reservation reservation
+    public PaymentHistory pay(PaymentService paymentService, Reservation reservation
             , User user
             , Merchant merchant
             , PayDto.InputPayDto payDto){

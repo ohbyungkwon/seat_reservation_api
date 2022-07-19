@@ -6,8 +6,10 @@ import com.seat.reservation.common.domain.enums.PaymentMethod;
 import com.seat.reservation.common.dto.PayDto;
 import com.seat.reservation.common.service.PaymentService;
 import lombok.Getter;
+import org.springframework.stereotype.Component;
 
 @Getter
+@Component
 public class TossPayServiceImpl implements PaymentService {
 
     private final PaymentMethod paymentMethod = PaymentMethod.TOSS;
