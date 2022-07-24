@@ -58,6 +58,10 @@ public class User {
         return Years.yearsBetween(dt.toLocalDate(), now).getYears();
     }
 
+    public void setIsLocked(boolean isLocked){
+        this.isLocked = isLocked;
+    }
+
     public static User createUserSimple(String userId){
         return User.builder().userid(userId).build();
     }

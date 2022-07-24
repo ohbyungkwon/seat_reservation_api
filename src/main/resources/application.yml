@@ -4,7 +4,9 @@ spring:
   profiles:
     active: local
   batch:
-    initialize-schema: always
+    initialize-schema: always # 운영환경에서는 never 로 변경
+    job:
+      names: ${job.name:NONE}
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://125.129.2.104:3306/WEBDB?serverTimezone=Asia/Seoul&useSSL=false&autoReconnection=true
