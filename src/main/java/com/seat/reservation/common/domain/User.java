@@ -28,7 +28,7 @@ public class User {
     @Id
     private String userid; // userid. PK
 
-    private String password;
+    private String pw;
 
     private String name;
 
@@ -72,7 +72,7 @@ public class User {
 
         return User.builder()
                 .userid(userDto.getUserId())
-                .password(userDto.getPassword())
+                .pw(userDto.getPassword())
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .birth(userDto.getBirth())
