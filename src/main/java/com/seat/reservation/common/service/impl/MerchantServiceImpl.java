@@ -78,7 +78,7 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
 
 
     @Override
-    public MerchantDetailDto selectMerchantDetail(Long reservationId) {
+    public MerchantDetailDto selectMerchantDetail(Integer merchantRegNum) {
         return null;
     }
 

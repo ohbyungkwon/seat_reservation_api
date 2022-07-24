@@ -12,5 +12,5 @@ import org.springframework.data.domain.Pageable;
 public interface MerchantService {
     void registerMerchant(Merchant merchant) throws Exception;
     Page<MerchantDto.show> selectMerchant(SearchDto.date search, Pageable pageable); // 가맹점 조회
-    MerchantDetailDto selectMerchantDetail(Long reservationId); // 가맹점 상세조회
+    MerchantDetailDto selectMerchantDetail(Integer merchantRegNum); // 가맹점 상세조회
 }

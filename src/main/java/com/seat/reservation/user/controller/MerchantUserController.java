@@ -24,10 +24,18 @@ public class MerchantUserController {
         this.merchantService = merchantService;
     }
 
-    // 가맹점을 보여주는
-    //   @GetMapping("/merchant/{id}")
-//    public Merchant findById(@PathVariable String id){
-//        return merchantService.findById(id);
+
+    // 가맹점 정보를 보여주는
+    //   @GetMapping("/merchant/{merchantRegNum}")
+//    public Merchant findBySelectMerchant(@PathVariable SearchDto.date search, Pageable pageable){
+//        return merchantService.selectMerchant(SearchDto.date search, Pageable pageable);
+//    }
+
+
+    // 가맹점 상제 정보를 보여주는
+    //   @GetMapping("/merchant/{merchantRegNum}")
+//    public Merchant findBySelectMerchantDetail(@PathVariable Integer merchantRegNum){
+//        return merchantService.selectMerchantDetail(merchantRegNum);
 //    }
 
 
