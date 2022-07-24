@@ -1,11 +1,9 @@
 package com.seat.reservation.common.domain;
 
+import com.querydsl.core.group.GroupBy;
 import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.MerchantDto;
-import com.seat.reservation.common.dto.ReservationDto;
-import com.seat.reservation.common.dto.UserDto;
-import com.seat.reservation.common.repository.Impl.ReservationItemRepositoryImpl;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -34,6 +32,14 @@ public class Merchant {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user; // 자리 등록한 유저 -> long / string ?
 
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Merchant merchant;
+
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Upzong upzong; // 디테일 조회를 위한 업종 조인
+
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "merchant")
     private List<Item> item = new ArrayList<Item>();// 메뉴 (가맹점 삭제 시 메뉴 전체 삭제를 위해 cascade 사용)
@@ -48,10 +54,6 @@ public class Merchant {
     private String merchantTel; // 가맹점 번호
 
     private String merchantName; // 가맹점 상호
-
-    @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Upzong upzong; // 업종 코드
 
     @Enumerated(EnumType.STRING)
     private RegisterCode registerCode; // 등록 코드
@@ -113,14 +115,6 @@ public class Merchant {
     }
 
 
-
-
-
-
-
-
-
-
     // create user 참고해서 메서드로 2개 빼기 -> 전역으로 만들어서 다른곳에섣 사용 가능하게
     // merchantDto 처럼 또 선언해서 땡겨갈 수 있도록
     // 업종 코드
@@ -153,5 +147,35 @@ public class Merchant {
         this.registerCode = registerCode;
     }
 
+    // 가맹점 조회
+    public MerchantDto.show selectMerchant(){
+        return MerchantDto.show.builder()
+                .repName(this.repName)
+                .repPhone(this.repPhone)
+                .repPhone(this.merchant.getRepPhone())
+                .merchantTel(this.merchant.getMerchantTel())
+                .merchantName(this.merchant.getMerchantName())
+                .address(this.merchant.getAddress())
+                .zipCode(this.merchant.getZipCode())
+                .build();
+    }
 
+    // 가맹점 디테일 조회
+    public MerchantDto.showDetail selectMerchantDetail(){
+        return MerchantDto.showDetail.builder()
+                .repName(this.repName)
+                .repPhone(this.repPhone)
+                .repPhone(this.merchant.getRepPhone())
+                .merchantTel(this.merchant.getMerchantTel())
+                .merchantName(this.merchant.getMerchantName())
+                .address(this.merchant.getAddress())
+                .zipCode(this.merchant.getZipCode())
+                .upzongId(this.upzong.getId()) // 어떤 업종인지를 가져와야하는데 카테고리?
+                .build();
+        
+    }
+
+    public GroupBy get() {
+        return null;
+    }
 }

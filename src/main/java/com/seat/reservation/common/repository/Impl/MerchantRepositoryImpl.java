@@ -43,13 +43,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
                 .where(eqMerchantName(String.valueOf(merchant.merchantName))) // 상호 = 상호
                 .fetch();
     }
-
-    @Override
-    public Page<Reservation> findByUserAndRegisterDateBetween(String userId, LocalDateTime startDateTime, LocalDateTime endDateTime, Pageable pageable) {
-        return null;
-    }
-
-
+    
     public BooleanExpression eqMerchantName(String merchantName){
         return StringUtils.isEmpty(merchantName) ? null : merchant.merchantName.eq(merchantName);
     }

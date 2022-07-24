@@ -2,6 +2,7 @@ package com.seat.reservation.common.service.impl;
 
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.MerchantDetailDto;
+import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.dto.ReservationDto;
 import com.seat.reservation.common.dto.SearchDto;
 import com.seat.reservation.common.exception.NotFoundUserException;
@@ -53,24 +54,31 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
     public void registerMerchant(Merchant merchant) throws Exception {
     }
 
-    // 페이지에 사용자에 맞는 예약 정보를 가져오기 위함 -> reservation과 동일하다 생각
     @Override
-    public Page<ReservationDto.show> selectReservations(SearchDto.date search, Pageable pageable) {
-        User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
-        LocalDateTime startDateTime = search.getStartDateTime();
-        LocalDateTime endDateTime = search.getEndDateTime();
-
-        String userId = user.getUserid();
-        Page<Reservation> reservations = merchantRepository.findByUserAndRegisterDateBetween(userId, startDateTime, endDateTime, pageable);
-        List<ReservationDto.show> reservationList = reservations.get()
-                .map(Reservation::convertSimpleReservationDtoShow)
-                .collect(Collectors.toList());
-        return new PageImpl<>(reservationList, pageable, reservations.getTotalElements());
+    public Page<MerchantDto.show> selectMerchant(SearchDto.date search, Pageable pageable) {
+        return null;
     }
 
+    // 페이지에 가맹점 정보를 가져오기 위함 -> reservation과 동일하다 생각
+//    @Override
+//    public Page<MerchantDto.show> selectMerchant(SearchDto.date search, Pageable pageable) {
+//
+//        Merchant merchant = (Merchant) this.getMerchant().orElseThrow(()-> new NotFoundUserException("가맹점 정보가 없습니다."));
+//        LocalDateTime startDateTime = search.getStartDateTime();
+//        LocalDateTime endDateTime = search.getEndDateTime();
+//
+//        Integer merchantRegNum = merchant.getMerchantRegNum(); // 가맹점 정보를 긁어오는 것
+//
+//        Page<Merchant> Merchant = merchantRepository.findByUserAndRegisterDateBetween(merchantRegNum, startDateTime, endDateTime, pageable);
+//        List<MerchantDto.show> MerchantList = merchant.get()
+//                .map(Merchant::selectMerchant)
+//                .collect(Collectors.toList());
+//        return new PageImpl<>(MerchantList, pageable, merchant.getTotalElements());
+//    }
+
 
     @Override
-    public MerchantDetailDto selectReservationDetail(Long reservationId) {
+    public MerchantDetailDto selectMerchantDetail(Integer merchantRegNum) {
         return null;
     }
 
