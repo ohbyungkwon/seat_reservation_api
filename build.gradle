@@ -39,14 +39,14 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'org.springframework.boot:spring-boot-starter-quartz:2.2.2.RELEASE'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz:2.7.0'
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.4.RELEASE'
 	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.8'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
 	//html 파일이 resource에 있어 핫로딩이 불가한데 devtools가 이를 지원함(재빌링만 진행하면 된다.)
 	implementation 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+	implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
 
 	compile("org.springframework.boot:spring-boot-starter-aop")
 	compile("org.springframework.boot:spring-boot-starter-batch")
@@ -55,7 +55,9 @@ dependencies {
 	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.1.2.RELEASE'
 	compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'
 	compile group: 'org.springframework.security', name: 'spring-security-jwt', version: '1.0.9.RELEASE'
-	compile group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+	implementation (group: 'it.ozimov', name: 'embedded-redis', version: '0.7.3') {
+		exclude group: 'org.slf4j', module: 'slf4j-simple'
+	}
 
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'

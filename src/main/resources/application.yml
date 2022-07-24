@@ -26,6 +26,13 @@ spring:
     user:
       name: reservation_ad
       password: 1234
+  cache:
+    redis:
+      cache-null-values: true
+      name: reservation_api_cache_name
+  redis:
+    host: 127.0.0.1
+    port: 6379
 
 logging.level:
   org.hibernate.SQL: debug #SQL log? ??.

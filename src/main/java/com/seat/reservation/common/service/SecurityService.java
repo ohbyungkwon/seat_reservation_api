@@ -25,6 +25,6 @@ public class SecurityService {
                 .map(Authentication::getPrincipal)
                 .orElseThrow(() -> new NotFoundPrincipalException("Principal 만료"));
 
-        return userRepository.findById(principal.getName());
+        return userRepository.findByUsername(principal.getName());
     }
 }
