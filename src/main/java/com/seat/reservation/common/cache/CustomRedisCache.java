@@ -1,5 +1,6 @@
-package com.seat.reservation.cache;
+package com.seat.reservation.common.cache;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;

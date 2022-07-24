@@ -43,7 +43,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
                 .where(eqMerchantName(String.valueOf(merchant.merchantName))) // 상호 = 상호
                 .fetch();
     }
-    
+
     public BooleanExpression eqMerchantName(String merchantName){
         return StringUtils.isEmpty(merchantName) ? null : merchant.merchantName.eq(merchantName);
     }

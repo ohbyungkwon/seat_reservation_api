@@ -1,4 +1,4 @@
-package com.seat.reservation.cache;
+package com.seat.reservation.common.cache;
 
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.data.redis.cache.RedisCacheWriter;

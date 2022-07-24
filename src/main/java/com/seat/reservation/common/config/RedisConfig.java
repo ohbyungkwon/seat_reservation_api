@@ -1,11 +1,11 @@
 package com.seat.reservation.common.config;
 
-import com.seat.reservation.cache.CustomRedisCacheManager;
-import com.seat.reservation.cache.CustomRedisCacheWriter;
+import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -57,19 +57,14 @@ public class RedisConfig {
     }
 
     @Bean
-    public CustomRedisCacheManager redisCacheManager(){
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+    public RedisCacheWriter redisCacheWriter(){
+        return new CustomRedisCacheWriter(redisConnectionFactory());
+    }
+
+    @Bean
+    public RedisCacheConfiguration redisCacheConfiguration(){
+        return RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-
-        CustomRedisCacheWriter writer = new CustomRedisCacheWriter(redisConnectionFactory());
-
-        CustomRedisCacheManager.RedisCacheManagerBuilder
-                .fromCacheWriter(writer);
-
-        return CustomRedisCacheManager.RedisCacheManagerBuilder
-                .fromConnectionFactory(redisConnectionFactory())
-                .cacheDefaults(redisCacheConfiguration)
-                .build();
     }
 }
