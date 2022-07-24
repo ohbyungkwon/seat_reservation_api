@@ -1,7 +1,9 @@
 package com.seat.reservation.common.service;
 
+import com.seat.reservation.common.domain.Merchant;
 import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.exception.NotFoundPrincipalException;
+import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.support.ApplicationContextProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,20 @@ public class SecurityService {
                 .map(Authentication::getPrincipal)
                 .orElseThrow(() -> new NotFoundPrincipalException("Principal 만료"));
 
-        return userRepository.findById(principal.getName());
+        return userRepository.findById(Long.valueOf(principal.getName()));
+    }
+    
+    // 확인 필요
+    protected Optional<Object> getMerchant() {
+        ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
+
+        MerchantRepository merchantRepository = applicationContext.getBean(MerchantRepository.class);
+
+        Principal principal = (Principal) Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                .map(Authentication::getPrincipal)
+                .orElseThrow(() -> new NotFoundPrincipalException("Principal 만료"));
+
+        // 이게 맞는건가?
+        return Optional.ofNullable(merchantRepository.findByMerchantRegNum(Integer.parseInt(principal.getName())));
     }
 }

@@ -53,7 +53,7 @@ public class MerchantAdminController {
                 , createMerchant.getRepPhone()
                 , createMerchant.getMerchantTel()
                 , createMerchant.getMerchantName()
-                , createMerchant.getUpzongId()
+                , createMerchant.get()
                 , createMerchant.getAddress()
                 , createMerchant.getZipCode());
 

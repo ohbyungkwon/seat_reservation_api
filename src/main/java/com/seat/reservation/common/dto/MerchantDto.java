@@ -24,15 +24,44 @@ public class MerchantDto {
         private String repName;
         private String merchantTel;
         private String merchantName;
-        private Long upzongId;
         private String address;
         private String zipCode;
 
         @QueryProjection
         public show(Integer merchantRegNum, String repPhone, String repName,
-                    String merchantTel, String merchantName, Long upzongId,
+                    String merchantTel, String merchantName,
                     String address, String zipCode
                     ) {
+            this.merchantRegNum = merchantRegNum;
+            this.repName = repName;
+            this.repPhone = repPhone;
+            this.merchantTel = merchantTel;
+            this.merchantName = merchantName;
+            this.address = address;
+            this.zipCode = zipCode;
+        }
+    }
+
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    public static class showDetail{
+        private Integer merchantRegNum;
+        private String repPhone;
+        private String repName;
+        private String merchantTel;
+        private String merchantName;
+        private Long upzongId;
+        private String address;
+        private String zipCode;
+
+        @QueryProjection
+        public showDetail(Integer merchantRegNum, String repPhone, String repName,
+                    String merchantTel, String merchantName, Long upzongId,
+                    String address, String zipCode
+        ) {
             this.merchantRegNum = merchantRegNum;
             this.repName = repName;
             this.repPhone = repPhone;
@@ -43,6 +72,10 @@ public class MerchantDto {
             this.zipCode = zipCode;
         }
     }
+
+
+
+
 
 
     @Builder

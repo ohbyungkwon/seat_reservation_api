@@ -3,12 +3,16 @@ package com.seat.reservation.common.repository.Impl;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.Merchant;
+import com.seat.reservation.common.domain.Reservation;
 import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.dto.QMerchantDto_show;
 import com.seat.reservation.common.repository.custom.MerchantRepositoryCustom;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.seat.reservation.common.domain.QMerchant.merchant;
@@ -39,8 +43,6 @@ import static com.seat.reservation.common.domain.QUpzong.upzong;
                 .where(eqMerchantName(String.valueOf(merchant.merchantName))) // 상호 = 상호
                 .fetch();
     }
-
-
 
 
     public BooleanExpression eqMerchantName(String merchantName){
