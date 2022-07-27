@@ -1,10 +1,7 @@
 package com.seat.reservation.common.service.impl;
 
 import com.seat.reservation.common.domain.*;
-import com.seat.reservation.common.dto.MerchantDetailDto;
-import com.seat.reservation.common.dto.MerchantDto;
-import com.seat.reservation.common.dto.ReservationDto;
-import com.seat.reservation.common.dto.SearchDto;
+import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.repository.MerchantHistoryRepository;
 import com.seat.reservation.common.repository.MerchantRepository;
@@ -55,11 +52,12 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
     }
 
     @Override
-    public Page<MerchantDto.show> selectMerchant(SearchDto.date search, Pageable pageable) {
+    public Page<MerchantDto.show> findByMerchantList(SearchDto.date search, Pageable pageable) {
         return null;
     }
 
-    // 페이지에 가맹점 정보를 가져오기 위함 -> reservation과 동일하다 생각
+    // 페이지에 가맹점 정보를 가져오기 위함 -> reservation과 동일하다 생각 Jpa로 Dto 연결된 부분 쿼리만?
+
 //    @Override
 //    public Page<MerchantDto.show> selectMerchant(SearchDto.date search, Pageable pageable) {
 //
@@ -77,8 +75,25 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
 //    }
 
 
+    // 가맹점 조회
+//    @Override
+//    public MerchantDto findByMerchantList() {
+//
+//        /*
+//        가맹점 조회
+//         */
+//        return
+//    }
+
+    // 가맹점 상세조회
     @Override
-    public MerchantDetailDto selectMerchantDetail(Integer merchantRegNum) {
+    public MerchantDetailDto findByMerchantListDetail(Integer merchantRegNum) {
+
+//        return MerchantDetailDto.builder()
+//                .merchantInfo(merchant)
+//                .reservationItemInfo(reservationItems)
+//                .build();
+//
         return null;
     }
 

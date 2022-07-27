@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class MerchantDetailDto {
     private MerchantDto.show merchantInfo;
-    private List<MerchantInfoDto.show> MerchantReservationInfo;
+    private List<MerchantInfoDto.show> MerchantDetailInfo;
 }
