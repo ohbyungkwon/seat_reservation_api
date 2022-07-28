@@ -13,5 +13,5 @@ public interface MerchantRepositoryCustom {
 
     List<Merchant> findMerchant(Integer merchantRegNum);
 
-    // Page<Reservation> findByUserAndRegisterDateBetween(Integer merchantRegNum, LocalDateTime startDateTime, LocalDateTime endDateTime, Pageable pageable);
+    Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable);
 }

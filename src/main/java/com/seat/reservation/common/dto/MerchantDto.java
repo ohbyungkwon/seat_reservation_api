@@ -13,6 +13,17 @@ import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 public class MerchantDto {
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class search {
+        private Long upzongId;
+        private String merchantName;
+        private String zipcode;
+    }
+
 
     @Getter
     @Setter
@@ -36,6 +47,7 @@ public class MerchantDto {
             this.repName = repName;
             this.repPhone = repPhone;
             this.merchantTel = merchantTel;
+
             this.merchantName = merchantName;
             this.address = address;
             this.zipCode = zipCode;
@@ -57,11 +69,13 @@ public class MerchantDto {
         private String address;
         private String zipCode;
 
+        //Item 정보
+        //Seat과 Reservation 조인된 정보
+
         @QueryProjection
         public showDetail(Integer merchantRegNum, String repPhone, String repName,
                     String merchantTel, String merchantName, Long upzongId,
-                    String address, String zipCode
-        ) {
+                    String address, String zipCode) {
             this.merchantRegNum = merchantRegNum;
             this.repName = repName;
             this.repPhone = repPhone;

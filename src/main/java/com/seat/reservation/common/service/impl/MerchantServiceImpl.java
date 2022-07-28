@@ -52,8 +52,8 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
     }
 
     @Override
-    public Page<MerchantDto.show> findByMerchantList(SearchDto.date search, Pageable pageable) {
-        return null;
+    public Page<MerchantDto.show> findByMerchantList(MerchantDto.search search, Pageable pageable) {
+        return merchantRepository.findMerchantList(search, pageable);
     }
 
     // 페이지에 가맹점 정보를 가져오기 위함 -> reservation과 동일하다 생각 Jpa로 Dto 연결된 부분 쿼리만?

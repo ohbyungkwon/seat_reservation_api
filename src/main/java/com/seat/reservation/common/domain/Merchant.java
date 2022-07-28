@@ -32,9 +32,9 @@ public class Merchant {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user; // 자리 등록한 유저 -> long / string ?
 
-    @JoinColumn
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Merchant merchant;
+//    @JoinColumn
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Merchant merchant;
 
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
@@ -152,11 +152,11 @@ public class Merchant {
         return MerchantDto.show.builder()
                 .repName(this.repName)
                 .repPhone(this.repPhone)
-                .repPhone(this.merchant.getRepPhone())
-                .merchantTel(this.merchant.getMerchantTel())
-                .merchantName(this.merchant.getMerchantName())
-                .address(this.merchant.getAddress())
-                .zipCode(this.merchant.getZipCode())
+                .repPhone(this.getRepPhone())
+                .merchantTel(this.getMerchantTel())
+                .merchantName(this.getMerchantName())
+                .address(this.getAddress())
+                .zipCode(this.getZipCode())
                 .build();
     }
 
@@ -165,11 +165,11 @@ public class Merchant {
         return MerchantDto.showDetail.builder()
                 .repName(this.repName)
                 .repPhone(this.repPhone)
-                .repPhone(this.merchant.getRepPhone())
-                .merchantTel(this.merchant.getMerchantTel())
-                .merchantName(this.merchant.getMerchantName())
-                .address(this.merchant.getAddress())
-                .zipCode(this.merchant.getZipCode())
+                .repPhone(this.getRepPhone())
+                .merchantTel(this.getMerchantTel())
+                .merchantName(this.getMerchantName())
+                .address(this.getAddress())
+                .zipCode(this.getZipCode())
                 .upzongId(this.upzong.getId()) // 어떤 업종인지를 가져와야하는데 카테고리?
                 .build();
         
