@@ -4,7 +4,10 @@ package com.seat.reservation.user.controller;
 /* 가맹점 누르면 가맹점별 상세 조회 보여준다. (좌석들(예약되어 있냐), 리뷰정보) */
 
 import com.seat.reservation.common.domain.Merchant;
+import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.service.MerchantService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @Controller
 @RequestMapping("/merchant")
@@ -26,17 +30,18 @@ public class MerchantUserController {
 
 
     // 가맹점 정보를 보여주는
-    //   @GetMapping("/merchant/{merchantRegNum}")
-//    public Merchant findBySelectMerchant(@PathVariable SearchDto.date search, Pageable pageable){
-//        return merchantService.selectMerchant(SearchDto.date search, Pageable pageable);
-//    }
+    @GetMapping("/merchant/{merchantRegNum}")
+    public Merchant findMerchantList(@PathVariable MerchantDto.search search, Pageable pageable){
+        return findMerchantList(search, pageable);
+    }
 
 
     // 가맹점 상제 정보를 보여주는
-    //   @GetMapping("/merchant/{merchantRegNum}")
-//    public Merchant findBySelectMerchantDetail(@PathVariable Integer merchantRegNum){
-//        return merchantService.selectMerchantDetail(merchantRegNum);
-//    }
+    @GetMapping("/merchant/{merchantRegNum}")
+    public Merchant findMerchantDetail(@PathVariable Integer merchantRegNum){
+        return findMerchantDetail(merchantRegNum);
+    }
+
 
 
 }
