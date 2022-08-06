@@ -32,13 +32,13 @@ public class Merchant {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user; // 자리 등록한 유저 -> long / string ?
 
-//    @JoinColumn
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Merchant merchant;
-
     @JoinColumn
     @ManyToOne(fetch = FetchType.LAZY)
     private Upzong upzong; // 디테일 조회를 위한 업종 조인
+
+    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Menu menu; // 디테일 조회를 위한 메뉴 조인
 
     @Builder.Default
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "merchant")
