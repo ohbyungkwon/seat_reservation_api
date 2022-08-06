@@ -44,7 +44,7 @@ public class PosUserController {
 
         return new ResponseEntity<>(ResponseComDto.builder()
                 .resultObj(json)
-                .resultMsg("좌석을 비활성화 했습니다.")
+                .resultMsg("좌석을 활성화 했습니다.")
                 .build(), HttpStatus.OK);
     }
 }
