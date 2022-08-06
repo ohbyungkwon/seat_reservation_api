@@ -5,6 +5,10 @@ import org.springframework.context.ApplicationContext;
 
 import java.io.IOException;
 
+/*
+* 참고 사이트: https://intro0517.tistory.com/35
+* 저작권따위 나도 몰라
+* */
 public class SmsService {
 
     private String coolSmsId; // coolsms id
