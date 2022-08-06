@@ -51,8 +51,6 @@ public class Reservation {
     @LastModifiedDate
     private LocalDateTime changeDate;
 
-    private Boolean isPreEnd;
-
     public static Reservation createReservation(ReservationDto.create dto,
                                                 Merchant merchant, Seat seat, User user){
 
