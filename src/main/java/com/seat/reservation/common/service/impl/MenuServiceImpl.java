@@ -51,6 +51,10 @@ public class MenuServiceImpl extends SecurityService implements MenuService {
         return list.stream().map(Menu::convertMenuDtoShow).collect(Collectors.toList());
     }
 
+    /**
+     * @param key (#userId + "_menu_list")
+     * @return
+     */
     @Override
     @Cacheable(value = "reservation_api_cache_name", key = "#key")
     public List<MenuDto.searchAll> searchUserMenu(String key) {

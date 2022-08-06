@@ -26,4 +26,11 @@ public class Menu {
                 .menuName(this.menuName)
                 .build();
     }
+
+    public static Menu createSimpleMenu(String menuId, String menuName){
+        return Menu.builder()
+                .menuId(menuId)
+                .menuName(menuName)
+                .build();
+    }
 }

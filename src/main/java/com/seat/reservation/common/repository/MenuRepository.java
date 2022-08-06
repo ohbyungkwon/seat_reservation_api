@@ -12,3 +12,4 @@ public interface MenuRepository extends JpaRepository<Menu, String> {
 
     List<Menu> findByMenuIdAndMenuName(String menuId, String menuName);
 }
+
