@@ -32,6 +32,8 @@ public class User {
 
     private String name;
 
+    private String phoneNum;
+
     private String email;
 
     private String birth;

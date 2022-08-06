@@ -5,4 +5,5 @@ import com.seat.reservation.common.repository.custom.MenuAuthorityRepositoryCust
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MenuAuthorityRepository extends JpaRepository<MenuAuthority, String>, MenuAuthorityRepositoryCustom {
+
 }

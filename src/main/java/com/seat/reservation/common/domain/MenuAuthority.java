@@ -44,4 +44,11 @@ public class MenuAuthority {
                 .userId(this.user.getUserid())
                 .build();
     }
+
+    public static MenuAuthority createSimpleMenuAuthority(Menu menu, User user){
+        return MenuAuthority.builder()
+                .menu(menu)
+                .user(user)
+                .build();
+    }
 }

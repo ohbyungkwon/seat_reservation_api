@@ -29,4 +29,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "  AND HH.MAX_DATE < DATE_SUB(NOW(), INTERVAL 90 DAY)"
             , nativeQuery = true)
     List<User> findUserByLoginTimeBeforeThreeMonth();
+
+    @Query(value =  "SELECT U.USER_ID" +
+            "  FROM USER U" +
+            "  LEFT OUTER JOIN " +
+            "       (SELECT H.USER_ID" +
+            "             , MAX(LOGIN_DATE) MAX_DATE" +
+            "          FROM LOGIN_HISTORY H" +
+            "         WHERE H.IS_SUCCESS = 'TRUE'" +
+            "         GROUP BY H.USER_ID) HH" +
+            "WHERE U.USER_ID = HH.USER_ID" +
+            "  AND U.IS_LOCKED = 'FALSE'" +
+            "  AND HH.MAX_DATE < DATE_SUB(NOW(), INTERVAL 120 DAY)"
+            , nativeQuery = true)
+    List<User> findUserByLoginTimeBeforeFourMonth();
 }
