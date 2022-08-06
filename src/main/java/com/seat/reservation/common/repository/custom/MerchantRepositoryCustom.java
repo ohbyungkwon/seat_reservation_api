@@ -1,10 +1,8 @@
 package com.seat.reservation.common.repository.custom;
 
-import com.seat.reservation.common.domain.Menu;
-import com.seat.reservation.common.domain.Merchant;
-import com.seat.reservation.common.domain.Reservation;
-import com.seat.reservation.common.domain.ReservationItem;
+import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.MerchantDto;
+import com.seat.reservation.common.dto.ReviewDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,5 +15,7 @@ public interface MerchantRepositoryCustom {
 
     Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable);
 
-    List<Merchant> findMerchantDetail(Integer merchantRegNum);
+    List<MerchantDto.showMerchantWithItem> findMerchantWithItem(Integer merchantRegNum);
+
+    List<ReviewDto.showSimpleList> findReview(Integer merchantRegNum);
 }

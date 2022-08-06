@@ -4,8 +4,7 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.*;
-import com.seat.reservation.common.dto.MerchantDto;
-import com.seat.reservation.common.dto.QMerchantDto_show;
+import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.repository.custom.MerchantRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -14,15 +13,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.seat.reservation.common.domain.QItem.item;
-import static com.seat.reservation.common.domain.QMenu.menu;
 import static com.seat.reservation.common.domain.QMerchant.merchant;
-import static com.seat.reservation.common.domain.QReservation.reservation;
-import static com.seat.reservation.common.domain.QReservationItem.reservationItem;
-import static com.seat.reservation.common.domain.QSeat.seat;
 import static com.seat.reservation.common.domain.QUpzong.upzong;
+import static com.seat.reservation.common.domain.QReview.review;
 
 @Repository
 public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
@@ -54,13 +51,8 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
     public Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable) {
         QueryResults<MerchantDto.show> merchants = jpaQueryFactory
                 .select(new QMerchantDto_show(
-                        merchant.merchantRegNum,
-                        merchant.repPhone,
-                        merchant.repName,
-                        merchant.merchantTel,
                         merchant.merchantName,
-                        merchant.address,
-                        merchant.zipCode
+                        merchant.address
                 ))
                 .from(merchant)
                 .join(merchant.upzong, upzong).fetchJoin() // 업종 조인
@@ -77,16 +69,41 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
         return new PageImpl<MerchantDto.show>(pageContents, pageable, total);
     }
 
+
     @Override
-    public List<Merchant> findMerchantDetail(Integer merchantRegNum) {
-        return (List<Merchant>) jpaQueryFactory.selectFrom(merchant)
-                .join(merchant.upzong, upzong).fetchJoin() // 업종 조인
-                .join(seat.merchant, merchant).fetchJoin() // 좌석 조인
-                .join(merchant.menu, menu).fetchJoin() // 메뉴 조인
-                .where(merchant.merchantRegNum.eq(merchantRegNum)) // 상호 = 상호
-                .fetchOne();
+    public List<MerchantDto.showMerchantWithItem> findMerchantWithItem(Integer merchantRegNum) {
+        return jpaQueryFactory
+                .selectDistinct(
+                        new QMerchantDto_showMerchantWithItem(
+                        merchant.merchantRegNum,
+                        merchant.repPhone,
+                        merchant.repName,
+                        merchant.merchantTel,
+                        merchant.merchantName,
+                        merchant.upzong.category,
+                        merchant.address,
+                        merchant.zipCode,
+                        merchant.item
+                ))
+                .from(merchant)
+                .join(merchant.item, item).fetchJoin()
+                .where(eqMerchantRegNum(merchantRegNum))
+                .fetch();
     }
 
+    @Override
+    public List<ReviewDto.showSimpleList> findReview(Integer merchantRegNum) {
+        return jpaQueryFactory
+                .selectDistinct(
+                        new QReviewDto_showSimpleList(
+                            merchant.review
+                        )
+                )
+                .from(merchant)
+                .join(merchant.review, review).fetchJoin()
+                .where(eqMerchantRegNum(merchantRegNum))
+                .fetch();
+    }
 
     public BooleanExpression eqMerchantName(String merchantName){
         return StringUtils.isEmpty(merchantName) ? null : merchant.merchantName.eq(merchantName);

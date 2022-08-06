@@ -1,5 +1,9 @@
 package com.seat.reservation.common.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
+import com.seat.reservation.common.domain.Item;
+import com.seat.reservation.common.domain.Review;
+import com.seat.reservation.common.domain.enums.Category;
 import lombok.*;
 
 import java.util.List;
@@ -40,5 +44,36 @@ public class ReviewDto {
         private String title;
         private String comment;
         private List<ReviewDto.show> subReviews;
+    }
+
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class showSimple {
+        private String title;
+        private String comment;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class showSimpleList {
+        List<ReviewDto.showSimple> reviews;
+
+        @QueryProjection
+        public showSimpleList(List<Review> reviews) {
+            for(Review review : reviews){
+                this.reviews.add(
+                        ReviewDto.showSimple
+                                .builder()
+                                .title(review.getTitle())
+                                .comment(review.getComment())
+                                .build()
+                );
+            }
+        }
     }
 }

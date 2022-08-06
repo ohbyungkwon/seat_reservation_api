@@ -147,34 +147,6 @@ public class Merchant {
         this.registerCode = registerCode;
     }
 
-    // 가맹점 조회
-    public MerchantDto.show selectMerchant(){
-        return MerchantDto.show.builder()
-                .repName(this.repName)
-                .repPhone(this.repPhone)
-                .repPhone(this.getRepPhone())
-                .merchantTel(this.getMerchantTel())
-                .merchantName(this.getMerchantName())
-                .address(this.getAddress())
-                .zipCode(this.getZipCode())
-                .build();
-    }
-
-    // 가맹점 디테일 조회
-    public MerchantDto.showDetail selectMerchantDetail(){
-        return MerchantDto.showDetail.builder()
-                .repName(this.repName)
-                .repPhone(this.repPhone)
-                .repPhone(this.getRepPhone())
-                .merchantTel(this.getMerchantTel())
-                .merchantName(this.getMerchantName())
-                .address(this.getAddress())
-                .zipCode(this.getZipCode())
-                .upzongId(this.upzong.getId()) // 어떤 업종인지를 가져와야하는데 카테고리?
-                .build();
-        
-    }
-
     public GroupBy get() {
         return null;
     }
