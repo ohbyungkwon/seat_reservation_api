@@ -41,12 +41,17 @@ public class Seat {
     @LastModifiedDate
     private LocalDateTime changeDate; // 데이터가 바뀐날짜
 
+    private Boolean isUse;
+
+    public void setIsUse(Boolean isUse) { this.isUse = isUse; }
+
     public static Seat createSeat(String seatCode, Merchant merchant, int reservationCost, RegisterCode registerCode){
         return Seat.builder()
                 .seatCode(seatCode)
                 .merchant(merchant)
                 .reservationCost(reservationCost)
                 .registerCode(registerCode)
+                .isUse(Boolean.FALSE)
                 .build();
     }
 

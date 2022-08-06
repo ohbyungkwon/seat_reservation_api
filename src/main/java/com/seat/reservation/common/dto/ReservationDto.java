@@ -15,6 +15,9 @@ public class ReservationDto {
         private int totalPrice;
         private boolean isPreOrder;
         private LocalDateTime reservationDate;
+
+        private LocalDateTime realUserDate;
+
         private String seatCode;
 
         private String repPhone;
@@ -27,12 +30,13 @@ public class ReservationDto {
 
         @QueryProjection
         public show(int totalPrice, boolean isPreOrder, LocalDateTime reservationDate,
-                    String seatCode, String repPhone, String merchantTel,
-                    String merchantName, String address, String zipCode,
-                    int reservationCost) {
+                    LocalDateTime realUserDate, String seatCode, String repPhone,
+                    String merchantTel, String merchantName, String address,
+                    String zipCode, int reservationCost) {
             this.totalPrice = totalPrice;
             this.isPreOrder = isPreOrder;
             this.reservationDate = reservationDate;
+            this.realUserDate = realUserDate;
             this.seatCode = seatCode;
             this.repPhone = repPhone;
             this.merchantTel = merchantTel;
@@ -62,7 +66,8 @@ public class ReservationDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class update{
-        private Long seatId;
+        private Long reservationId;
         private LocalDateTime reservationDate;
+        private LocalDateTime realUseDate;
     }
 }

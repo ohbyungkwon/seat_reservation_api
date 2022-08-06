@@ -2,7 +2,6 @@ package com.seat.reservation.common.repository.Impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.MenuAuthority;
-import com.seat.reservation.common.dto.MenuDto;
 import com.seat.reservation.common.repository.custom.MenuAuthorityRepositoryCustom;
 import org.springframework.stereotype.Repository;
 

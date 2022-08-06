@@ -43,20 +43,27 @@ public class Reservation {
 
     private LocalDateTime reservationDate;
 
+    private LocalDateTime realUseDate;
+
     @CreatedDate
     private LocalDateTime registerDate;
 
     @LastModifiedDate
     private LocalDateTime changeDate;
 
+    private Boolean isPreEnd;
+
     public static Reservation createReservation(ReservationDto.create dto,
                                                 Merchant merchant, Seat seat, User user){
+
+        seat.setIsUse(Boolean.TRUE);
         return Reservation.builder()
                 .seat(seat)
                 .user(user)
                 .merchant(merchant)
                 .isPreOrder(!dto.getItemIdList().isEmpty())
                 .reservationDate(dto.getReservationDate())
+                .realUseDate(dto.getReservationDate())
                 .build();
     }
 
@@ -64,9 +71,15 @@ public class Reservation {
         this.isPreOrder = !items.isEmpty();
     }
 
+    public void setRealUseDate(LocalDateTime date) { this.realUseDate = date; }
+
     public void setTotalPrice(List<Item> items){
         for(Item item : items)
             this.totalPrice += item.getPrice();
+    }
+
+    public void cancelUsingSeat(){
+        this.seat.setIsUse(Boolean.FALSE);
     }
 
     public ReservationDto.show convertSimpleReservationDtoShow(){
@@ -74,6 +87,7 @@ public class Reservation {
                 .totalPrice(this.totalPrice)
                 .isPreOrder(this.isPreOrder)
                 .reservationDate(this.reservationDate)
+                .realUserDate(this.realUseDate)
                 .repPhone(this.merchant.getRepPhone())
                 .merchantTel(this.merchant.getMerchantTel())
                 .merchantName(this.merchant.getMerchantName())
@@ -88,6 +102,7 @@ public class Reservation {
                 .totalPrice(this.totalPrice)
                 .isPreOrder(this.isPreOrder)
                 .reservationDate(this.reservationDate)
+                .realUserDate(this.realUseDate)
                 .seatCode(this.seat.getSeatCode())
                 .repPhone(this.merchant.getRepPhone())
                 .merchantTel(this.merchant.getMerchantTel())

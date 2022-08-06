@@ -65,17 +65,16 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     public Boolean saveReservation(ReservationDto.create dto, PayDto.InputPayDto inputPayDto) {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         Merchant merchant = merchantRepository.findByMerchantRegNum(dto.getMerchantRegNum());
-        Optional<Seat> seat = seatRepository.findById(dto.getSeatId());
-        if(seat.isPresent()){
+        Optional<Seat> seatOptional = seatRepository.findById(dto.getSeatId());
+        if(seatOptional.isPresent()){
+            Seat seat = seatOptional.get();
             List<Item> itemList = itemRepository.findByIdIn(dto.getItemIdList());
-            Reservation reservation = Reservation.createReservation(dto, merchant, seat.get(), user);
+            Reservation reservation = Reservation.createReservation(dto, merchant, seat, user);
             reservation.setTotalPrice(itemList);
 
             PaymentService paymentService = payModule.getPayService(inputPayDto.getPaymentMethod());
-
             PaymentHistory paymentHistory = payModule.pay(paymentService, reservation, user, merchant, inputPayDto);
             paymentHistoryRepository.save(paymentHistory);
-
             if(paymentHistory.getPaymentCode() != PaymentCode.APPROVE){
                 return Boolean.FALSE;
             }
@@ -101,24 +100,19 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
         }
 
         PaymentService paymentService = payModule.getPayService(inputPayDto.getPaymentMethod());
-
-        PaymentHistory paymentHistory = payModule.pay(paymentService
-                                                    , reservation
-                                                    , reservation.getUser()
-                                                    , reservation.getMerchant()
-                                                    , inputPayDto);
+        PaymentHistory paymentHistory = payModule.pay(paymentService, reservation,
+                reservation.getUser(), reservation.getMerchant(), inputPayDto);
         paymentHistoryRepository.save(paymentHistory);
-
         if(paymentHistory.getPaymentCode() != PaymentCode.APPROVE){
             return Boolean.FALSE;
         }
-
 
         if(reservation.isPreOrder()) {
             List<Long> reservationItemIdList = reservationItemRepository.findByReservationId(reservationId)
                     .stream().map(ReservationItem::getId).collect(Collectors.toList());
             reservationItemRepository.deleteByIdIn(reservationItemIdList);
         }
+        reservation.cancelUsingSeat();
         reservationRepository.delete(reservation);
         return Boolean.TRUE;
     }
@@ -166,5 +160,17 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
                 .reservationInfo(reservation)
                 .reservationItemInfo(reservationItems)
                 .build();
+    }
+
+    @Override
+    public Boolean completePreReservation(ReservationDto.update update) {
+        Long reservationId = update.getReservationId();
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new BadReqException("예약 정보가 존재하지 않습니다."));
+
+        reservation.setRealUseDate(update.getRealUseDate());
+        reservation.cancelUsingSeat();
+
+        return Boolean.TRUE;
     }
 }
