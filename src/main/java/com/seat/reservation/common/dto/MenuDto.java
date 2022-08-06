@@ -9,7 +9,7 @@ public class MenuDto {
     @AllArgsConstructor
     public static class search{
         private String menuId;
-        private String merchantName;
+        private String menuName;
     }
 
     @Getter
