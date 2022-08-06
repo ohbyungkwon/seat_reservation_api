@@ -30,6 +30,7 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
     }
 
     @Override
+    @Transactional
     public void historySave(Object entity) {
         Seat seat = (Seat) entity;
         Optional<Seat> beforeSeatOptional = seatRepository.findById(seat.getId());
