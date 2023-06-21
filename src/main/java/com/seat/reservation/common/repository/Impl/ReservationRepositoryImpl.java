@@ -1,12 +1,9 @@
 package com.seat.reservation.common.repository.Impl;
 
 import com.querydsl.core.QueryResults;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.Reservation;
-import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.repository.custom.ReservationRepositoryCustom;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -59,7 +56,7 @@ public class ReservationRepositoryImpl implements ReservationRepositoryCustom {
                 .join(reservation.user, user).fetchJoin()
                 .join(reservation.merchant, merchant).fetchJoin()
                 .where(
-                        reservation.user.userid.eq(userId),
+                        reservation.user.userId.eq(userId),
                         reservation.registerDate.between(start, end)
                 )
                 .orderBy(reservation.registerDate.desc())

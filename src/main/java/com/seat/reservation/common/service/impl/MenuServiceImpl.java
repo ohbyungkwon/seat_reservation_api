@@ -62,7 +62,7 @@ public class MenuServiceImpl extends SecurityService implements MenuService {
         String userId = st.nextToken();
 
         User user = this.getUser().orElseThrow(() -> new NotFoundUserException("사용자 정보를 찾을 수 없습니다."));
-        if(!user.getUserid().equals(userId)){
+        if(!user.getUserId().equals(userId)){
             throw new BadReqException("로그인 정보가 다릅니다.");
         }
 

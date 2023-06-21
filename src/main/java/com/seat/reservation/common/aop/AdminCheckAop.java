@@ -5,7 +5,6 @@ import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.exception.NotAdminException;
 import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.service.SecurityService;
-import lombok.AllArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

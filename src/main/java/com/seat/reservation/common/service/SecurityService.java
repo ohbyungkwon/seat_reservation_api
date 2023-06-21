@@ -1,12 +1,10 @@
 package com.seat.reservation.common.service;
 
-import com.seat.reservation.common.domain.Merchant;
 import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.exception.NotFoundPrincipalException;
 import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.support.ApplicationContextProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +25,7 @@ public class SecurityService {
                 .map(Authentication::getPrincipal)
                 .orElseThrow(() -> new NotFoundPrincipalException("Principal 만료"));
 
-        return userRepository.findByUsername(principal.getName());
+        return userRepository.findByUserId(principal.getName());
     }
     
     // 확인 필요

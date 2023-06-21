@@ -2,7 +2,6 @@ package com.seat.reservation.common.domain;
 
 import com.seat.reservation.common.domain.enums.PaymentCode;
 import com.seat.reservation.common.domain.enums.PaymentMethod;
-import com.seat.reservation.common.listener.AuditHistoryEntityListener;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

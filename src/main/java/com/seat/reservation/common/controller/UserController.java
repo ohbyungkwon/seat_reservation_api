@@ -1,37 +1,42 @@
 package com.seat.reservation.common.controller;
 
-import com.seat.reservation.common.domain.User;
+import com.seat.reservation.common.dto.ResponseComDto;
+import com.seat.reservation.common.dto.UserDto;
+import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.service.UserService;
+import com.seat.reservation.common.util.CommonUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.inject.Inject;
+import javax.validation.Valid;
 
 /* 회원 등록, 수정, 탈퇴 (조회 기능은 Spring Security에서 자동으로 함) */
 @Controller
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    @Inject
-    public UserController(UserService userService){
-        this.userService = userService;
-    }
+    @PostMapping("/signUp")
+    public ResponseEntity<ResponseComDto> createUser(
+            @Valid @RequestBody UserDto.create dto, BindingResult result) throws Exception {
+        String errMsg = CommonUtil.getFirstError(result);
+        if(!StringUtils.isEmpty(errMsg)) {
+            throw new BadReqException(errMsg);
+        }
 
-    @RequestMapping(value="/register",method = RequestMethod.GET)
-    public String registerGet() throws Exception {
-        return "/user/register";
-    }
-
-    @RequestMapping(value="/register", method = RequestMethod.POST)
-    public String registerPost(User user) throws Exception {
-        userService.registerUser(user);
-        return "redirect:/user/login";
-    }
-
-    @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String login() throws Exception {
-        return "/user/loginForm";
+        UserDto.create createdUser = userService.createUser(dto);
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("회원가입 완료되었습니다.")
+                        .resultObj(createdUser)
+                        .build(), HttpStatus.OK);
     }
 }

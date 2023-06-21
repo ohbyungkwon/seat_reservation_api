@@ -41,7 +41,7 @@ public class MenuAuthority {
         return MenuDto.searchAll.builder()
                 .menuId(this.menu.getMenuId())
                 .menuName(this.menu.getMenuName())
-                .userId(this.user.getUserid())
+                .userId(this.user.getUserId())
                 .build();
     }
 

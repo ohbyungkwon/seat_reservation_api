@@ -16,7 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Table
+@Table(name =
+"merchants")
 @Getter
 @Entity
 @Builder
@@ -127,7 +128,7 @@ public class Merchant {
 
     // Merchant를 만드는 것
     public static Merchant createMerchant(MerchantDto.create dto,
-                                             User user, List<Item> itemList){
+                                          User user, List<Item> itemList){
         return Merchant.builder() // 값을 받을 생성자를 선언한다.
                 .merchantRegNum(dto.getMerchantRegNum())
                 .user(user)

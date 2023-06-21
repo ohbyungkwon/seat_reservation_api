@@ -128,7 +128,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
         LocalDateTime startDateTime = search.getStartDateTime();
         LocalDateTime endDateTime = search.getEndDateTime();
 
-        String userId = user.getUserid();
+        String userId = user.getUserId();
         Page<Reservation> reservations = reservationRepository.findByUserAndRegisterDateBetween(userId, startDateTime, endDateTime, pageable);
         List<ReservationDto.show> reservationList = reservations.get()
                 .map(Reservation::convertSimpleReservationDtoShow)

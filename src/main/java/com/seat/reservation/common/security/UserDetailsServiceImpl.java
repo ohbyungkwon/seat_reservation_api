@@ -8,17 +8,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     @Override
-    public MyUserDetails loadUserByUsername(String email) {
-        return userRepository.findByEmail(email)
+    public MyUserDetails loadUserByUsername(String username) {
+        return userRepository.findByUserId(username)
                 .map(u -> new MyUserDetails(u, Collections.singleton(new SimpleGrantedAuthority(u.getRole().getValue()))))
-                .orElseThrow(() -> new UserNotFoundException(email));
+                .orElseThrow(() -> new UserNotFoundException(username));
     }
 
 

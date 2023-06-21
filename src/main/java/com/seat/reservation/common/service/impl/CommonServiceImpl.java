@@ -8,6 +8,7 @@ import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.repository.FileRepository;
 import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.service.CommonService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

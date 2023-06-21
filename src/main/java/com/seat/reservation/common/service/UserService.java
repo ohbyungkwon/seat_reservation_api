@@ -1,7 +1,7 @@
 package com.seat.reservation.common.service;
 
-import com.seat.reservation.common.domain.User;
+import com.seat.reservation.common.dto.UserDto;
 
 public interface UserService {
-    void registerUser(User user) throws Exception;
+    UserDto.create createUser(UserDto.create user) throws Exception;
 }

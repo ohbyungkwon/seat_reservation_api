@@ -25,7 +25,7 @@ public class MenuAuthorityRepositoryImpl implements MenuAuthorityRepositoryCusto
                 .selectFrom(menuAuthority)
                 .join(menuAuthority.user, user)
                 .join(menuAuthority.menu, menu).fetchJoin()
-                .where(menuAuthority.user.userid.eq(userId))
+                .where(menuAuthority.user.userId.eq(userId))
                 .orderBy(menuAuthority.menu.menuId.asc())
                 .fetch();
     }

@@ -1,7 +1,6 @@
 package com.seat.reservation.common.repository;
 
 import com.seat.reservation.common.domain.User;
-import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.SeatHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

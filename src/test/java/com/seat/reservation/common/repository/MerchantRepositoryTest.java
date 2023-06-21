@@ -1,28 +1,14 @@
 package com.seat.reservation.common.repository;
 
 
-import com.seat.reservation.common.domain.Item;
-import com.seat.reservation.common.domain.Merchant;
-import com.seat.reservation.common.domain.Upzong;
-import com.seat.reservation.common.domain.User;
-import com.seat.reservation.common.domain.enums.Category;
-import com.seat.reservation.common.domain.enums.RegisterCode;
-import com.seat.reservation.common.dto.ItemDto;
-import com.seat.reservation.common.dto.MerchantDto;
-import com.seat.reservation.common.dto.UpzongDto;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 @SpringBootTest
 @RunWith(SpringRunner.class)

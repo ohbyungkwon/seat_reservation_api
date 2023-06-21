@@ -3,30 +3,32 @@ package com.seat.reservation.common.domain;
 import com.seat.reservation.common.domain.enums.Gender;
 import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.UserDto;
+import io.netty.util.internal.StringUtil;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.LocalDate;
 import org.joda.time.Years;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.time.Year;
 import java.util.Optional;
 
-@Table
+@Slf4j
 @Entity
 @Builder
+@Table(name = "member")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = {AuditingEntityListener.class})
 public class User {
+
     @Id
-    private String userid; // userid. PK
+    private String userId; // userId. PK
 
     private String pw;
 
@@ -42,6 +44,7 @@ public class User {
 
     private int age; // birth로부터 계산. 따로 입력 받지는 않음.
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     private String snsType; // 로그인: sns 기반. ex ) kakao, apple, google, etc.
@@ -65,16 +68,19 @@ public class User {
     }
 
     public static User createUserSimple(String userId){
-        return User.builder().userid(userId).build();
+        return User.builder().userId(userId).build();
     }
 
-    public static User createUser(UserDto.create userDto){
+    public static User createUser(UserDto.create userDto, PasswordEncoder passwordEncoder){
         Role role = Optional.ofNullable(userDto.getRole())
                 .orElse(Role.UNAUTHORIZATION_ROLE);
+        String password = userDto.getPassword();
+        String encodedPassword = passwordEncoder.encode(password);
+        log.debug("[password={}]", encodedPassword);
 
         return User.builder()
-                .userid(userDto.getUserId())
-                .pw(userDto.getPassword())
+                .userId(userDto.getUserId())
+                .pw(encodedPassword)
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .birth(userDto.getBirth())
@@ -82,6 +88,20 @@ public class User {
                 .gender(userDto.getGender())
                 .role(role)
                 .age(getAge(userDto.getBirth()))
+                .build();
+    }
+
+    public UserDto.create convertDto(){
+        return UserDto.create.builder()
+                .userId(this.getUserId())
+                .password(StringUtil.EMPTY_STRING)
+                .name(this.getName())
+                .email(this.getEmail())
+                .birth(this.getBirth())
+                .address(this.getAddress())
+                .gender(this.getGender())
+                .role(role)
+                .age(getAge(this.getBirth()))
                 .build();
     }
 }

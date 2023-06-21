@@ -2,8 +2,7 @@ package com.seat.reservation.common.dto;
 
 import com.seat.reservation.common.domain.enums.Gender;
 import com.seat.reservation.common.domain.enums.Role;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.EnumType;
@@ -12,8 +11,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 public class UserDto {
-    @Data
+
+    @Setter
+    @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class create {
         @Length(min=4, max = 8)
         @NotEmpty(message = "username null")
@@ -30,7 +33,7 @@ public class UserDto {
         @NotEmpty(message = "email null")
         private String email;
 
-        @Length(max = 6)
+        @Length(max = 8)
         @NotEmpty(message = "birth null")
         private String birth;
 

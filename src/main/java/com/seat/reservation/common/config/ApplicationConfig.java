@@ -1,11 +1,17 @@
 package com.seat.reservation.common.config;
 
+import com.zaxxer.hikari.HikariConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.sql.DataSource;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 @Configuration
 public class ApplicationConfig implements WebMvcConfigurer {
@@ -29,5 +35,12 @@ public class ApplicationConfig implements WebMvcConfigurer {
                 .allowedHeaders("*") //요청 허용 헤더
                 .allowCredentials(true) //요청 허용 쿠키
                 .maxAge(MAX_AGE_SECS);
+    }
+
+    @Bean
+    public StringHttpMessageConverter StringHttpMessageConverter(){
+        return new StringHttpMessageConverter(
+                StandardCharsets.UTF_8
+        );
     }
 }

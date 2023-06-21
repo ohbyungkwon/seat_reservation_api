@@ -1,17 +1,16 @@
 package com.seat.reservation.common.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public enum Gender {
-    MAN("MAN", "1"),
-    WOMAN("WOMAN","2");
+    MAN("MAN"),
+    WOMAN("WOMAN");
 
-    private String gubun;
     private String type;
-
-    Gender(String gubun, String type){
-        this.gubun = gubun;
-        this.type = type;
-    }
 }
