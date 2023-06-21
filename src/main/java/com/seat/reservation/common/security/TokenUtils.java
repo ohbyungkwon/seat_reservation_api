@@ -48,6 +48,12 @@ public final class TokenUtils {
                 .compact();
     }
 
+    public static UserDto.create getUser(String token) throws IOException {
+        String claims = getClaimsFormToken(token);
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(claims, UserDto.create.class);
+    }
+
     public static boolean isValidToken(String token){
         if(token.contains(AuthConstants.TOKEN_TYPE)){
             token = token.substring(AuthConstants.TOKEN_TYPE.length() + 1);

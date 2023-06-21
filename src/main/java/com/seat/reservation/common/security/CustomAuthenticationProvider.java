@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         UserDto.create user = userDetails.getUser().convertDto();
-        return new UsernamePasswordAuthenticationToken(user, userPw, userDetails.getAuthorities());
+        Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(user, userPw, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(workedAuthentication);
+        return workedAuthentication;
     }
 
     @Override
