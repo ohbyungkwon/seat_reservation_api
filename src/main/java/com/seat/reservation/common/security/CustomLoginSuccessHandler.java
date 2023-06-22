@@ -1,6 +1,7 @@
 package com.seat.reservation.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
@@ -13,10 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
-    private final CustomRedisCacheWriter customRedisCacheWriter;
+    private final CustomRedisCache redisCache;
 
-    public CustomLoginSuccessHandler(CustomRedisCacheWriter customRedisCacheWriter) {
-        this.customRedisCacheWriter = customRedisCacheWriter;
+    public CustomLoginSuccessHandler(CustomRedisCache redisCache) {
+        this.redisCache = redisCache;
     }
 
     @Override
@@ -28,7 +29,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         response.addHeader(AuthConstants.AUTH_HEADER, AuthConstants.TOKEN_TYPE + " " + token);
 
         String redisTokenKey = AuthConstants.getAccessTokenKey(user.getUserId());
-        customRedisCacheWriter.put(redisTokenKey, token);
+        redisCache.put(redisTokenKey, token);
 
         ObjectMapper objectMapper = new ObjectMapper();
         ResponseComDto responseComDto = ResponseComDto.builder()

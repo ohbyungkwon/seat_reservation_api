@@ -1,11 +1,11 @@
 package com.seat.reservation.common.config;
 
+import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -20,6 +20,8 @@ import javax.annotation.PreDestroy;
 
 @Configuration
 public class RedisConfig {
+    public static final String DEFAULT_REDIS_STORAGE = "reservation-redis-storage";
+
     @Value("${spring.redis.host}")
     private String host;
 
@@ -66,5 +68,10 @@ public class RedisConfig {
         return RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+    }
+
+    @Bean
+    public CustomRedisCache redisCacheManager(){
+        return new CustomRedisCache(DEFAULT_REDIS_STORAGE, redisCacheWriter(), redisCacheConfiguration());
     }
 }

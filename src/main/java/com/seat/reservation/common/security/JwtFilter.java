@@ -1,6 +1,7 @@
 package com.seat.reservation.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
@@ -26,11 +27,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
-    private final CustomRedisCacheWriter redisCacheWriter;
+    private final CustomRedisCache redisCache;
     private final String[] allowUrl;
 
-    public JwtFilter(CustomRedisCacheWriter redisCacheWriter, String[] allowUrl) {
-        this.redisCacheWriter = redisCacheWriter;
+    public JwtFilter(CustomRedisCache redisCache, String[] allowUrl) {
+        this.redisCache = redisCache;
         this.allowUrl = allowUrl;
     }
 
@@ -55,11 +56,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 UserDto.create user = TokenUtils.getUser(token);
                 String redisTokenKey = AuthConstants.getAccessTokenKey(user.getUserId());
                 try {
-                    String tokenInRedis = (String) redisCacheWriter.get(redisTokenKey);
+                    String tokenInRedis = (String) redisCache.getValue(redisTokenKey);
                     if(!token.equals(tokenInRedis)) {
                         throw new CustomAuthenticationException("만료된 토근입니다.");
                     }
-                } catch (ClassNotFoundException cle) {
+                } catch (Exception cle) {
                     throw new CustomAuthenticationException("사용자 정보를 가져오는데 실패했습니다.");
                 }
 

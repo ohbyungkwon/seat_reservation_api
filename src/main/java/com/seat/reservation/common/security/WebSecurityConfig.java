@@ -1,6 +1,6 @@
 package com.seat.reservation.common.security;
 
-import com.seat.reservation.common.cache.CustomRedisCacheWriter;
+import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private CustomRedisCacheWriter redisCacheWriter;
+    private CustomRedisCache redisCache;
 
     @Autowired
     private UserRepository userRepository;
@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CustomLoginSuccessHandler customLoginSuccessHandler() {
-        return new CustomLoginSuccessHandler(redisCacheWriter);
+        return new CustomLoginSuccessHandler(redisCache);
     }
 
     @Bean
@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtFilter jwtFilter() {
-        return new JwtFilter(redisCacheWriter, CommonUtil.allowUrls);
+        return new JwtFilter(redisCache, CommonUtil.allowUrls);
     }
 
     @Override
