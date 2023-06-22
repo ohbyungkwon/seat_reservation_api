@@ -64,6 +64,10 @@ public class User {
         return Years.yearsBetween(dt.toLocalDate(), now).getYears();
     }
 
+    public int plusLoginFailCount(){
+        return (this.loginFailCount == 5 ? loginFailCount : (this.loginFailCount += 1));
+    }
+
     public void setIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
     }
@@ -106,6 +110,7 @@ public class User {
         String password = userDto.getPassword();
         if (!StringUtils.isEmpty(password)) {
             this.pw = passwordEncoder.encode(password);
+            this.setIsLocked(false);
         }
     }
 

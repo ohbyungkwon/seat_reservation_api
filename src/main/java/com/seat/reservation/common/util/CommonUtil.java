@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 public class CommonUtil {
@@ -65,5 +66,13 @@ public class CommonUtil {
         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
         ObjectInput oin = new ObjectInputStream(bis);
         return oin.readObject();
+    }
+
+    public static String getStr(Object obj) {
+        if (!(obj instanceof String)) {
+            return "";
+        }
+
+        return String.valueOf(Optional.of(obj).orElseGet(() -> ""));
     }
 }

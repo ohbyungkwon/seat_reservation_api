@@ -26,6 +26,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String userId = map.get("userId");
             String password = map.get("password");
 
+            request.setAttribute("userId", userId);
             authRequest = new UsernamePasswordAuthenticationToken(userId, password);
         } catch (IOException exception){
             String msg = "입력 형식을 확인해주세요.";

@@ -25,6 +25,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String userPw = (String)token.getCredentials();
 
         MyUserDetails userDetails = userDetailService.loadUserByUsername(userName);
+        if(!userDetails.isEnabled()) {
+            throw new CustomAuthenticationException("계정이 잠겨있습니다.");
+        }
+
         if(!passwordEncoder.matches(userPw, userDetails.getPassword())){
             throw new BadCredentialsException(userDetails.getUsername() + "use invalid password. please check it.");
         }

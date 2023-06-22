@@ -1,6 +1,7 @@
 package com.seat.reservation.common.security;
 
 import com.seat.reservation.common.cache.CustomRedisCacheWriter;
+import com.seat.reservation.common.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomRedisCacheWriter redisCacheWriter;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private static final String loginUrl = "/login";
     private static final String signUpUrl = "/user/signUp";
@@ -51,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CustomLoginFailureHandler customLoginFailureHandler() {
-        return new CustomLoginFailureHandler();
+        return new CustomLoginFailureHandler(userRepository);
     }
 
     @Bean
