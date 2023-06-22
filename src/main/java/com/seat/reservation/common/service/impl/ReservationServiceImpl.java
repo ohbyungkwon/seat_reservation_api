@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
      */
     @Override
     @Transactional
-    public Boolean saveReservation(ReservationDto.create dto, PayDto.InputPayDto inputPayDto) {
+    public Boolean saveReservation(ReservationDto.create dto, PayDto.InputPayDto inputPayDto) throws IOException {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         Merchant merchant = merchantRepository.findByMerchantRegNum(dto.getMerchantRegNum());
         Optional<Seat> seatOptional = seatRepository.findById(dto.getSeatId());
@@ -123,7 +124,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
      * @return Page<ReservationDto.show>
      */
     @Override
-    public Page<ReservationDto.show> selectReservations(SearchDto.date search, Pageable pageable) {
+    public Page<ReservationDto.show> selectReservations(SearchDto.date search, Pageable pageable) throws IOException {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         LocalDateTime startDateTime = search.getStartDateTime();
         LocalDateTime endDateTime = search.getEndDateTime();
@@ -142,7 +143,7 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
      * @return ReservationDetailDto
      */
     @Override
-    public ReservationDetailDto selectReservationDetail(Long reservationId) {
+    public ReservationDetailDto selectReservationDetail(Long reservationId) throws IOException {
         User user = this.getUser().orElseThrow(()-> new NotFoundUserException("사용자 정보가 없습니다."));
         Boolean isExistUserReservation = reservationRepository.existsByIdAndUser(reservationId, user);
         if(isExistUserReservation == Boolean.FALSE){

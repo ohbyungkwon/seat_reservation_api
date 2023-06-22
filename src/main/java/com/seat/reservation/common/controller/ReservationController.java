@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class ReservationController {
     }
 
     @PostMapping("/reservation")
-    public ResponseEntity<ResponseComDto> saveReservation(ReservationDto.create create, PayDto.InputPayDto inputPayDto){
+    public ResponseEntity<ResponseComDto> saveReservation(ReservationDto.create create, PayDto.InputPayDto inputPayDto) throws IOException {
         Boolean isSuccess = reservationService.saveReservation(create, inputPayDto);
 
         Map<String, Boolean> json = new HashMap<>();
@@ -48,7 +49,7 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<ResponseComDto> selectReservations(SearchDto.date search, Pageable pageable){
+    public ResponseEntity<ResponseComDto> selectReservations(SearchDto.date search, Pageable pageable) throws IOException {
         Page<ReservationDto.show> reservations = reservationService.selectReservations(search, pageable);
         return new ResponseEntity<>(
                 ResponseComDto.builder()
@@ -58,7 +59,7 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations/{id}")
-    public ResponseEntity<ResponseComDto> selectReservationDetail(@PathVariable Long id){
+    public ResponseEntity<ResponseComDto> selectReservationDetail(@PathVariable Long id) throws IOException {
         ReservationDetailDto reservationDetail = reservationService.selectReservationDetail(id);
         return new ResponseEntity<>(
                 ResponseComDto.builder()

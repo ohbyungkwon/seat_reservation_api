@@ -18,7 +18,7 @@ public class UserDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class create {
-        @Length(min=4, max = 8)
+        @Length(min = 4, max = 8)
         @NotEmpty(message = "username null")
         private String userId;
 
@@ -47,5 +47,22 @@ public class UserDto {
 
         @Enumerated(EnumType.STRING)
         private Role role;
+    }
+
+
+    @Setter
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class update {
+        @Length(min = 6)
+        @NotEmpty(message = "password null")
+        private String oldPassword;
+
+        @Length(min = 6)
+        private String password;
+
+        private String address;
     }
 }

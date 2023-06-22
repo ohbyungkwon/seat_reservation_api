@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -37,6 +38,23 @@ public class UserController {
                 ResponseComDto.builder()
                         .resultMsg("회원가입 완료되었습니다.")
                         .resultObj(createdUser)
+                        .build(), HttpStatus.OK);
+    }
+
+
+    @PutMapping("/modify")
+    public ResponseEntity<ResponseComDto> modifyUser(
+            @Valid @RequestBody UserDto.update dto, BindingResult result) throws Exception {
+        String errMsg = CommonUtil.getFirstError(result);
+        if(!StringUtils.isEmpty(errMsg)) {
+            throw new BadReqException(errMsg);
+        }
+
+        userService.updateUser(dto);
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("회원 정보가 수정되었습니다.")
+                        .resultObj(null)
                         .build(), HttpStatus.OK);
     }
 }

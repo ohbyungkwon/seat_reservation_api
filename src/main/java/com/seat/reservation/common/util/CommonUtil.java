@@ -8,8 +8,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -19,6 +18,8 @@ import java.util.Date;
 
 @Slf4j
 public class CommonUtil {
+    public static final String redisKeyToSave = "access-token";
+
 
     /**
      * domain, dto 필드명이 모두 일치할 경우만 사용
@@ -53,5 +54,18 @@ public class CommonUtil {
         PrintWriter printWriter = response.getWriter();
         printWriter.write(body);
         printWriter.flush();
+    }
+
+    public static byte[] convertByte(Object obj) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput out = new ObjectOutputStream(bos);
+        out.writeObject(obj);
+        return bos.toByteArray();
+    }
+
+    public static Object convertObj(byte[] bytes) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+        ObjectInput oin = new ObjectInputStream(bis);
+        return oin.readObject();
     }
 }

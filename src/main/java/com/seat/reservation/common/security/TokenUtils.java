@@ -49,6 +49,9 @@ public final class TokenUtils {
     }
 
     public static UserDto.create getUser(String token) throws IOException {
+        if(token.contains(AuthConstants.TOKEN_TYPE)){
+            token = token.substring(AuthConstants.TOKEN_TYPE.length() + 1);
+        }
         String claims = getClaimsFormToken(token);
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readValue(claims, UserDto.create.class);

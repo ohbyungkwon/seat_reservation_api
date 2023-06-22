@@ -1,5 +1,6 @@
 package com.seat.reservation.common.cache;
 
+import com.seat.reservation.common.util.CommonUtil;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -9,6 +10,7 @@ import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collections;
@@ -18,6 +20,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CustomRedisCacheWriter implements RedisCacheWriter {
+    private static final String redisStorageName = "reservation-redis-storage";
 
     private final RedisConnectionFactory connectionFactory;
     private final Duration sleepTime;
@@ -43,6 +46,11 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
         this.sleepTime = sleepTime;
     }
 
+    public void put(String key, Object value) throws IOException {
+        this.put(redisStorageName, key.getBytes(), CommonUtil.convertByte(value), null);
+    }
+
+
     /*
      * (non-Javadoc)
      * @see org.springframework.data.redis.cache.RedisCacheWriter#put(java.lang.String, byte[], byte[], java.time.Duration)
@@ -64,6 +72,11 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
 
             return "OK";
         });
+    }
+
+    public Object get(String key) throws IOException, ClassNotFoundException {
+        byte[] bytes = this.get(redisStorageName, key.getBytes());
+        return CommonUtil.convertObj(bytes);
     }
 
     /*

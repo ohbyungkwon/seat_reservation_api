@@ -1,5 +1,6 @@
 package com.seat.reservation.common.security;
 
+import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,7 +18,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final UserDetailsServiceImpl userDetailService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
@@ -31,7 +31,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDto.create user = userDetails.getUser().convertDto();
         Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(user, userPw, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(workedAuthentication);
+        SecurityContextHolder.getContext().setAuthentication(workedAuthentication);// Session 사용시 설정 필요
         return workedAuthentication;
     }
 

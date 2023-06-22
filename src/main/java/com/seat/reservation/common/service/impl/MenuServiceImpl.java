@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -57,7 +58,7 @@ public class MenuServiceImpl extends SecurityService implements MenuService {
      */
     @Override
     @Cacheable(value = "reservation_api_cache_name", key = "#key")
-    public List<MenuDto.searchAll> searchUserMenu(String key) {
+    public List<MenuDto.searchAll> searchUserMenu(String key) throws IOException {
         StringTokenizer st = new StringTokenizer(key, "_");
         String userId = st.nextToken();
 

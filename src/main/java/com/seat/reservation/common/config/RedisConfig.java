@@ -57,7 +57,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisCacheWriter redisCacheWriter(){
+    public CustomRedisCacheWriter redisCacheWriter(){
         return new CustomRedisCacheWriter(redisConnectionFactory());
     }
 

@@ -3,7 +3,7 @@ package com.seat.reservation.common.domain;
 import com.seat.reservation.common.domain.enums.Gender;
 import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.UserDto;
-import io.netty.util.internal.StringUtil;
+import com.seat.reservation.common.exception.BadReqException;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Optional;
@@ -63,15 +64,15 @@ public class User {
         return Years.yearsBetween(dt.toLocalDate(), now).getYears();
     }
 
-    public void setIsLocked(boolean isLocked){
+    public void setIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
     }
 
-    public static User createUserSimple(String userId){
+    public static User createUserSimple(String userId) {
         return User.builder().userId(userId).build();
     }
 
-    public static User createUser(UserDto.create userDto, PasswordEncoder passwordEncoder){
+    public static User createUser(UserDto.create userDto, PasswordEncoder passwordEncoder) {
         Role role = Optional.ofNullable(userDto.getRole())
                 .orElse(Role.UNAUTHORIZATION_ROLE);
         String password = userDto.getPassword();
@@ -91,10 +92,27 @@ public class User {
                 .build();
     }
 
+    public void updateUser(UserDto.update userDto, PasswordEncoder passwordEncoder) throws Exception {
+        boolean isCorrect = passwordEncoder.matches(userDto.getOldPassword(), this.pw);
+        if(!isCorrect) {
+            throw new BadReqException("현재 비밀번호를 확인해주세요.");
+        }
+
+        String address = userDto.getAddress();
+        if (!StringUtils.isEmpty(address)) {
+            this.address = address;
+        }
+
+        String password = userDto.getPassword();
+        if (!StringUtils.isEmpty(password)) {
+            this.pw = passwordEncoder.encode(password);
+        }
+    }
+
     public UserDto.create convertDto(){
         return UserDto.create.builder()
                 .userId(this.getUserId())
-                .password(StringUtil.EMPTY_STRING)
+                .password("")
                 .name(this.getName())
                 .email(this.getEmail())
                 .birth(this.getBirth())
