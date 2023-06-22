@@ -70,8 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers(loginUrl, signUpUrl).permitAll()
             .anyRequest().authenticated()
-//            .and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) 일단 주석
+            .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) 일단 주석
             .and()
                 .addFilterBefore(jwtFilter(), ExceptionTranslationFilter.class)
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
