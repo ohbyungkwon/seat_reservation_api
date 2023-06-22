@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CustomRedisCacheWriter implements RedisCacheWriter {
-    private static final String redisStorageName = "reservation-redis-storage";
+    private static final String DEFAULT_REDIS_STORAGE = "reservation-redis-storage";
 
     private final RedisConnectionFactory connectionFactory;
     private final Duration sleepTime;
@@ -38,7 +38,6 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
      *          to disable locking.
      */
     public CustomRedisCacheWriter(RedisConnectionFactory connectionFactory, Duration sleepTime) {
-
         Assert.notNull(connectionFactory, "ConnectionFactory must not be null!");
         Assert.notNull(sleepTime, "SleepTime must not be null!");
 
@@ -47,7 +46,7 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
     }
 
     public void put(String key, Object value) throws IOException {
-        this.put(redisStorageName, key.getBytes(), CommonUtil.convertByte(value), null);
+        this.put(DEFAULT_REDIS_STORAGE, key.getBytes(), CommonUtil.convertByte(value), null);
     }
 
 
@@ -75,7 +74,7 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
     }
 
     public Object get(String key) throws IOException, ClassNotFoundException {
-        byte[] bytes = this.get(redisStorageName, key.getBytes());
+        byte[] bytes = this.get(DEFAULT_REDIS_STORAGE, key.getBytes());
         return CommonUtil.convertObj(bytes);
     }
 
@@ -85,7 +84,6 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
      */
     @Override
     public byte[] get(String name, byte[] key) {
-
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
 
@@ -98,7 +96,6 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
      */
     @Override
     public byte[] putIfAbsent(String name, byte[] key, byte[] value, @Nullable Duration ttl) {
-
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
         Assert.notNull(value, "Value must not be null!");
@@ -134,7 +131,6 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
      */
     @Override
     public void remove(String name, byte[] key) {
-
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(key, "Key must not be null!");
 
@@ -147,16 +143,12 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
      */
     @Override
     public void clean(String name, byte[] pattern) {
-
         Assert.notNull(name, "Name must not be null!");
         Assert.notNull(pattern, "Pattern must not be null!");
 
         execute(name, connection -> {
-
             boolean wasLocked = false;
-
             try {
-
                 if (isLockingCacheWriter()) {
                     doLock(name, connection);
                     wasLocked = true;

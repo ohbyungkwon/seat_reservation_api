@@ -18,8 +18,6 @@ import java.util.Date;
 
 @Slf4j
 public class CommonUtil {
-    public static final String redisKeyToSave = "access-token";
-
 
     /**
      * domain, dto 필드명이 모두 일치할 경우만 사용

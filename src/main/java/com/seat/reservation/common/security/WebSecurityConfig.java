@@ -57,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JwtFilter jwtFilter() {
         String[] allowUrl = {loginUrl, signUpUrl};
-        return new JwtFilter(allowUrl);
+        return new JwtFilter(redisCacheWriter, allowUrl);
     }
 
     @Override

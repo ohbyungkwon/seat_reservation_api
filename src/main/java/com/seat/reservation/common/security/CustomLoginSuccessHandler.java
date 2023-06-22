@@ -1,23 +1,16 @@
 package com.seat.reservation.common.security;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seat.reservation.common.cache.CustomRedisCacheWriter;
-import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.util.CommonUtil;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     private final CustomRedisCacheWriter customRedisCacheWriter;
@@ -34,7 +27,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         String token = TokenUtils.generateJwtToken(user);
         response.addHeader(AuthConstants.AUTH_HEADER, AuthConstants.TOKEN_TYPE + " " + token);
 
-        String redisTokenKey = user.getUserId() + "." + CommonUtil.redisKeyToSave;
+        String redisTokenKey = AuthConstants.getAccessTokenKey(user.getUserId());
         customRedisCacheWriter.put(redisTokenKey, token);
 
         ObjectMapper objectMapper = new ObjectMapper();
