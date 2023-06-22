@@ -23,28 +23,17 @@ import java.util.Optional;
 
 public class SecurityService {
 
-    public Optional<User> getUser() throws IOException {
-        HttpServletRequest request =
-                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String token = request.getHeader(AuthConstants.AUTH_HEADER);
-        UserDto.create userDto = TokenUtils.getUser(token);
-
-        ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-        UserRepository userRepository = applicationContext.getBean(UserRepository.class);
-        return userRepository.findByUserId(userDto.getUserId());
-    }
-
-    /**
-     * SESSION 사용할 경우 정상 동작
-     */
-    protected Optional<User> getUserInSession(){
+    protected UserDto.create getUserInfo() {
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken)
                 SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null){
             throw new NotFoundPrincipalException("Principal 만료");
         }
-        UserDto.create userDto = (UserDto.create) authentication.getPrincipal();
+        return (UserDto.create) authentication.getPrincipal();
+    }
 
+    protected Optional<User> getUser(){
+        UserDto.create userDto = this.getUserInfo();
         ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
         UserRepository userRepository = applicationContext.getBean(UserRepository.class);
         return userRepository.findByUserId(userDto.getUserId());
