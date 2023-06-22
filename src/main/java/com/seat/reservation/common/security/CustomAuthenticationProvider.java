@@ -30,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         UserDto.create user = userDetails.getUser().convertDto();
-        Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(user, userPw, userDetails.getAuthorities());
+        Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(user, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(workedAuthentication);// Session 사용시 설정 필요
         return workedAuthentication;
     }
