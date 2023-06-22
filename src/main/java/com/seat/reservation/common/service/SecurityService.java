@@ -1,23 +1,16 @@
 package com.seat.reservation.common.service;
 
-import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.exception.NotFoundPrincipalException;
 import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.UserRepository;
-import com.seat.reservation.common.security.AuthConstants;
-import com.seat.reservation.common.security.TokenUtils;
 import com.seat.reservation.common.support.ApplicationContextProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.security.Principal;
 import java.util.Optional;
 
