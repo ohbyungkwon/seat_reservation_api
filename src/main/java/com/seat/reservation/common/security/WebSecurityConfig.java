@@ -2,9 +2,11 @@ package com.seat.reservation.common.security;
 
 import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.repository.UserRepository;
+import com.seat.reservation.common.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,8 +25,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserRepository userRepository;
 
-    private static final String loginUrl = "/login";
-    private static final String signUpUrl = "/user/signUp";
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
-        customAuthenticationFilter.setFilterProcessesUrl(loginUrl);
+        customAuthenticationFilter.setFilterProcessesUrl(CommonUtil.allowUrls[0]);
         customAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
         customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
         customAuthenticationFilter.setAuthenticationFailureHandler(customLoginFailureHandler());
@@ -60,8 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtFilter jwtFilter() {
-        String[] allowUrl = {loginUrl, signUpUrl};
-        return new JwtFilter(redisCacheWriter, allowUrl);
+        return new JwtFilter(redisCacheWriter, CommonUtil.allowUrls);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .formLogin().disable()
             .authorizeRequests()
-            .antMatchers(loginUrl, signUpUrl).permitAll()
+            .antMatchers(CommonUtil.allowUrls).permitAll()
             .anyRequest().authenticated()
             .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

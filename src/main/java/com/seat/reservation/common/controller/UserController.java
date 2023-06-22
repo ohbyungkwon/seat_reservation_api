@@ -14,13 +14,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
 /* 회원 등록, 수정, 탈퇴 (조회 기능은 Spring Security에서 자동으로 함) */
 @Controller
-@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -42,8 +40,8 @@ public class UserController {
     }
 
 
-    @PutMapping("/modify")
-    public ResponseEntity<ResponseComDto> modifyUser(
+    @PutMapping("/modify/user")
+    public ResponseEntity<ResponseComDto> updateUser(
             @Valid @RequestBody UserDto.update dto, BindingResult result) throws Exception {
         String errMsg = CommonUtil.getFirstError(result);
         if(!StringUtils.isEmpty(errMsg)) {
@@ -56,5 +54,11 @@ public class UserController {
                         .resultMsg("회원 정보가 수정되었습니다.")
                         .resultObj(null)
                         .build(), HttpStatus.OK);
+    }
+
+    @PostMapping("/auth/email")
+    public ResponseEntity<ResponseComDto> authEmail() {
+        // TODO) 이메일 인증 작업 후 임시 토큰 발급
+        return null;
     }
 }

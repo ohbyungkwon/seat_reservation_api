@@ -42,7 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
             log.debug("Url: {}", url);
 
             if(!ArrayUtils.contains(allowUrl, url)) {
-                String token = request.getHeader(AuthConstants.AUTH_HEADER);
+                String token = TokenUtils.removeTokenType(request.getHeader(AuthConstants.AUTH_HEADER));
                 if (StringUtils.isEmpty(token)) {
                     throw new CustomAuthenticationException("토큰이 필요합니다.");
                 }

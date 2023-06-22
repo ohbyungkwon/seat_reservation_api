@@ -2,14 +2,10 @@ package com.seat.reservation.common.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +15,12 @@ import java.util.Optional;
 
 @Slf4j
 public class CommonUtil {
+
+    public static final String[] allowUrls = {
+        "/login", // 첫번째 항목 수정X
+        "/signUp",
+        "/auth/email"
+    };
 
     /**
      * domain, dto 필드명이 모두 일치할 경우만 사용
