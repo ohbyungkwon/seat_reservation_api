@@ -35,10 +35,10 @@ spring:
   cache:
     redis:
       cache-null-values: true
-      name: reservation_api_cache_name
   redis:
     host: 127.0.0.1
     port: 6379
+    caches: reservation-redis-storage,test1,test2
 
 logging.level:
   org.hibernate.SQL: debug #SQL log? ??.
