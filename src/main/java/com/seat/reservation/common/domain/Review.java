@@ -78,4 +78,14 @@ public class Review {
             this.comment = dto.getComment();
         }
     }
+
+    /**
+     * 대댓글은 따로 request 요청 작업 필요
+     */
+    public ReviewDto.showSimple convertShowSimpleDto(){
+        return ReviewDto.showSimple.builder()
+                .title(this.title)
+                .comment(this.comment)
+                .build();
+    }
 }

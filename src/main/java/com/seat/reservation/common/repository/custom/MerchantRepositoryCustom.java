@@ -15,7 +15,5 @@ public interface MerchantRepositoryCustom {
 
     Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable);
 
-    List<MerchantDto.showMerchantWithItem> findMerchantWithItem(Integer merchantRegNum);
-
-    List<ReviewDto.showSimpleList> findReview(Integer merchantRegNum);
+    Merchant findMerchantDetail(Integer merchantRegNum);
 }

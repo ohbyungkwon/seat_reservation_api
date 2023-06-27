@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.repository.custom.MerchantRepositoryCustom;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,12 +23,9 @@ import static com.seat.reservation.common.domain.QUpzong.upzong;
 import static com.seat.reservation.common.domain.QReview.review;
 
 @Repository
+@RequiredArgsConstructor
 public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
-
-    public MerchantRepositoryImpl(JPAQueryFactory jpaQueryFactory){
-        this.jpaQueryFactory = jpaQueryFactory;
-    }
 
     /**
      *  SELECT *
@@ -71,38 +69,14 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
 
 
     @Override
-    public List<MerchantDto.showMerchantWithItem> findMerchantWithItem(Integer merchantRegNum) {
+    public Merchant findMerchantDetail(Integer merchantRegNum) {
         return jpaQueryFactory
-                .selectDistinct(
-                        new QMerchantDto_showMerchantWithItem(
-                        merchant.merchantRegNum,
-                        merchant.repPhone,
-                        merchant.repName,
-                        merchant.merchantTel,
-                        merchant.merchantName,
-                        merchant.upzong.category,
-                        merchant.address,
-                        merchant.zipCode,
-                        merchant.item
-                ))
+                .selectDistinct(merchant)
                 .from(merchant)
+                .join(merchant.upzong, upzong)
                 .join(merchant.item, item).fetchJoin()
                 .where(eqMerchantRegNum(merchantRegNum))
-                .fetch();
-    }
-
-    @Override
-    public List<ReviewDto.showSimpleList> findReview(Integer merchantRegNum) {
-        return jpaQueryFactory
-                .selectDistinct(
-                        new QReviewDto_showSimpleList(
-                            merchant.review
-                        )
-                )
-                .from(merchant)
-                .join(merchant.review, review).fetchJoin()
-                .where(eqMerchantRegNum(merchantRegNum))
-                .fetch();
+                .fetchOne();
     }
 
     public BooleanExpression eqMerchantName(String merchantName){
@@ -115,7 +89,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
         return StringUtils.isEmpty(upzongId) ? null : merchant.upzong.id.eq(upzongId);
     }
     public BooleanExpression eqMerchantRegNum(Integer merchantRegNum){
-        return StringUtils.isEmpty(merchantRegNum) ? null : merchant.merchantRegNum.eq(merchantRegNum);
+        return StringUtils.isEmpty(merchantRegNum) ? null : item.merchant.merchantRegNum.eq(merchantRegNum);
     }
 
 }

@@ -56,24 +56,4 @@ public class ReviewDto {
         private String title;
         private String comment;
     }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class showSimpleList {
-        List<ReviewDto.showSimple> reviews;
-
-        @QueryProjection
-        public showSimpleList(List<Review> reviews) {
-            for(Review review : reviews){
-                this.reviews.add(
-                        ReviewDto.showSimple
-                                .builder()
-                                .title(review.getTitle())
-                                .comment(review.getComment())
-                                .build()
-                );
-            }
-        }
-    }
 }

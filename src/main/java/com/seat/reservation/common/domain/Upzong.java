@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Table
@@ -26,22 +27,16 @@ public class Upzong {
 
     @JoinColumn
     @OneToMany(fetch = FetchType.LAZY)
-    private List<Merchant> merchant;
+    private List<Merchant> merchant = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     private Category category; // 카테고리 ex) pc방, cafe, hotel ...
 
 
-    // Upzong 만드는 것
-    public static Upzong createUpzong(UpzongDto.create dto){
+    public static Upzong createUpzong(UpzongDto.create dto) {
         return Upzong.builder() // 값을 받을 생성자를 선언한다.
                 .code(dto.getCode())
                 .category(dto.getCategory())
                 .build();
     }
-
-
-
-
-
 }

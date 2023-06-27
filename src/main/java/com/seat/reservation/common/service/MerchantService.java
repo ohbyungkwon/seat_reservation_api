@@ -12,7 +12,10 @@ import java.util.List;
 
 
 public interface MerchantService {
-    void registerMerchant(Merchant merchant) throws Exception;
+    void registerMerchant(MerchantDto.create merchantDto) throws Exception;
+
+    void updateMerchant(MerchantDto.update merchantDto) throws Exception;
+
     Page<MerchantDto.show> findByMerchantList(MerchantDto.search search, Pageable pageable); // 가맹점 조회
     MerchantDto.showDetail findByMerchantDetail(Integer merchantRegNum);
 }
