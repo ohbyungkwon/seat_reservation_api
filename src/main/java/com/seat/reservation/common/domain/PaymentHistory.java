@@ -30,15 +30,15 @@ public class PaymentHistory {
 
     private String cardNum; // 카드 번호
 
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn
+    @JoinColumn(name = "merchant_reg_num")
     @ManyToOne(fetch = FetchType.LAZY)
     private Merchant merchant;
 
-    @JoinColumn
+    @JoinColumn(name = "reservation_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Reservation reservation;
 

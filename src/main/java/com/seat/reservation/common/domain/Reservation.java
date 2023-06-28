@@ -27,11 +27,11 @@ public class Reservation {
     @ManyToOne(fetch = FetchType.LAZY)
     private Seat seat;
 
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn
+    @JoinColumn(name = "merchant_reg_num")
     @ManyToOne(fetch = FetchType.LAZY)
     private Merchant merchant;
 

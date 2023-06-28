@@ -1,5 +1,6 @@
 package com.seat.reservation.common.service;
 
+import com.querydsl.core.Tuple;
 import com.seat.reservation.common.domain.Merchant;
 import com.seat.reservation.common.dto.MerchantDetailDto;
 import com.seat.reservation.common.dto.MerchantDto;

@@ -23,7 +23,7 @@ public class MerchantHistory {
     private LocalDateTime registerDate; // 가맹점 등록 일자 PK는 시퀀스로 가고
 
     // id -> 이 부분을 없애고 id는 가맹점 등록일자로만 가는걸로 설정
-    @JoinColumn
+    @JoinColumn(name = "merchant_reg_num")
     @ManyToOne(fetch = FetchType.LAZY)
     private Merchant merchant; // 가맹점
 

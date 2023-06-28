@@ -20,7 +20,7 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn
+    @JoinColumn(name = "merchant_reg_num")
     @ManyToOne(fetch = FetchType.LAZY)
     private Merchant merchant;
 

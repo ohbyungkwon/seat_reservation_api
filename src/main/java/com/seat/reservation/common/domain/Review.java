@@ -19,7 +19,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn
+    @JoinColumn(name = "merchant_reg_num")
     @ManyToOne(fetch = FetchType.LAZY)
     private Merchant merchant; // 리뷰를 단 가맹점
 

@@ -1,5 +1,6 @@
 package com.seat.reservation.common.service.impl;
 
+import com.querydsl.core.Tuple;
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.exception.BadReqException;

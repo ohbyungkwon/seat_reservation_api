@@ -1,5 +1,6 @@
 package com.seat.reservation.admin.controller;
 
+import com.querydsl.core.Tuple;
 import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.service.MerchantService;

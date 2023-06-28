@@ -1,7 +1,13 @@
 package com.seat.reservation.common.repository.Impl;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.*;
@@ -20,6 +26,7 @@ import java.util.List;
 import static com.seat.reservation.common.domain.QItem.item;
 import static com.seat.reservation.common.domain.QMerchant.merchant;
 import static com.seat.reservation.common.domain.QUpzong.upzong;
+import static com.seat.reservation.common.domain.QReview.review;
 
 @Repository
 @RequiredArgsConstructor
@@ -47,17 +54,19 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
     @Override
     public Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable) {
         QueryResults<MerchantDto.show> merchants = jpaQueryFactory
-                .select(new QMerchantDto_show(
-                        merchant.merchantName,
-                        merchant.address
-                ))
+                .select(
+                        new QMerchantDto_show(
+                                merchant.merchantName,
+                                merchant.address
+                        )
+                )
                 .from(merchant)
                 .join(merchant.upzong, upzong) // 업종 조인
                 .where(eqZipCode(search.getZipcode()),
                         eqMerchantName(search.getMerchantName()),
                         eqUpzong(search.getUpzongId()),
                         isShowCloseMerchant(search.getIsShowCloseMerchant()))
-                .orderBy(merchant.merchantRegNum.asc())
+                .orderBy(merchant.review.size().desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();

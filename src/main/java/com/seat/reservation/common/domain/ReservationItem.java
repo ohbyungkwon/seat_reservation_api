@@ -18,11 +18,11 @@ public class ReservationItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn
+    @JoinColumn(name = "reservation_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Reservation reservation;
 
-    @JoinColumn
+    @JoinColumn(name = "item_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Item item;
 

@@ -30,11 +30,11 @@ public class Merchant {
     @Column(length = 8)
     private Integer merchantRegNum; // 사업자등록번호
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, name = "upzong_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Upzong upzong;
 
@@ -81,6 +81,7 @@ public class Merchant {
         LocalTime openTime = LocalTime.parse(merchantDto.getOpenTime());
         LocalTime closeTime = LocalTime.parse(merchantDto.getCloseTime());
         return Merchant.builder()
+                .merchantRegNum(merchantDto.getMerchantRegNum())
                 .repName(merchantDto.getRepName())
                 .repPhone(merchantDto.getRepPhone())
                 .merchantTel(merchantDto.getMerchantTel())

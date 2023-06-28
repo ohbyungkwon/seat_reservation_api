@@ -1,5 +1,6 @@
 package com.seat.reservation.common.repository.custom;
 
+import com.querydsl.core.Tuple;
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.dto.ReviewDto;

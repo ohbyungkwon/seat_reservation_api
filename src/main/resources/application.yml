@@ -25,7 +25,7 @@ spring:
         format_sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     open-in-view: false
     database-platform: org.hibernate.dialect.H2Dialect
   security:

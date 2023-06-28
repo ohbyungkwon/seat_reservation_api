@@ -28,7 +28,7 @@ public class MenuAuthority {
     private Menu menu;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     private User user;
 
     @CreatedDate
