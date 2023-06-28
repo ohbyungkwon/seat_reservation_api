@@ -14,13 +14,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.seat.reservation.common.domain.QItem.item;
 import static com.seat.reservation.common.domain.QMerchant.merchant;
 import static com.seat.reservation.common.domain.QUpzong.upzong;
-import static com.seat.reservation.common.domain.QReview.review;
 
 @Repository
 @RequiredArgsConstructor
@@ -53,10 +52,11 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
                         merchant.address
                 ))
                 .from(merchant)
-                .join(merchant.upzong, upzong).fetchJoin() // 업종 조인
+                .join(merchant.upzong, upzong) // 업종 조인
                 .where(eqZipCode(search.getZipcode()),
                         eqMerchantName(search.getMerchantName()),
-                        eqUpzong(search.getUpzongId()))
+                        eqUpzong(search.getUpzongId()),
+                        isShowCloseMerchant(search.getIsShowCloseMerchant()))
                 .orderBy(merchant.merchantRegNum.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -79,6 +79,10 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
                 .fetchOne();
     }
 
+    public BooleanExpression isShowCloseMerchant(boolean isShowCloseMerchant){
+        LocalTime now = LocalTime.now();
+        return isShowCloseMerchant ? null : merchant.closeTime.after(now);
+    }
     public BooleanExpression eqMerchantName(String merchantName){
         return StringUtils.isEmpty(merchantName) ? null : merchant.merchantName.eq(merchantName);
     }

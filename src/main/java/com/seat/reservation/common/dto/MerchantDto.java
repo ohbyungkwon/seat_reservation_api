@@ -7,9 +7,11 @@ import com.seat.reservation.common.domain.Item;
 import com.seat.reservation.common.domain.Review;
 import com.seat.reservation.common.domain.Upzong;
 import com.seat.reservation.common.domain.enums.Category;
+import com.seat.reservation.common.domain.enums.MerchantSortMethod;
 import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.domain.enums.Role;
 import lombok.*;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,9 +26,11 @@ public class MerchantDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class search {
-        private Long upzongId;
         private String merchantName;
-        private String zipcode;
+        private String zipcode; //현 위치 기반
+        private Long upzongId;
+        private Boolean isShowCloseMerchant;
+        //private MerchantSortMethod sortMethod; 아직 미구현
     }
 
 
