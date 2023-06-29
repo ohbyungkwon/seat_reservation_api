@@ -72,7 +72,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
                         eqMerchantName(search.getMerchantName()),
                         eqUpzong(search.getUpzongId()),
                         isShowCloseMerchant(search.getIsShowCloseMerchant()))
-                .groupBy(merchant.merchantName, merchant.address)
+                .groupBy(merchant.merchantRegNum, merchant.merchantName, merchant.address)
                 .orderBy(reviewCntAlias.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -96,7 +96,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
                 .selectDistinct(merchant)
                 .from(merchant)
                 .join(merchant.upzong, upzong)
-                .join(merchant.item, item).fetchJoin()
+                .leftJoin(merchant.item, item).fetchJoin()
                 .where(eqMerchantRegNum(merchantRegNum))
                 .fetchOne();
     }

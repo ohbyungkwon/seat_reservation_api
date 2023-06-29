@@ -27,25 +27,25 @@ public class CommonLogAop extends SecurityService {
     }
 
     @Around("controller()")
-    private void controllerAspect(ProceedingJoinPoint joinPoint) throws Throwable {
+    private Object controllerAspect(ProceedingJoinPoint joinPoint) throws Throwable {
         UserDto.create userDto = this.getUserInfo();
-        printCommonLog(joinPoint, userDto);
+        return printCommonLog(joinPoint, userDto);
     }
 
-    private void printCommonLog(ProceedingJoinPoint joinPoint, UserDto.create userDto) throws Throwable {
+    private Object printCommonLog(ProceedingJoinPoint joinPoint, UserDto.create userDto) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         log.info("{} USER, ACCESS METHOD: {}", userDto.getUserId(), method);
 
         boolean isSysUser = userDto.getRole().equals(Role.SYSTEM_ROLE);
         if (isSysUser) {
-            this.printSysUserLog(joinPoint, userDto.getUserId());
+            return this.printSysUserLog(joinPoint, userDto.getUserId());
         } else {
-            this.printRunTimeLog(joinPoint, userDto.getUserId());
+            return this.printRunTimeLog(joinPoint, userDto.getUserId());
         }
     }
 
-    private void printSysUserLog(ProceedingJoinPoint joinPoint, String userId) throws Throwable {
+    private Object printSysUserLog(ProceedingJoinPoint joinPoint, String userId) throws Throwable {
         for (Object arg : joinPoint.getArgs()) {
             for (Field field : arg.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
@@ -55,6 +55,7 @@ public class CommonLogAop extends SecurityService {
 
         Object result = printRunTimeLog(joinPoint, userId);
         log.info("ACCESS METHOD RESULT: {}", result);
+        return result;
     }
 
     private Object printRunTimeLog(ProceedingJoinPoint joinPoint, String userId) throws Throwable {
