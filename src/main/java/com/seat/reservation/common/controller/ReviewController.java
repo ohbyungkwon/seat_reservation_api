@@ -7,15 +7,13 @@ import com.seat.reservation.common.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-@Controller
+@RestController
 @RequestMapping("/common")
 @RequiredArgsConstructor
 public class ReviewController {

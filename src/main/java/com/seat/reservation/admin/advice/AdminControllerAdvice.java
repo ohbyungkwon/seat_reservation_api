@@ -1,16 +1,16 @@
-package com.seat.reservation.common.advice;
+package com.seat.reservation.admin.advice;
 
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.exception.NotAdminException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice(basePackages = "com.seat.reservation.admin.controller")
 public class AdminControllerAdvice {
 
-    @ExceptionHandler(NotAdminException.class)
+    @ExceptionHandler({NotAdminException.class})
     public ResponseEntity<ResponseComDto> responseAdminException(){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ResponseComDto.builder()
