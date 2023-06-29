@@ -1,13 +1,8 @@
 package com.seat.reservation.common.repository.Impl;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.StringPath;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.*;
@@ -19,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -51,31 +45,68 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
                 .fetch();
     }
 
+//    @Override
+//    public Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable) {
+//        QueryResults<MerchantDto.show> merchants = jpaQueryFactory
+//                .select(
+//                        new QMerchantDto_show(
+//                                merchant.merchantRegNum,
+//                                merchant.merchantName,
+//                                merchant.address
+//                        )
+//                )
+//                .from(merchant)
+//                .join(merchant.upzong, upzong) // 업종 조인
+//                .where(eqZipCode(search.getZipcode()),
+//                        eqMerchantName(search.getMerchantName()),
+//                        eqUpzong(search.getUpzongId()),
+//                        isShowCloseMerchant(search.getIsShowCloseMerchant()))
+//                .orderBy(merchant.review.size().desc())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetchResults();
+//
+//        List<MerchantDto.show> pageContents = merchants.getResults();
+//        long total = merchants.getTotal();//result 쿼리 보고 자동 생성
+//        return new PageImpl<MerchantDto.show>(pageContents, pageable, total);
+//    }
+
     @Override
     public Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable) {
-        QueryResults<MerchantDto.show> merchants = jpaQueryFactory
+        StringPath reviewCntAlias = Expressions.stringPath("reviewCnt");
+        List<MerchantDto.show> pageContents = jpaQueryFactory
                 .select(
                         new QMerchantDto_show(
+                                merchant.merchantRegNum,
                                 merchant.merchantName,
-                                merchant.address
+                                merchant.address,
+                                review.id.count().as("reviewCnt")
                         )
                 )
                 .from(merchant)
-                .join(merchant.upzong, upzong) // 업종 조인
+                .join(merchant.upzong, upzong)
+                .leftJoin(merchant.review, review)
                 .where(eqZipCode(search.getZipcode()),
                         eqMerchantName(search.getMerchantName()),
                         eqUpzong(search.getUpzongId()),
                         isShowCloseMerchant(search.getIsShowCloseMerchant()))
-                .orderBy(merchant.review.size().desc())
+                .groupBy(merchant.merchantName, merchant.address)
+                .orderBy(reviewCntAlias.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<MerchantDto.show> pageContents = merchants.getResults();
-        long total = merchants.getTotal();//result 쿼리 보고 자동 생성
+        long total = jpaQueryFactory
+                .select(merchant.merchantRegNum.count())
+                .from(merchant)
+                .where(eqZipCode(search.getZipcode()),
+                        eqMerchantName(search.getMerchantName()),
+                        eqUpzong(search.getUpzongId()),
+                        isShowCloseMerchant(search.getIsShowCloseMerchant()))
+                .fetchCount(); // 업종은 필수 등록값이기 때문에 조인 제외
+
         return new PageImpl<MerchantDto.show>(pageContents, pageable, total);
     }
-
 
     @Override
     public Merchant findMerchantDetail(Integer merchantRegNum) {

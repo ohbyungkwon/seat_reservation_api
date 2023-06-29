@@ -26,13 +26,25 @@ public class MerchantDto {
     @Builder
     @NoArgsConstructor
     public static class show{
+        private Integer merchantRegNum;
         private String merchantName;
         private String address;
 
+        private Long reviewCnt;
+
         @QueryProjection
-        public show(String merchantName, String address) {
+        public show(Integer merchantRegNum, String merchantName, String address) {
+            this.merchantRegNum = merchantRegNum;
             this.merchantName = merchantName;
             this.address = address;
+        }
+
+        @QueryProjection
+        public show(Integer merchantRegNum, String merchantName, String address, Long reviewCnt) {
+            this.merchantRegNum = merchantRegNum;
+            this.merchantName = merchantName;
+            this.address = address;
+            this.reviewCnt = reviewCnt;
         }
     }
 

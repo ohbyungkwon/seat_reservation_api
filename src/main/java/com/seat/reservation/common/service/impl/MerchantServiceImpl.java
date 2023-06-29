@@ -1,6 +1,5 @@
 package com.seat.reservation.common.service.impl;
 
-import com.querydsl.core.Tuple;
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.exception.BadReqException;
@@ -12,14 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 

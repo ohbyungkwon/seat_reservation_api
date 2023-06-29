@@ -1,8 +1,6 @@
 package com.seat.reservation.common.domain;
 
-import com.querydsl.core.group.GroupBy;
 import com.seat.reservation.common.domain.enums.RegisterCode;
-import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.ItemDto;
 import com.seat.reservation.common.dto.MerchantDto;
 import lombok.*;
@@ -15,7 +13,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Table(name = "merchants")
 @Getter
