@@ -1,0 +1,68 @@
+package com.seat.reservation.common.aop;
+
+import com.seat.reservation.common.domain.enums.Role;
+import com.seat.reservation.common.dto.UserDto;
+import com.seat.reservation.common.exception.NotAdminException;
+import com.seat.reservation.common.service.SecurityService;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+@Slf4j
+@Aspect
+@Component
+public class CommonLogAop extends SecurityService {
+
+    @Pointcut("execution(* com.seat.reservation.*.controller..*Controller.*(..))")
+    private void controller() {
+    }
+
+    @Around("controller()")
+    private void controllerAspect(ProceedingJoinPoint joinPoint) throws Throwable {
+        UserDto.create userDto = this.getUserInfo();
+        printCommonLog(joinPoint, userDto);
+    }
+
+    private void printCommonLog(ProceedingJoinPoint joinPoint, UserDto.create userDto) throws Throwable {
+        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        Method method = methodSignature.getMethod();
+        log.info("{} USER, ACCESS METHOD: {}", userDto.getUserId(), method);
+
+        boolean isSysUser = userDto.getRole().equals(Role.SYSTEM_ROLE);
+        if (isSysUser) {
+            this.printSysUserLog(joinPoint, userDto.getUserId());
+        } else {
+            this.printRunTimeLog(joinPoint, userDto.getUserId());
+        }
+    }
+
+    private void printSysUserLog(ProceedingJoinPoint joinPoint, String userId) throws Throwable {
+        for (Object arg : joinPoint.getArgs()) {
+            for (Field field : arg.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                log.info("ACCESS METHOD ARGS#{}, {}", field.getName(), field.get(arg));
+            }
+        }
+
+        Object result = printRunTimeLog(joinPoint, userId);
+        log.info("ACCESS METHOD RESULT: {}", result);
+    }
+
+    private Object printRunTimeLog(ProceedingJoinPoint joinPoint, String userId) throws Throwable {
+        LocalDateTime startTime = LocalDateTime.now();
+        Object result = joinPoint.proceed();
+        LocalDateTime endTime = LocalDateTime.now();
+        Duration duration = Duration.between(startTime, endTime);
+        log.info("{} USER, METHOD RUNTIME: {}초", userId, duration.getSeconds());
+        return result;
+    }
+}

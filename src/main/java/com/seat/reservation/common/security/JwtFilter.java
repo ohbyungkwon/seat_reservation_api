@@ -5,6 +5,7 @@ import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
+import com.seat.reservation.common.exception.NotAdminException;
 import com.seat.reservation.common.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.mapping.Collection;
@@ -54,6 +55,13 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
 
                 UserDto.create user = TokenUtils.getUser(token);
+                String firstPath = url.split("/")[1];
+                if(firstPath.equals("admin")){
+                    if(!user.getRole().isAccessAdminPage()){
+                        throw new CustomAuthenticationException("Admin 사용자가 아닙니다.");
+                    }
+                }
+
                 String redisTokenKey = AuthConstants.getAccessTokenKey(user.getUserId());
                 try {
                     String tokenInRedis = (String) redisCache.getValue(redisTokenKey);
