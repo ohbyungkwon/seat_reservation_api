@@ -18,32 +18,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/merchant")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class MerchantUserController {
 
     private final MerchantService merchantService;
 
-    // 가맹점 정보를 보여주는
+    // 가맹점리스트 조회
     @GetMapping("/merchant")
-    public ResponseEntity<ResponseComDto> selectMerchantList(MerchantDto.search search, Pageable pageable){
+    public ResponseEntity<ResponseComDto> findMerchantList(MerchantDto.search search, Pageable pageable){
         Page<MerchantDto.show> merchantList = merchantService.findByMerchantList(search, pageable);
-        return new ResponseEntity<>(
-                ResponseComDto.builder()
-                        .resultMsg("가맹점 리스트 조회 완료")
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseComDto.builder()
+                        .resultObj("")
                         .resultObj(merchantList)
-                        .build(), HttpStatus.OK);
+                        .build());
     }
 
-
-    // 가맹점 상제 정보를 보여주는
+    // 가맹점 상세 조회
     @GetMapping("/merchant/{merchantRegNum}")
-    public ResponseEntity<ResponseComDto> selectMerchantDetail(@PathVariable Integer merchantRegNum){
+    public ResponseEntity<ResponseComDto> findMerchant(@PathVariable Integer merchantRegNum){
         MerchantDto.showDetail merchantDetail = merchantService.findByMerchantDetail(merchantRegNum);
-        return new ResponseEntity<>(
-                ResponseComDto.builder()
-                        .resultMsg("가맹점 상세 조회 완료")
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseComDto.builder()
+                        .resultObj("")
                         .resultObj(merchantDetail)
-                        .build(), HttpStatus.OK);
+                        .build());
     }
 }

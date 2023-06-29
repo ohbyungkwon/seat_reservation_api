@@ -4,8 +4,6 @@ import com.seat.reservation.common.dto.MerchantDto;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.service.MerchantService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,28 +42,4 @@ public class MerchantAdminController {
                         .resultObj(updateMerchant)
                         .build());
     }
-
-    // 가맹점리스트 조회
-    @GetMapping("/merchant")
-    public ResponseEntity<ResponseComDto> findMerchantList(MerchantDto.search search, Pageable pageable){
-        Page<MerchantDto.show> merchantList = merchantService.findByMerchantList(search, pageable);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseComDto.builder()
-                        .resultObj("")
-                        .resultObj(merchantList)
-                        .build());
-    }
-
-    // 가맹점 상세 조회
-    @GetMapping("/merchant/{merchantRegNum}")
-    public ResponseEntity<ResponseComDto> findMerchant(@PathVariable Integer merchantRegNum){
-        MerchantDto.showDetail merchantDetail = merchantService.findByMerchantDetail(merchantRegNum);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(ResponseComDto.builder()
-                        .resultObj("")
-                        .resultObj(merchantDetail)
-                        .build());
-    }
-
-
 }
