@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface MerchantRepositoryCustom {
 
-    List<Merchant> findMerchant(Integer merchantRegNum);
-
     Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable);
 
     Merchant findMerchantDetail(Integer merchantRegNum);
