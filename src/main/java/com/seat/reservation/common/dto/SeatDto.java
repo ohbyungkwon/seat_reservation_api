@@ -11,11 +11,11 @@ import javax.persistence.Enumerated;
 
 
 public class SeatDto {
+
     @Getter
     @Setter
     @Builder
     @NoArgsConstructor
-    @ToString
     public static class show{
         private String seatCode; // 좌석 번호
 
@@ -30,11 +30,11 @@ public class SeatDto {
             this.merchantRegNumber = merchantRegNumber;
         }
     }
+
     @Getter
     @Setter
     @Builder
     @NoArgsConstructor
-    @ToString
     public static class showByTime{
         private String seatCode;
         private boolean isUse;
@@ -51,9 +51,8 @@ public class SeatDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class create{
-        private Integer merchantRegNum; // 사업자 등록 번호 8자리?
+        private Integer merchantRegNum; // 사업자 등록 번호 8자리
 
         private String seatCode; // 좌석 번호
 
@@ -68,7 +67,6 @@ public class SeatDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
     public static class update{
         private Long id;
 

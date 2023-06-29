@@ -5,6 +5,7 @@ import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.SeatDto;
+import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.repository.Impl.SeatRepositoryImpl;
 import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.SeatRepository;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,100 +31,75 @@ public class SeatAdminController {
     private final MerchantRepository merchantRepository;
     private final SeatRepositoryImpl seatRepositoryImpl;
 
-    @GetMapping(path = "/seat/{merchant_reg_num}")
-    public ResponseEntity<ResponseComDto> searchSeat(@PathVariable(value = "merchant_reg_num") Integer merchantRegNum){
+    @GetMapping(path = "/seat/merchant/{merchantRegNum}")
+    public ResponseEntity<ResponseComDto> searchSeat(@PathVariable Integer merchantRegNum){
         Merchant merchant = merchantRepository.findByMerchantRegNum(merchantRegNum);
-
         if(merchant == null){
-            System.out.println("존재하지 않는 가맹점입니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseComDto.builder()
-                    .resultMsg("존재하지 않는 가맹점입니다.")
-                    .resultObj(merchantRegNum).build());
+            throw new BadReqException("존재하지 않는 가맹점입니다.");
         }
 
         List<SeatDto.show> seats = seatRepositoryImpl.findSeatInMerchant(merchantRegNum);
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseComDto.builder()
                 .resultMsg(merchantRegNum + "에 대한 좌석 리스트입니다.")
-                .resultObj(seats).build());
+                .resultObj(seats)
+                .build());
     }
 
     // 좌석 등록
     @PostMapping(path = "/seat")
     public ResponseEntity<ResponseComDto> createSeat(@RequestBody List<SeatDto.create> createSeats){
         Merchant merchant = merchantRepository.findByMerchantRegNum(createSeats.get(0).getMerchantRegNum());
-        StringBuilder seatCodes = new StringBuilder();
-
         if(merchant == null){
-            System.out.println("존재하지 않는 가맹점입니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseComDto.builder()
-                    .resultMsg("존재하지 않는 가맹점입니다.")
-                    .resultObj(createSeats).build());
+            throw new BadReqException("존재하지 않는 가맹점입니다.");
         }
 
+        List<Seat> seatList = new ArrayList<>();
         createSeats.forEach((createSeat) -> {
-            Seat seat = Seat.createSeat(createSeat.getSeatCode()
+            seatList.add(Seat.createSeat(createSeat.getSeatCode()
                     , merchant
                     , createSeat.getReservationCost()
-                    , createSeat.getRegisterCode());
-
-            seatCodes.append(createSeat.getSeatCode());
-            seatCodes.append(", ");
-
-            seatRepository.save(seat);
+                    , createSeat.getRegisterCode()));
         });
+        seatRepository.saveAll(seatList);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseComDto.builder()
-                .resultMsg(seatCodes.substring(0, seatCodes.length()-2) + "가 등록되었습니다.")
-                .resultObj(createSeats).build());
+                .resultMsg(seatList.size()+ "개 좌석이 등록되었습니다.")
+                .resultObj(createSeats)
+                .build());
     }
 
     // 좌석 업데이트
     @PutMapping(path = "/seat")
     public ResponseEntity<ResponseComDto> updateSeat(@RequestParam SeatDto.update updateSeat){
-        Optional<Seat> seat = seatRepository.findById(updateSeat.getId());
+        Seat seat = seatRepository.findById(updateSeat.getId())
+                .orElseThrow(() -> new BadReqException("존재하지 않는 좌석입니다."));
 
-        if(seat.isPresent()){
-            seat.get().setReservationCost(updateSeat.getReservationCost());
-            seat.get().setRegisterCode(updateSeat.getRegisterCode());
-            seatRepository.save(seat.get());
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseComDto.builder()
-                    .resultObj("존재하지 않는 좌석입니다.")
-                    .resultObj(updateSeat).build());
-        }
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ResponseComDto.builder()
-                .resultObj(updateSeat.getId() + "가 갱신되었습니다.")
-                .resultObj(updateSeat).build());
-    }
-
-
-    @DeleteMapping(path = "/seats/{seat_id}")
-    public ResponseEntity<ResponseComDto> deleteSeat(@PathVariable(value = "seat_id") Long seatId){
-        Optional<Seat> seat = seatRepository.findById(seatId);
-
-        if(seat.isPresent()){
-            seat.get().setRegisterCode(RegisterCode.DELETE);
-            seatRepository.save(seat.get());
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseComDto.builder()
-                    .resultObj("존재하지 않는 좌석입니다.")
-                    .resultObj(seatId).build());
-        }
+        seat.setReservationCost(updateSeat.getReservationCost());
+        seat.setRegisterCode(updateSeat.getRegisterCode());
+        seatRepository.save(seat);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ResponseComDto.builder()
-                        .resultObj(seatId + "가 삭제되었습니다.")
-                        .resultObj(seatId).build());
+                .resultMsg(seat.getSeatCode() + "번 좌석 정보가 갱신되었습니다.")
+                .resultObj(updateSeat)
+                .build());
+    }
+
+
+    @DeleteMapping(path = "/seats/{seatId}")
+    public ResponseEntity<ResponseComDto> deleteSeat(@PathVariable Long seatId){
+        Seat seat = seatRepository.findById(seatId)
+                .orElseThrow(() -> new BadReqException("존재하지 않는 좌석입니다."));
+
+        seat.setRegisterCode(RegisterCode.DELETE);
+        seatRepository.save(seat);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseComDto.builder()
+                        .resultMsg(seat.getSeatCode() + "번 좌석이 삭제되었습니다.")
+                        .resultObj(null)
+                        .build());
     }
 }

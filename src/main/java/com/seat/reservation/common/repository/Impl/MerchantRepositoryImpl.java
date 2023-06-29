@@ -27,24 +27,6 @@ import static com.seat.reservation.common.domain.QReview.review;
 public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
-    /**
-     *  SELECT *
-     *  FROM MERCHANT
-     *  WHERE 1 = 1
-     *  AND 업종 = 업종
-     *  AND 지역 = 지역
-     *  AND 상호 = 상호
-     */
-
-    // 가맹점 리스트를 가져오는 것
-    @Override
-    public List<Merchant> findMerchant(Integer merchantRegNum) {
-        return jpaQueryFactory.selectFrom(merchant)
-                .join(merchant.upzong, upzong).fetchJoin() // 업종 조인
-                .where(eqMerchantName(String.valueOf(merchant.merchantName))) // 상호 = 상호
-                .fetch();
-    }
-
 //    @Override
 //    public Page<MerchantDto.show> findMerchantList(MerchantDto.search search, Pageable pageable) {
 //        QueryResults<MerchantDto.show> merchants = jpaQueryFactory
