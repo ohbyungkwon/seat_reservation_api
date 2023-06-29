@@ -35,10 +35,6 @@ public class Merchant {
     @ManyToOne(fetch = FetchType.LAZY)
     private Upzong upzong;
 
-//    @JoinColumn
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    private Menu menu;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "merchant")
     private List<Item> item = new ArrayList<Item>();// 메뉴 (가맹점 삭제 시 메뉴 전체 삭제를 위해 cascade 사용)
 
