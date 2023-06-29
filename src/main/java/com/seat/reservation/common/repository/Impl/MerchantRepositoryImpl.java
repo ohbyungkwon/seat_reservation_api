@@ -115,7 +115,7 @@ public class MerchantRepositoryImpl implements MerchantRepositoryCustom {
         return StringUtils.isEmpty(upzongId) ? null : merchant.upzong.id.eq(upzongId);
     }
     public BooleanExpression eqMerchantRegNum(Integer merchantRegNum){
-        return StringUtils.isEmpty(merchantRegNum) ? null : item.merchant.merchantRegNum.eq(merchantRegNum);
+        return StringUtils.isEmpty(merchantRegNum) ? null : merchant.merchantRegNum.eq(merchantRegNum);
     }
 
 }
