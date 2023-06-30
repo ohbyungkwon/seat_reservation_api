@@ -1,5 +1,6 @@
 package com.seat.reservation.common.repository.Impl;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.seat.reservation.common.domain.QMerchant;
@@ -51,17 +52,19 @@ public class SeatRepositoryImpl implements SeatRepositoryCustom {
                         new QSeatDto_showByTime(
                                 seat.seatCode,
                                 new CaseBuilder()
-                                        .when(seat.isUse.eq(Boolean.FALSE)
+                                        .when(seat.isUse.eq(Boolean.FALSE)).then(
+                                                (Predicate) new CaseBuilder()
                                                 .when(reservation.id.isNull()).then(false)// 예약 여부 확인
-                                                .when(reservation.reservationEndDateTime.after(startTime)).then(false)// 예약 시간 확인
+                                                .when(reservation.reservationEndDateTime.before(startTime)).then(false)// 예약 시간 확인
                                                 .otherwise(true)
-                                        ).then(false)
+                                        )
                                         .otherwise(true)
                                         .as("isUse")
                         )
                 ).from(seat)
                 .leftJoin(reservation)
-                .on(seat.merchant.merchantRegNum.eq(merchantRegNum))
+                .on(seat.id.eq(reservation.seat.id))
+                .where(seat.merchant.merchantRegNum.eq(merchantRegNum))
                 .fetch();
     }
 
