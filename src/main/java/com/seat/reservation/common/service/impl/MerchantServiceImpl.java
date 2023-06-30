@@ -104,7 +104,7 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
                         .map(Review::convertShowSimpleDto)
                         .collect(Collectors.toList());
 
-        List<SeatDto.showByTime> seatList = seatService.searchUseAbleSeat(merchantRegNum);
+        List<SeatDto.showByTime> seatList = seatService.searchUseAbleSeat(merchantRegNum, null);
         return MerchantDto.showDetail.builder()
                 .merchantDetail(merchantDetail)
                 .reviewList(reviewList)

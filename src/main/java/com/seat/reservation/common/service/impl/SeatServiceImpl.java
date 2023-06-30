@@ -6,6 +6,7 @@ import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.domain.enums.RegisterCode;
 import com.seat.reservation.common.dto.SeatDto;
 import com.seat.reservation.common.exception.BadReqException;
+import com.seat.reservation.common.exception.NotFoundUserException;
 import com.seat.reservation.common.repository.SeatHistoryRepository;
 import com.seat.reservation.common.repository.SeatRepository;
 import com.seat.reservation.common.service.HistoryService;
@@ -39,9 +40,8 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
         if(beforeSeatOptional.isPresent()) {
             log.info("SEAT HISTORY INSERT!!!");
 
-           // User user = this.getUser().orElseThrow(() ->
-           //         new NotFoundUserException("사용자를 찾을 수 없습니다."));
-            User user = User.createUserSimple("LSW");
+            User user = this.getUser().orElseThrow(() ->
+                    new NotFoundUserException("사용자를 찾을 수 없습니다."));
 
             Seat beforeSeat = beforeSeatOptional.get();
             SeatHistory seatHistory = SeatHistory.builder()
@@ -64,8 +64,8 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
     }
 
 
-    public List<SeatDto.showByTime> searchUseAbleSeat(int merchantRegNum) {
-        LocalDateTime startHour = LocalDateTime.now();
-        return seatRepository.findSeatByTime(merchantRegNum, startHour);
+    public List<SeatDto.showByTime> searchUseAbleSeat(int merchantRegNum, LocalDateTime startTime) {
+        if(startTime == null) startTime = LocalDateTime.now();
+        return seatRepository.findSeatByTime(merchantRegNum, startTime);
     }
 }
