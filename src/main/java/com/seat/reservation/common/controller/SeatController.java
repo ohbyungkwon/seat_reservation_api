@@ -18,11 +18,11 @@ import java.util.List;
 public class SeatController {
     private final SeatService seatService;
 
-    @GetMapping("/seat/{merchantRegNum}")
+    @GetMapping("/seat/merchant/{merchantRegNum}")
     public ResponseEntity<ResponseComDto> searchUseAbleSeat(
             @PathVariable Integer merchantRegNum,
-            @RequestParam LocalDateTime startTime){
-        List<SeatDto.showByTime> seatList = seatService.searchUseAbleSeat(merchantRegNum, startTime);
+            @RequestParam String startDateTime){
+        List<SeatDto.showByTime> seatList = seatService.searchUseAbleSeat(merchantRegNum, startDateTime);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg("")
