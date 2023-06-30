@@ -20,7 +20,7 @@ import java.util.List;
 @EntityListeners(value = AuditingEntityListener.class)
 public class Reservation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @JoinColumn

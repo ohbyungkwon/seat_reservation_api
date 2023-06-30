@@ -24,6 +24,6 @@ public enum Role implements GrantedAuthority {
 
     public boolean isAccessAdminPage() {
         Role[] roles = { ADMIN_ROLE, SYSTEM_ROLE };
-        return ArrayUtils.contains(roles, value);
+        return ArrayUtils.contains(roles, this);
     }
 }

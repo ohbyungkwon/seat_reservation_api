@@ -37,6 +37,7 @@ public class SeatAdminServiceImpl implements SeatAdminService {
     }
 
     @Override
+    @Transactional
     public void createSeats(List<SeatDto.create> createSeats) {
         Merchant merchant = merchantRepository.findByMerchantRegNum(createSeats.get(0).getMerchantRegNum());
         if(merchant == null){
@@ -54,6 +55,7 @@ public class SeatAdminServiceImpl implements SeatAdminService {
     }
 
     @Override
+    @Transactional
     public String updateSeats(SeatDto.update updateSeat) {
         Seat seat = seatRepository.findById(updateSeat.getId())
                 .orElseThrow(() -> new BadReqException("존재하지 않는 좌석입니다."));

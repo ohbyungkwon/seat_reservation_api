@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @ToString
 public class Seat {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id; // Auto Increment를 사용한 PK
 
     private String seatCode; // 좌석 번호
