@@ -39,9 +39,9 @@ public class Reservation {
 
     private boolean isPreOrder;
 
-    private LocalDateTime reservationDate;
+    private LocalDateTime reservationStartDateTime;
 
-    private LocalDateTime realUseDate;
+    private LocalDateTime reservationEndDateTime;
 
     @CreatedDate
     private LocalDateTime registerDate;
@@ -51,15 +51,15 @@ public class Reservation {
 
     public static Reservation createReservation(ReservationDto.create dto,
                                                 Merchant merchant, Seat seat, User user){
-
-        seat.setIsUse(Boolean.TRUE);
+        LocalDateTime startDateTime = dto.getReservationDate();
+        int stdHour = merchant.getReservationStdHour();
         return Reservation.builder()
                 .seat(seat)
                 .user(user)
                 .merchant(merchant)
                 .isPreOrder(!dto.getItemIdList().isEmpty())
-                .reservationDate(dto.getReservationDate())
-                .realUseDate(dto.getReservationDate())
+                .reservationStartDateTime(startDateTime)
+                .reservationEndDateTime(startDateTime.plusHours(stdHour))
                 .build();
     }
 
@@ -67,7 +67,7 @@ public class Reservation {
         this.isPreOrder = !items.isEmpty();
     }
 
-    public void setRealUseDate(LocalDateTime date) { this.realUseDate = date; }
+    public void setReservationEndDateTime(LocalDateTime dateTime) { this.reservationEndDateTime = dateTime; }
 
     public void setTotalPrice(List<Item> items){
         for(Item item : items)
@@ -82,8 +82,8 @@ public class Reservation {
         return ReservationDto.show.builder()
                 .totalPrice(this.totalPrice)
                 .isPreOrder(this.isPreOrder)
-                .reservationDate(this.reservationDate)
-                .realUserDate(this.realUseDate)
+                .reservationStartDateTime(this.reservationStartDateTime)
+                .reservationEndDateTime(this.reservationEndDateTime)
                 .repPhone(this.merchant.getRepPhone())
                 .merchantTel(this.merchant.getMerchantTel())
                 .merchantName(this.merchant.getMerchantName())
@@ -97,8 +97,8 @@ public class Reservation {
         return ReservationDto.show.builder()
                 .totalPrice(this.totalPrice)
                 .isPreOrder(this.isPreOrder)
-                .reservationDate(this.reservationDate)
-                .realUserDate(this.realUseDate)
+                .reservationStartDateTime(this.reservationStartDateTime)
+                .reservationEndDateTime(this.reservationEndDateTime)
                 .seatCode(this.seat.getSeatCode())
                 .repPhone(this.merchant.getRepPhone())
                 .merchantTel(this.merchant.getMerchantTel())
@@ -113,7 +113,7 @@ public class Reservation {
         String msg = "";
         LocalDateTime todayDateTime = LocalDateTime.now();
         LocalDate today = todayDateTime.toLocalDate();
-        LocalDate reservationDate = this.getReservationDate().toLocalDate();
+        LocalDate reservationDate = this.getReservationStartDateTime().toLocalDate();
         LocalDate registerDate = this.getRegisterDate().toLocalDate();
 
         //당일 예약
@@ -125,7 +125,7 @@ public class Reservation {
         } else {
             //예약 당일
             if (today.equals(reservationDate)) {
-                if (todayDateTime.plusHours(1).isAfter(this.getReservationDate())) {
+                if (todayDateTime.plusHours(1).isAfter(this.getReservationStartDateTime())) {
                     msg = "예약 1시간 이전 취소는 불가합니다.";
                 }
             }

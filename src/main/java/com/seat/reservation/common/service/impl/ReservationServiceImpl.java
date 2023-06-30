@@ -113,7 +113,6 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
                     .stream().map(ReservationItem::getId).collect(Collectors.toList());
             reservationItemRepository.deleteByIdIn(reservationItemIdList);
         }
-        reservation.cancelUsingSeat();
         reservationRepository.delete(reservation);
         return Boolean.TRUE;
     }
@@ -164,12 +163,12 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     }
 
     @Override
-    public Boolean completePreReservation(ReservationDto.update update) {
+    public Boolean completeReservation(ReservationDto.update update) {
         Long reservationId = update.getReservationId();
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new BadReqException("예약 정보가 존재하지 않습니다."));
 
-        reservation.setRealUseDate(update.getRealUseDate());
+        reservation.setReservationEndDateTime(update.getRealUseDate());
         reservation.cancelUsingSeat();
 
         return Boolean.TRUE;

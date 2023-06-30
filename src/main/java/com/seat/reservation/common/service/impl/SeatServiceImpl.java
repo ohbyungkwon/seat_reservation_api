@@ -4,6 +4,7 @@ import com.seat.reservation.common.domain.Seat;
 import com.seat.reservation.common.domain.SeatHistory;
 import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.domain.enums.RegisterCode;
+import com.seat.reservation.common.dto.SeatDto;
 import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.repository.SeatHistoryRepository;
 import com.seat.reservation.common.repository.SeatRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -59,5 +61,11 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
                 .orElseThrow(() -> new BadReqException("좌석 정보를 확인해주세요."));
         seat.setIsUse(Boolean.TRUE);
         return Boolean.TRUE;
+    }
+
+
+    public List<SeatDto.showByTime> searchUseAbleSeat(int merchantRegNum) {
+        LocalDateTime startHour = LocalDateTime.now();
+        return seatRepository.findSeatByTime(merchantRegNum, startHour);
     }
 }

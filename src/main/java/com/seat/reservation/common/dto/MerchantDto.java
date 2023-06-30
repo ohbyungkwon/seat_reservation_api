@@ -95,6 +95,7 @@ public class MerchantDto {
         private String openTime;
         private String closeTime;
         private Integer reservationStdHour;
+        private List<SeatDto.create> seatList;
     }
 
     @Getter

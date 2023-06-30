@@ -112,7 +112,7 @@ public class SeatRepositoryTest {
     public void findSeatByReservationTime(){
         List<SeatDto.showByTime> seats = seatRepositoryImpl.findSeatByTime(1
                 , LocalDateTime.of(2022, 5, 23, 13, 0)
-                , LocalDateTime.of(2022, 5, 23, 14, 0)
+//                , LocalDateTime.of(2022, 5, 23, 14, 0)
         );
 
         seats.forEach(System.out::println);

@@ -10,6 +10,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * POS 와 연동되어 isUse 값만 변경함
+ */
 @Table
 @Entity
 @Getter

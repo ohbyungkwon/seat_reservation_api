@@ -43,22 +43,45 @@ public class SeatRepositoryImpl implements SeatRepositoryCustom {
     }
 
     @Override
-    public List<SeatDto.showByTime> findSeatByTime(int merchantRegNum, LocalDateTime startTime, LocalDateTime endTime) {
+    public List<SeatDto.showByTime> findSeatByTime(int merchantRegNum, LocalDateTime startTime) {
         QSeat seat = QSeat.seat;
         QReservation reservation = QReservation.reservation;
 
         return jpaQueryFactory.select(
-                    new QSeatDto_showByTime(
-                            seat.seatCode,
-                            new CaseBuilder()
-                                    .when(seat.isUse.eq(Boolean.FALSE).and(reservation.id.isNull())).then(false)
-                                    .otherwise(true)
-                                    .as("isUse")
-                    )
-               ).from(reservation)
-                .rightJoin(reservation.seat, seat)
-                .on(seat.merchant.merchantRegNum.eq(merchantRegNum),
-                        reservation.realUseDate.between(startTime, endTime))
+                        new QSeatDto_showByTime(
+                                seat.seatCode,
+                                new CaseBuilder()
+                                        .when(seat.isUse.eq(Boolean.FALSE)
+                                                .when(reservation.id.isNull()).then(false)// 예약 여부 확인
+                                                .when(reservation.reservationEndDateTime.after(startTime)).then(false)// 예약 시간 확인
+                                                .otherwise(true)
+                                        ).then(false)
+                                        .otherwise(true)
+                                        .as("isUse")
+                        )
+                ).from(seat)
+                .leftJoin(reservation)
+                .on(seat.merchant.merchantRegNum.eq(merchantRegNum))
                 .fetch();
     }
+
+//    public List<SeatDto.showByTime> findSeatByTime(int merchantRegNum, LocalDateTime startTime, LocalDateTime endTime) {
+//        QSeat seat = QSeat.seat;
+//        QReservation reservation = QReservation.reservation;
+//
+//        return jpaQueryFactory.select(
+//                    new QSeatDto_showByTime(
+//                            seat.seatCode,
+//                            new CaseBuilder()
+//                                    .when(seat.isUse.eq(Boolean.FALSE).and(reservation.id.isNull())).then(false)
+//                                    .otherwise(true)
+//                                    .as("isUse")
+//                    )
+//                ).from(reservation)
+//                .rightJoin(reservation.seat, seat)
+//                .on(seat.merchant.merchantRegNum.eq(merchantRegNum),
+//                        reservation.reservationEndDateTime.between(startTime, endTime)
+//                )
+//                .fetch();
+//    }
 }

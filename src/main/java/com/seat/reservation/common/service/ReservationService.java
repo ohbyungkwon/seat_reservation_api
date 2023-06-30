@@ -17,5 +17,5 @@ public interface ReservationService {
     Page<ReservationDto.show> selectReservations(SearchDto.date search, Pageable pageable) throws IOException;
     ReservationDetailDto selectReservationDetail(Long reservationId) throws IOException;
 
-    Boolean completePreReservation(ReservationDto.update update);
+    Boolean completeReservation(ReservationDto.update update);
 }

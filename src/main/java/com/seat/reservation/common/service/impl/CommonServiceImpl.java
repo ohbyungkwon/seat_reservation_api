@@ -32,6 +32,9 @@ public class CommonServiceImpl implements CommonService {
         this.fileRepository = fileRepository;
     }
 
+    /**
+     * 30분 간격으로 stdHour 시간 이용(예약) 가능
+     */
     @Override
     public List<SearchDto.time> getReservationAbleHours(Integer merchantRegNum) {
         Merchant merchant = merchantRepository.findByMerchantRegNum(merchantRegNum);

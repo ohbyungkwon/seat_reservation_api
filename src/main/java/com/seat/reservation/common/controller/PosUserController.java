@@ -36,8 +36,8 @@ public class PosUserController {
     }
 
     @GetMapping("/unUse")
-    public ResponseEntity<ResponseComDto> completePreReservation(ReservationDto.update update){
-        Boolean isSuccess = reservationService.completePreReservation(update);
+    public ResponseEntity<ResponseComDto> completeReservation(ReservationDto.update update){
+        Boolean isSuccess = reservationService.completeReservation(update);
 
         Map<String, Object> json = new HashMap<>();
         json.put("isSuccess", isSuccess);

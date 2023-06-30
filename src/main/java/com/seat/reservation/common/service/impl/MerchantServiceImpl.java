@@ -1,11 +1,13 @@
 package com.seat.reservation.common.service.impl;
 
+import com.seat.reservation.admin.service.SeatAdminService;
 import com.seat.reservation.common.domain.*;
 import com.seat.reservation.common.dto.*;
 import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.repository.*;
 import com.seat.reservation.common.service.HistoryService;
 import com.seat.reservation.common.service.MerchantService;
+import com.seat.reservation.common.service.SeatService;
 import com.seat.reservation.common.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.ListUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +29,10 @@ import java.util.stream.Collectors;
 public class MerchantServiceImpl extends SecurityService implements HistoryService, MerchantService {
     private final MerchantRepository merchantRepository;
     private final MerchantHistoryRepository merchantHistoryRepository;
-    private final SeatRepository seatRepository;
+
+    private final SeatService seatService;
+
+    private final SeatAdminService seatAdminService;
     private final UpzongRepository upzongRepository;
     private final ReviewRepository reviewRepository;
 
@@ -62,6 +68,11 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
         Merchant newMerchant = Merchant.createMerchant(merchantDto, upzong, user);
         newMerchant.setUpzong(upzong); //양방향 관계
 
+        List<SeatDto.create> seatList = merchantDto.getSeatList();
+        if(!ListUtils.isEmpty(seatList)){
+            seatAdminService.createSeats(seatList);
+        }
+
         merchantRepository.save(newMerchant);
     }
 
@@ -93,10 +104,7 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
                         .map(Review::convertShowSimpleDto)
                         .collect(Collectors.toList());
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime afterOneHour = now.plusHours(1);
-        List<SeatDto.showByTime> seatList = seatRepository.findSeatByTime(merchantRegNum, now, afterOneHour);
-
+        List<SeatDto.showByTime> seatList = seatService.searchUseAbleSeat(merchantRegNum);
         return MerchantDto.showDetail.builder()
                 .merchantDetail(merchantDetail)
                 .reviewList(reviewList)
