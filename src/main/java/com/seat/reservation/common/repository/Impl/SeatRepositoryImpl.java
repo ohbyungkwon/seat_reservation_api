@@ -61,9 +61,8 @@ public class SeatRepositoryImpl implements SeatRepositoryCustom {
                                         .otherwise(true)
                                         .as("isUse")
                         )
-                ).from(seat)
-                .leftJoin(reservation)
-                .on(seat.id.eq(reservation.seat.id))
+                ).from(reservation)
+                .rightJoin(reservation.seat, seat)
                 .where(seat.merchant.merchantRegNum.eq(merchantRegNum))
                 .fetch();
     }
