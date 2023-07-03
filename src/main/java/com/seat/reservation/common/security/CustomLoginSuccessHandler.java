@@ -39,7 +39,7 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         String redisTokenKey = AuthConstants.getAccessTokenKey(userId);
         redisCache.put(redisTokenKey, accessToken);
         response.addHeader(AuthConstants.AUTH_HEADER,
-                AuthConstants.TOKEN_TYPE + " " + accessToken);
+                AuthConstants.ACCESS_TOKEN_TYPE + " " + accessToken);
 
         RefreshTokenStore refreshToken = RefreshTokenStore.createRefreshTokenStore(userId);
         String cookieValue = refreshToken.getCookieValue();

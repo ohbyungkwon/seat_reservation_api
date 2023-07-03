@@ -54,8 +54,8 @@ public final class TokenUtils {
     }
 
     public static String removeTokenType(String token) {
-        if(token.contains(AuthConstants.TOKEN_TYPE)){
-            return token.substring(AuthConstants.TOKEN_TYPE.length() + 1);
+        if(token.contains(AuthConstants.ACCESS_TOKEN_TYPE)){
+            return token.substring(AuthConstants.ACCESS_TOKEN_TYPE.length() + 1);
         }
         return token;
     }
@@ -67,17 +67,23 @@ public final class TokenUtils {
         return objectMapper.readValue(claims, UserDto.create.class);
     }
 
-    public static boolean isValidToken(String token){
+    public static boolean isValidToken(String token, String tokenType){
         token = removeTokenType(token);
         try{
             String claims = getClaimsFormToken(token);
             ObjectMapper objectMapper = new ObjectMapper();
-            UserDto.create user = objectMapper.readValue(claims, UserDto.create.class);
-            log.debug("User: {}", user);
+
+            if(AuthConstants.ACCESS_TOKEN_TYPE.equals(tokenType)){
+                UserDto.create user = objectMapper.readValue(claims, UserDto.create.class);
+                log.debug("User: {}", user);
+            } else {
+                String content = objectMapper.readValue(claims, String.class);
+                log.debug("Content: {}", content);
+            }
 
             return true;
         } catch (ExpiredJwtException exception){
-            log.error("Token Expried");
+            log.error("Token Expired");
             return false;
         } catch (JwtException exception){
             log.error("Token Tampered");

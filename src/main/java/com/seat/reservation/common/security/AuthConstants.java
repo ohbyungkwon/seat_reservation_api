@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public final class AuthConstants {
     public static final String AUTH_HEADER = "Authorization";
-    public static final String TOKEN_TYPE = "BEARER";
+    public static final String ACCESS_TOKEN_TYPE = "BEARER";
 
     public static final String ACCESS_TOKEN_KEY_PART = "access-token";
 

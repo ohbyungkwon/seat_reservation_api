@@ -49,7 +49,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     throw new CustomAuthenticationException("토큰이 필요합니다.");
                 }
 
-                boolean isValid = TokenUtils.isValidToken(token);
+                boolean isValid = TokenUtils.isValidToken(token, AuthConstants.ACCESS_TOKEN_TYPE);
                 if (!isValid) {
                     throw new CustomAuthenticationException("토큰이 만료되었습니다.");
                 }

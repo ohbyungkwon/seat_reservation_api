@@ -66,18 +66,21 @@ public class UserServiceImpl extends SecurityService implements UserService {
         if(!cookieOptional.isPresent()) {
             throw new BadReqException("토큰 정보가 전달되지 않았습니다.");
         }
+
+        // 기존 refresh-token 검증
         Cookie cookie = cookieOptional.get();
         String cookieValue = cookie.getValue();
         RefreshTokenStore refreshTokenStore =
                 refreshTokenStoreRepository.findByCookieValue(cookieValue)
                         .orElseThrow(() -> new BadReqException("토큰이 존재하지 않습니다."));
         String oldRefreshToken = refreshTokenStore.getRefreshToken();
-        boolean isValid = TokenUtils.isValidToken(oldRefreshToken);
+        boolean isValid = TokenUtils.isValidToken(oldRefreshToken, AuthConstants.REFRESH_TOKEN_KEY_PART);
         if(!isValid) throw new BadReqException("토큰 정보가 불일치합니다.");
 
         // refresh-token, cookie value 변경
         refreshTokenStore.renewRefreshTokenStore();
         cookie.setValue(refreshTokenStore.getCookieValue());
+        cookie.setPath("/");
         response.addCookie(cookie);
 
         // access-token 재발급
@@ -90,6 +93,6 @@ public class UserServiceImpl extends SecurityService implements UserService {
         String redisTokenKey = AuthConstants.getAccessTokenKey(userId);
         redisCache.put(redisTokenKey, accessToken);
         response.addHeader(AuthConstants.AUTH_HEADER,
-                AuthConstants.TOKEN_TYPE + " " + accessToken);
+                AuthConstants.ACCESS_TOKEN_TYPE + " " + accessToken);
     }
 }
