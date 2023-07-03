@@ -2,7 +2,6 @@ package com.seat.reservation.common.aop;
 
 import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.UserDto;
-import com.seat.reservation.common.exception.NotAdminException;
 import com.seat.reservation.common.service.SecurityService;
 import com.seat.reservation.common.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +27,7 @@ import java.time.LocalDateTime;
 public class CommonLogAop extends SecurityService {
 
     @Pointcut("execution(* com.seat.reservation.*.controller..*Controller.*(..))")
-    private void controller() {
-    }
+    private void controller() {}
 
     @Around("controller()")
     private Object controllerAspect(ProceedingJoinPoint joinPoint) throws Throwable {

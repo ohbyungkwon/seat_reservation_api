@@ -71,6 +71,9 @@ public class UserServiceImpl extends SecurityService implements UserService {
         RefreshTokenStore refreshTokenStore =
                 refreshTokenStoreRepository.findByCookieValue(cookieValue)
                         .orElseThrow(() -> new BadReqException("토큰이 존재하지 않습니다."));
+        String oldRefreshToken = refreshTokenStore.getRefreshToken();
+        boolean isValid = TokenUtils.isValidToken(oldRefreshToken);
+        if(!isValid) throw new BadReqException("토큰 정보가 불일치합니다.");
 
         // refresh-token, cookie value 변경
         refreshTokenStore.renewRefreshTokenStore();
