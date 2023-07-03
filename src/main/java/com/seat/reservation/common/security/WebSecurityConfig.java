@@ -1,6 +1,7 @@
 package com.seat.reservation.common.security;
 
 import com.seat.reservation.common.cache.CustomRedisCache;
+import com.seat.reservation.common.repository.RefreshTokenStoreRepository;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private RefreshTokenStoreRepository refreshTokenStoreRepository;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -50,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CustomLoginSuccessHandler customLoginSuccessHandler() {
-        return new CustomLoginSuccessHandler(redisCache);
+        return new CustomLoginSuccessHandler(redisCache, refreshTokenStoreRepository);
     }
 
     @Bean

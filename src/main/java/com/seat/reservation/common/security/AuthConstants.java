@@ -18,7 +18,7 @@ public final class AuthConstants {
         return userId + SEPARATOR + ACCESS_TOKEN_KEY_PART;
     }
 
-    public static String getRefreshTokenKey(String userId) {
-        return userId + SEPARATOR + REFRESH_TOKEN_KEY_PART;
+    public static String getRefreshTokenKey() {
+        return REFRESH_TOKEN_KEY_PART;
     }
 }

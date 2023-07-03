@@ -20,10 +20,7 @@ import javax.security.auth.Subject;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.security.Key;
 
 @Slf4j
@@ -31,12 +28,20 @@ import java.security.Key;
 public final class TokenUtils {
     private static final String secretKey = "test-reservation-token-key";
 
-    public static String generateJwtToken(UserDto.create user) throws JsonProcessingException {
+    public static String generateJwtToken(Object target) throws JsonProcessingException {
         LocalDateTime now = CommonUtil.getNowDateTime();
-        LocalDateTime expiredDate =  now.plusHours(1);
+        LocalDateTime expiredDate;
+        if(target instanceof UserDto.create) {
+            expiredDate = now.plusHours(1);
+        } else {
+            expiredDate = now.plusWeeks(1);
+            String randomValue = UUID.randomUUID().toString().substring(0, 10);
+            target += (AuthConstants.SEPARATOR + randomValue +
+                    AuthConstants.SEPARATOR + System.currentTimeMillis());
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String subject = objectMapper.writeValueAsString(user);
+        String subject = objectMapper.writeValueAsString(target);
         log.debug("Subject: {}", subject);
 
         return Jwts.builder()

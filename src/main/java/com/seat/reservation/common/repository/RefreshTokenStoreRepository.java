@@ -1,0 +1,13 @@
+package com.seat.reservation.common.repository;
+
+import com.seat.reservation.common.domain.RefreshTokenStore;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface RefreshTokenStoreRepository extends JpaRepository<RefreshTokenStore, String> {
+
+    Optional<RefreshTokenStore> findByCookieValue(String cookieValue);
+}
