@@ -22,9 +22,14 @@ public class PosUserController {
     private final SeatService seatService;
     private final ReservationService reservationService;
 
+    /**
+     * @param seatId
+     * @return ResponseEntity<ResponseComDto>
+     * - 워크인 손님 방문(자리 비활성화)
+     */
     @GetMapping("/use/{seatId}")
     public ResponseEntity<ResponseComDto> visitCustomerAnotherRoute(@PathVariable Long seatId){
-        Boolean isSuccess = seatService.visitCustomerAnotherRoute(seatId);
+        Boolean isSuccess = seatService.switchFlagAsWalkIn(seatId);
 
         Map<String, Object> json = new HashMap<>();
         json.put("isSuccess", isSuccess);
@@ -35,9 +40,19 @@ public class PosUserController {
                 .build(), HttpStatus.OK);
     }
 
+    /**
+     * @param update
+     * @return ResponseEntity<ResponseComDto>
+     * - 손님 퇴장(예약 종료, 좌석 활성화)
+     */
     @GetMapping("/unUse")
     public ResponseEntity<ResponseComDto> completeReservation(ReservationDto.update update){
-        Boolean isSuccess = reservationService.completeReservation(update);
+        Boolean isSuccess;
+        if(update.isWalkIn()){
+            isSuccess = seatService.switchFlagAsWalkIn(update.getSeatId());
+        } else {
+            isSuccess = reservationService.completeReservation(update);
+        }
 
         Map<String, Object> json = new HashMap<>();
         json.put("isSuccess", isSuccess);

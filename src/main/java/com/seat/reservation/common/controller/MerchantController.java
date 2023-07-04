@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * {@link com.seat.reservation.admin.controller.MerchantAdminController}
+ */
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -23,7 +27,13 @@ public class MerchantController {
 
     private final MerchantService merchantService;
 
-    // 가맹점리스트 조회
+
+    /**
+     * @param search
+     * @param pageable
+     * @return ResponseEntity<ResponseComDto>
+     * - 가맹점 리스트 조회
+     */
     @GetMapping("/merchant")
     public ResponseEntity<ResponseComDto> findMerchantList(MerchantDto.search search, Pageable pageable){
         Page<MerchantDto.show> merchantList = merchantService.findByMerchantList(search, pageable);
@@ -34,7 +44,11 @@ public class MerchantController {
                         .build());
     }
 
-    // 가맹점 상세 조회
+    /**
+     * @param merchantRegNum
+     * @return ResponseEntity<ResponseComDto>
+     * - 가맹점 상세 조회
+     */
     @GetMapping("/merchant/{merchantRegNum}")
     public ResponseEntity<ResponseComDto> findMerchant(@PathVariable Integer merchantRegNum){
         MerchantDto.showDetail merchantDetail = merchantService.findByMerchantDetail(merchantRegNum);

@@ -19,6 +19,14 @@ import java.util.Map;
 public class ReviewController {
     private final ReviewService reviewService;
 
+
+    /**
+     * @param file
+     * @param create
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 리뷰 저장
+     */
     @PostMapping("/review")
     public ResponseEntity<ResponseComDto> saveReview(
             @RequestPart(value = "file", required = false) MultipartFile file,
@@ -37,6 +45,14 @@ public class ReviewController {
                         .build(), HttpStatus.OK);
     }
 
+    /**
+     * @param file
+     * @param update
+     * @param id
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 리뷰 수정(리뷰 수정, 파일 수정/삭제)
+     */
     @PutMapping("/review/{id}")
     public ResponseEntity<ResponseComDto> updateReview(
             @RequestPart(value = "file", required = false) MultipartFile file,
@@ -60,6 +76,12 @@ public class ReviewController {
                         .build(), HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 리뷰 삭제
+     */
     @DeleteMapping("/review/{id}")
     public ResponseEntity<ResponseComDto> deleteReview(@PathVariable Long id) throws Exception {
         Boolean isSuccess = reviewService.deleteReview(id);

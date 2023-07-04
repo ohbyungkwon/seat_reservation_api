@@ -2,13 +2,10 @@ package com.seat.reservation.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seat.reservation.common.cache.CustomRedisCache;
-import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
-import com.seat.reservation.common.exception.NotAdminException;
 import com.seat.reservation.common.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.mapping.Collection;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,8 +21,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
+/**
+ * Create Bean at {@link com.seat.reservation.common.security.WebSecurityConfig}
+ * This bean manages to access services.
+ */
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
     private final CustomRedisCache redisCache;
@@ -72,8 +72,10 @@ public class JwtFilter extends OncePerRequestFilter {
                     throw new CustomAuthenticationException("사용자 정보를 가져오는데 실패했습니다.");
                 }
 
-                Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(user, null, Collections.singleton(user.getRole()));
-                SecurityContextHolder.getContext().setAuthentication(workedAuthentication);// Session 사용시 설정 필요
+                // Save an authenticated object at ContextHolder
+                Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(
+                        user, null, Collections.singleton(user.getRole()));
+                SecurityContextHolder.getContext().setAuthentication(workedAuthentication);
             }
 
             filterChain.doFilter(request, response);

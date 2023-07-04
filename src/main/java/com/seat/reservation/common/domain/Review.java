@@ -28,7 +28,7 @@ public class Review {
     private String comment; // 리얼 리뷰
 
     @JoinColumn
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private File file;
 
     @JoinColumn

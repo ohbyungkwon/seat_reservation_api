@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/* 가맹점 등록 (결제 방식 선택 기능(선.후불 유무)), 수정, 삭제, 조회1( 내 가맹점 조회 ), 조회2( 좌석 및 예약 상세 정보 조회 ) */
 
+/**
+ * {@link com.seat.reservation.common.controller.MerchantController}
+ */
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -17,7 +19,13 @@ public class MerchantAdminController {
 
     private final MerchantService merchantService;
 
-    // 가맹점 등록
+
+    /**
+     * @param createMerchant
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 가맹점 등록
+     */
     @PostMapping("/merchant")
     public ResponseEntity<ResponseComDto> createMerchant(@RequestBody MerchantDto.create createMerchant) throws Exception {
         merchantService.registerMerchant(createMerchant);
@@ -30,8 +38,12 @@ public class MerchantAdminController {
                         .build());
     }
 
-
-    // 가맹점 업데이트
+    /**
+     * @param updateMerchant
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 가맹점 수정
+     */
     @PutMapping("/merchant")
     public ResponseEntity<ResponseComDto> updateMerchant(@RequestBody MerchantDto.update updateMerchant) throws Exception {
         merchantService.updateMerchant(updateMerchant);

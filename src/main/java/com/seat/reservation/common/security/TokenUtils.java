@@ -1,28 +1,21 @@
 package com.seat.reservation.common.security;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seat.reservation.common.domain.User;
-import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.util.CommonUtil;
 import io.jsonwebtoken.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 
-import javax.crypto.spec.SecretKeySpec;
-import javax.security.auth.Subject;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.security.Key;
 
+/**
+ * This class is util file about JWT.
+ */
 @Slf4j
 @NoArgsConstructor(access= AccessLevel.PRIVATE)
 public final class TokenUtils {

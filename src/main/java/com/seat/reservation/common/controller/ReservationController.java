@@ -22,6 +22,14 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
+
+    /**
+     * @param create
+     * @param inputPayDto
+     * @return ResponseEntity<ResponseComDto>
+     * @throws IOException
+     * - 예약 저장
+     */
     @PostMapping("/reservation")
     public ResponseEntity<ResponseComDto> saveReservation(ReservationDto.create create, PayDto.InputPayDto inputPayDto) throws IOException {
         Boolean isSuccess = reservationService.saveReservation(create, inputPayDto);
@@ -35,6 +43,12 @@ public class ReservationController {
                         .build(), HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @param inputPayDto
+     * @return ResponseEntity<ResponseComDto>
+     * - 예약 취소
+     */
     @DeleteMapping("/reservation/{id}")
     public ResponseEntity<ResponseComDto> removeReservation(@PathVariable Long id, PayDto.InputPayDto inputPayDto) {
         Boolean isSuccess = reservationService.removeReservation(id, inputPayDto);
@@ -48,6 +62,13 @@ public class ReservationController {
                         .build(), HttpStatus.OK);
     }
 
+    /**
+     * @param search
+     * @param pageable
+     * @return ResponseEntity<ResponseComDto>
+     * @throws IOException
+     * - 내 예약 리스트 조회
+     */
     @GetMapping("/reservations")
     public ResponseEntity<ResponseComDto> selectReservations(SearchDto.date search, Pageable pageable) throws IOException {
         Page<ReservationDto.show> reservations = reservationService.selectReservations(search, pageable);
@@ -58,6 +79,12 @@ public class ReservationController {
                         .build(), HttpStatus.OK);
     }
 
+    /**
+     * @param id
+     * @return ResponseEntity<ResponseComDto>
+     * @throws IOException
+     * - 예약 상세 조회
+     */
     @GetMapping("/reservations/{id}")
     public ResponseEntity<ResponseComDto> selectReservationDetail(@PathVariable Long id) throws IOException {
         ReservationDetailDto reservationDetail = reservationService.selectReservationDetail(id);

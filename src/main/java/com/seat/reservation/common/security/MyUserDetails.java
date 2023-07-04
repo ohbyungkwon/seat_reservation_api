@@ -5,20 +5,26 @@ import com.seat.reservation.common.domain.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
+/**
+ * Spring Security supports 'UserDetails'
+ * it supports functions related to user information.
+ * And it is used at the {@link com.seat.reservation.common.security.CustomAuthenticationProvider}
+ * and {@link com.seat.reservation.common.security.UserDetailsServiceImpl}
+ */
 @Getter
 @RequiredArgsConstructor
 public class MyUserDetails implements UserDetails {
     private final User user;
 
-    private final Collection<? extends GrantedAuthority> authorities;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().getValue()));
     }
 
     @Override

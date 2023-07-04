@@ -3,13 +3,10 @@ package com.seat.reservation.common.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.dto.ResponseComDto;
-import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.util.CommonUtil;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.ServletException;
@@ -18,6 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * Create Bean at {@link com.seat.reservation.common.security.WebSecurityConfig}
+ * Spring Security access this when login is failed.
+ */
 public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
     private final UserRepository userRepository;
 

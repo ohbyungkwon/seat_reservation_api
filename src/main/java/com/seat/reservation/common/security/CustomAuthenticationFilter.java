@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Create Bean at {@link com.seat.reservation.common.security.WebSecurityConfig}
+ * This bean is accessed to 'login' at first.
+ * It is return unauthenticated object
+ */
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override

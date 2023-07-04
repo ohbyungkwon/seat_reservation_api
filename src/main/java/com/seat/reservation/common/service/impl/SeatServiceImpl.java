@@ -61,10 +61,10 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
 
     @Override
     @Transactional
-    public Boolean visitCustomerAnotherRoute(Long seatId) {
+    public Boolean switchFlagAsWalkIn(Long seatId) {
         Seat seat = seatRepository.findById(seatId)
                 .orElseThrow(() -> new BadReqException("좌석 정보를 확인해주세요."));
-        seat.setIsUse(Boolean.TRUE);
+        seat.setIsUse(!seat.getIsUse());
         return Boolean.TRUE;
     }
 

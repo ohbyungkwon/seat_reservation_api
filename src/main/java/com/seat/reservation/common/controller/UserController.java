@@ -3,7 +3,6 @@ package com.seat.reservation.common.controller;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.exception.BadReqException;
-import com.seat.reservation.common.security.AuthConstants;
 import com.seat.reservation.common.service.UserService;
 import com.seat.reservation.common.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
@@ -16,19 +15,24 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.Optional;
 
-/* 회원 등록, 수정, 탈퇴 (조회 기능은 Spring Security에서 자동으로 함) */
+
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
+
+    /**
+     * @param dto
+     * @param result
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 회원가입
+     */
     @PostMapping("/signUp")
     public ResponseEntity<ResponseComDto> createUser(
             @Valid @RequestBody UserDto.create dto, BindingResult result) throws Exception {
@@ -45,7 +49,13 @@ public class UserController {
                         .build(), HttpStatus.OK);
     }
 
-
+    /**
+     * @param dto
+     * @param result
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 회원 정보 수정
+     */
     @PutMapping("/modify/user")
     public ResponseEntity<ResponseComDto> updateUser(
             @Valid @RequestBody UserDto.update dto, BindingResult result) throws Exception {
@@ -62,6 +72,13 @@ public class UserController {
                         .build(), HttpStatus.OK);
     }
 
+    /**
+     * @param request
+     * @param response
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 토큰갱신(AccessToken, RefreshToken)
+     */
     @PostMapping("/renew/token")
     public ResponseEntity<ResponseComDto> renewToken(HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
@@ -73,6 +90,10 @@ public class UserController {
                         .build(), HttpStatus.OK);
     }
 
+    /**
+     * @return ResponseEntity<ResponseComDto>
+     * - 이메일 인증
+     */
     @PostMapping("/auth/email")
     public ResponseEntity<ResponseComDto> authEmail() {
         // TODO) 이메일 인증 작업 후 임시 토큰 발급

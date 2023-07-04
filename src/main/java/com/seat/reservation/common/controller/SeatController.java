@@ -9,15 +9,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+
+/**
+ * {@link com.seat.reservation.admin.controller.SeatAdminController}
+ */
 @RestController
 @RequestMapping("/common")
 @RequiredArgsConstructor
 public class SeatController {
     private final SeatService seatService;
 
+
+    /**
+     * @param merchantRegNum
+     * @param startDateTime
+     * @return ResponseEntity<ResponseComDto>
+     * - 가맹점 이용가능 좌석 조회
+     */
     @GetMapping("/seat/merchant/{merchantRegNum}")
     public ResponseEntity<ResponseComDto> searchUseAbleSeat(
             @PathVariable Integer merchantRegNum,

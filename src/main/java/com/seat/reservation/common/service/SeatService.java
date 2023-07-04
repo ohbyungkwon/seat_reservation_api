@@ -5,6 +5,6 @@ import com.seat.reservation.common.dto.SeatDto;
 import java.util.List;
 
 public interface SeatService {
-    Boolean visitCustomerAnotherRoute(Long seatId);
+    Boolean switchFlagAsWalkIn(Long seatId);
     List<SeatDto.showByTime> searchUseAbleSeat(int merchantRegNum, String startDateTime);
 }

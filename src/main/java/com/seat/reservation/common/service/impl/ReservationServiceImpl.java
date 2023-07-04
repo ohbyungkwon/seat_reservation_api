@@ -170,7 +170,6 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
 
         reservation.setReservationEndDateTime(update.getRealUseDate());
         reservation.cancelUsingSeat();
-
         return Boolean.TRUE;
     }
 }

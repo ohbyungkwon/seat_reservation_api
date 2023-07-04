@@ -2,7 +2,6 @@ package com.seat.reservation.common.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seat.reservation.common.cache.CustomRedisCache;
-import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.domain.RefreshTokenStore;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
@@ -16,8 +15,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 
+
+/**
+ * Create Bean at {@link com.seat.reservation.common.security.WebSecurityConfig}
+ * Spring Security access this when login is successful.
+ * This bean creates access token and refresh token for the next access.
+ */
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
     private final CustomRedisCache redisCache;
     private final RefreshTokenStoreRepository refreshTokenStoreRepository;

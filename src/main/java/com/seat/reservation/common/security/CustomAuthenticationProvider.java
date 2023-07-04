@@ -1,6 +1,5 @@
 package com.seat.reservation.common.security;
 
-import com.seat.reservation.common.cache.CustomRedisCacheWriter;
 import com.seat.reservation.common.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,6 +11,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * It is a custom provider to check validation.
+ * Spring Security calls providers including this bean.
+ * And It is return authenticated object.
+ */
 @Component
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -35,7 +39,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDto.create user = userDetails.getUser().convertDto();
         Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(user, null, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(workedAuthentication);// Session 사용시 설정 필요
+        SecurityContextHolder.getContext().setAuthentication(workedAuthentication);
         return workedAuthentication;
     }
 

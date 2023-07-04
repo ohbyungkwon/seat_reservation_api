@@ -22,6 +22,13 @@ public class CacheController {
         this.redisCacheManager = redisCacheManager;
     }
 
+    /**
+     * @param name
+     * @param key
+     * @return ResponseEntity<ResponseComDto>
+     * @throws Exception
+     * - 캐시 수동 제거
+     */
     @DeleteMapping("/cache/{name}/{key}")
     public ResponseEntity<ResponseComDto> deleteCache(@PathVariable String name, @PathVariable String key) throws Exception{
         Objects.requireNonNull(redisCacheManager.getCache(name)).evict(key);

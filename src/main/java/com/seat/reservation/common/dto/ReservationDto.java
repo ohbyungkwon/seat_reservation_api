@@ -69,5 +69,7 @@ public class ReservationDto {
         private Long reservationId;
         private LocalDateTime reservationDate;
         private LocalDateTime realUseDate;
+        private boolean isWalkIn;
+        private Long seatId;
     }
 }

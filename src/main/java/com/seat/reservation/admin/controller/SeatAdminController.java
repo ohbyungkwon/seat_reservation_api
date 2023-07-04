@@ -10,17 +10,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/* 가맹점 등록 후 좌석 등록, 삭제 기능 */
-/* TODO
-*  1. AOP(Intercepter)를 이용하여 권한 확인 (기본적으로 ADMIN 권한이 있어야 접근이 가능)
-*  2. 각 Request에 맞는 로직 추가
-* */
+/**
+ * {@link com.seat.reservation.common.controller.SeatController}
+ */
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class SeatAdminController {
     private final SeatAdminService seatAdminService;
 
+
+    /**
+     * @param merchantRegNum
+     * @return ResponseEntity<ResponseComDto>
+     * - 가맹점 보유 좌석 조회
+     */
     @GetMapping(path = "/seat/merchant/{merchantRegNum}")
     public ResponseEntity<ResponseComDto> searchSeat(@PathVariable Integer merchantRegNum){
         List<SeatDto.show> seats = seatAdminService.searchSeatsInMerchant(merchantRegNum);
@@ -31,7 +35,11 @@ public class SeatAdminController {
                 .build());
     }
 
-    // 좌석 등록
+    /**
+     * @param createSeats
+     * @return ResponseEntity<ResponseComDto>
+     * - 좌석 등록
+     */
     @PostMapping(path = "/seat")
     public ResponseEntity<ResponseComDto> createSeat(@RequestBody List<SeatDto.create> createSeats){
         seatAdminService.createSeats(createSeats);
@@ -42,7 +50,11 @@ public class SeatAdminController {
                 .build());
     }
 
-    // 좌석 업데이트
+    /**
+     * @param updateSeat
+     * @return ResponseEntity<ResponseComDto>
+     * - 좌석 수정
+     */
     @PutMapping(path = "/seat")
     public ResponseEntity<ResponseComDto> updateSeat(@RequestParam SeatDto.update updateSeat){
         String msg = seatAdminService.updateSeats(updateSeat);
