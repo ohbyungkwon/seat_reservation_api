@@ -7,7 +7,6 @@ import com.seat.reservation.common.domain.Review;
 import com.seat.reservation.common.dto.FileDto;
 import com.seat.reservation.common.dto.ReviewDto;
 import com.seat.reservation.common.exception.NotFoundUserException;
-import com.seat.reservation.common.repository.FileRepository;
 import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.ReservationRepository;
 import com.seat.reservation.common.repository.ReviewRepository;
@@ -28,12 +27,13 @@ public class ReviewServiceImpl implements ReviewService {
     private final MerchantRepository merchantRepository;
     private final ReservationRepository reservationRepository;
 
+
     /**
-     * 리뷰 하나에 하나 사진만 관리
      * @param file
      * @param create
-     * @return
+     * @return Boolean
      * @throws Exception
+     * - 리뷰 하나에 하나 사진만 관리
      */
     @Override
     @Transactional
@@ -57,8 +57,9 @@ public class ReviewServiceImpl implements ReviewService {
     /**
      * @param file (파일이 null이면 삭제, 파일이 있으면 유지 혹은 변경)
      * @param update
-     * @return
+     * @return Boolean
      * @throws Exception
+     * - 리뷰 수정
      */
     @Override
     @Transactional
@@ -101,8 +102,9 @@ public class ReviewServiceImpl implements ReviewService {
 
     /**
      * @param reviewId
-     * @return
+     * @return Boolean
      * @throws Exception
+     * - 리뷰 삭제
      */
     @Override
     @Transactional

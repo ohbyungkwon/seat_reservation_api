@@ -54,12 +54,13 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     private final SeatRepository seatRepository;
     private final ItemRepository itemRepository;
     private final PaymentHistoryRepository paymentHistoryRepository;
-    private final PayModule payModule;
+    private final PaymentManager paymentManager;
+
 
     /**
-     * Reservation 저장
      * @param dto
      * @return Boolean
+     * - Reservation 저장
      */
     @Override
     @Transactional
@@ -73,8 +74,8 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
             Reservation reservation = Reservation.createReservation(dto, merchant, seat, user);
             reservation.setTotalPrice(itemList);
 
-            PaymentService paymentService = payModule.getPayService(inputPayDto.getPaymentMethod());
-            PaymentHistory paymentHistory = payModule.pay(paymentService, reservation, user, merchant, inputPayDto);
+            PaymentService paymentService = paymentManager.getPayService(inputPayDto.getPaymentMethod());
+            PaymentHistory paymentHistory = paymentManager.pay(paymentService, reservation, user, merchant, inputPayDto);
             paymentHistoryRepository.save(paymentHistory);
             if(paymentHistory.getPaymentCode() != PaymentCode.APPROVE){
                 return Boolean.FALSE;
@@ -89,6 +90,12 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
         return Boolean.TRUE;
     }
 
+    /**
+     * @param reservationId
+     * @param inputPayDto
+     * @return Boolean
+     * - 예약 취소
+     */
     @Override
     @Transactional
     public Boolean removeReservation(Long reservationId, PayDto.InputPayDto inputPayDto) {
@@ -100,8 +107,8 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
             throw new BadReqException(msg);
         }
 
-        PaymentService paymentService = payModule.getPayService(inputPayDto.getPaymentMethod());
-        PaymentHistory paymentHistory = payModule.pay(paymentService, reservation,
+        PaymentService paymentService = paymentManager.getPayService(inputPayDto.getPaymentMethod());
+        PaymentHistory paymentHistory = paymentManager.pay(paymentService, reservation,
                 reservation.getUser(), reservation.getMerchant(), inputPayDto);
         paymentHistoryRepository.save(paymentHistory);
         if(paymentHistory.getPaymentCode() != PaymentCode.APPROVE){
@@ -118,9 +125,9 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     }
 
     /**
-     * 나의 Reservation 리스트 조회
      * @param pageable
      * @return Page<ReservationDto.show>
+     * - 나의 Reservation 리스트 조회
      */
     @Override
     public Page<ReservationDto.show> selectReservations(SearchDto.date search, Pageable pageable) throws IOException {
@@ -137,9 +144,9 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
     }
 
     /**
-     * Reservation 상세 조회
      * @param reservationId
      * @return ReservationDetailDto
+     * - Reservation 상세 조회
      */
     @Override
     public ReservationDetailDto selectReservationDetail(Long reservationId) throws IOException {
@@ -162,6 +169,11 @@ public class ReservationServiceImpl extends SecurityService implements Reservati
                 .build();
     }
 
+    /**
+     * @param update
+     * @return Boolean
+     * - 예약 진행 완료처리
+     */
     @Override
     public Boolean completeReservation(ReservationDto.update update) {
         Long reservationId = update.getReservationId();

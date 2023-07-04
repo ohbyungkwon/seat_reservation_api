@@ -14,6 +14,13 @@ public class NaverPayServiceImpl implements PaymentService {
 
     private final PaymentMethod paymentMethod = PaymentMethod.NAVER;
 
+    /**
+     * [TODO]
+     * @param reservation
+     * @param payDto
+     * @return PayDto.OutputPayDto
+     * - 네이버 결제 로직
+     */
     @Override
     public PayDto.OutputPayDto pay(Reservation reservation, PayDto.InputPayDto payDto) {
         /*

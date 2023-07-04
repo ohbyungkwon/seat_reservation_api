@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.ListUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,15 +26,23 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MerchantServiceImpl extends SecurityService implements HistoryService, MerchantService {
+
     private final MerchantRepository merchantRepository;
+
     private final MerchantHistoryRepository merchantHistoryRepository;
 
     private final SeatService seatService;
 
     private final SeatAdminService seatAdminService;
+
     private final UpzongRepository upzongRepository;
+
     private final ReviewRepository reviewRepository;
 
+    /**
+     * @param entity
+     * - 가맹점 정보 History 저장
+     */
     @Override
     @Transactional
     public void historySave(Object entity) {
@@ -52,6 +59,11 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
         }
     }
 
+    /**
+     * @param merchantDto
+     * @throws Exception
+     * - 가맹점 정보 등록
+     */
     @Override
     @Transactional
     public void registerMerchant(MerchantDto.create merchantDto) throws Exception {
@@ -76,6 +88,11 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
         merchantRepository.save(newMerchant);
     }
 
+    /**
+     * @param merchantDto
+     * @throws Exception
+     * - 가맹점 정보 수정
+     */
     @Override
     @Transactional
     public void updateMerchant(MerchantDto.update merchantDto) throws Exception {
@@ -89,12 +106,23 @@ public class MerchantServiceImpl extends SecurityService implements HistoryServi
         merchant.updateMerchant(merchantDto, upzong);
     }
 
+    /**
+     * @param search
+     * @param pageable
+     * @return Page<MerchantDto.show>
+     * - 가맹점 리스트 조회
+     */
     @Override
     public Page<MerchantDto.show> findByMerchantList(MerchantDto.search search, Pageable pageable) {
         return merchantRepository.findMerchantList(search, pageable);
     }
 
 
+    /**
+     * @param merchantRegNum
+     * @return MerchantDto.showDetail
+     * - 가맹점 상세 정보 조회
+     */
     @Override
     public MerchantDto.showDetail findByMerchantDetail(Integer merchantRegNum) {
         Merchant merchant = merchantRepository.findMerchantDetail(merchantRegNum);

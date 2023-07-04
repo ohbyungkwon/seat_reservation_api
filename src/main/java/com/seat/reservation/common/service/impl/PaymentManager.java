@@ -12,11 +12,17 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-// Payment Module Factory
-@AllArgsConstructor
+/**
+ * This bean is related to payment service.
+ */
 @Component
-public class PayModule {
+@AllArgsConstructor
+public class PaymentManager {
 
+    /**
+     * @param paymentMethod
+     * @return PaymentService
+     */
     public PaymentService getPayService(PaymentMethod paymentMethod){
         ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
 
@@ -40,6 +46,14 @@ public class PayModule {
         }
     }
 
+    /**
+     * @param paymentService
+     * @param reservation
+     * @param user
+     * @param merchant
+     * @param payDto
+     * @return PaymentHistory
+     */
     public PaymentHistory pay(PaymentService paymentService, Reservation reservation
             , User user
             , Merchant merchant

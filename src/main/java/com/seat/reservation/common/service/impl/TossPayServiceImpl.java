@@ -14,6 +14,13 @@ public class TossPayServiceImpl implements PaymentService {
 
     private final PaymentMethod paymentMethod = PaymentMethod.TOSS;
 
+    /**
+     * [TODO]
+     * @param reservation
+     * @param payDto
+     * @return PayDto.OutputPayDto
+     * - 토스 결제 로직
+     */
     @Override
     public PayDto.OutputPayDto pay(Reservation reservation, PayDto.InputPayDto payDto) {
         /*

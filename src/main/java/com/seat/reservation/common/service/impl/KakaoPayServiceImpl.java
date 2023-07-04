@@ -13,6 +13,13 @@ import org.springframework.stereotype.Component;
 public class KakaoPayServiceImpl implements PaymentService {
     private final PaymentMethod paymentMethod = PaymentMethod.KAKAO;
 
+    /**
+     * [TODO]
+     * @param reservation
+     * @param payDto
+     * @return PayDto.OutputPayDto
+     * - 카카오 결제 로직
+     */
     @Override
     public PayDto.OutputPayDto pay(Reservation reservation, PayDto.InputPayDto payDto) {
         /*

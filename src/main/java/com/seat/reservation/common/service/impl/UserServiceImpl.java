@@ -26,7 +26,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl extends SecurityService implements UserService {
-
     private final UserRepository userRepository;
 
     private final RefreshTokenStoreRepository refreshTokenStoreRepository;
@@ -35,6 +34,12 @@ public class UserServiceImpl extends SecurityService implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+
+    /**
+     * @param dto
+     * @return UserDto.create
+     * @throws Exception
+     */
     @Override
     @Transactional
     public UserDto.create createUser(UserDto.create dto) throws Exception {
@@ -48,6 +53,10 @@ public class UserServiceImpl extends SecurityService implements UserService {
                 .convertDto();
     }
 
+    /**
+     * @param dto
+     * @throws Exception
+     */
     @Override
     @Transactional
     public void updateUser(UserDto.update dto) throws Exception {
@@ -56,7 +65,14 @@ public class UserServiceImpl extends SecurityService implements UserService {
         user.updateUser(dto, passwordEncoder);
     }
 
-
+    /**
+     * @param request
+     * @param response
+     * @throws Exception
+     * - 토큰 갱신
+     * - AccessToken: Send a token to the response's header.
+     * - RefreshToken: Store at the DB and Send a key to a client to find data.
+     */
     @Override
     @Transactional
     public void manageRefreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception {

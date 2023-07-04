@@ -13,16 +13,12 @@ import com.seat.reservation.common.service.HistoryService;
 import com.seat.reservation.common.service.SeatService;
 import com.seat.reservation.common.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
-import org.springframework.format.datetime.joda.LocalDateTimeParser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Slf4j
@@ -37,6 +33,11 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
         this.seatHistoryRepository = seatHistoryRepository;
     }
 
+
+    /**
+     * @param entity
+     * - 히스토리 저장
+     */
     @Override
     @Transactional
     public void historySave(Object entity) {
@@ -59,6 +60,11 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
         }
     }
 
+    /**
+     * @param seatId
+     * @return Boolean
+     * - 워크인 고객의 경우 좌석 비활성화 처리
+     */
     @Override
     @Transactional
     public Boolean switchFlagAsWalkIn(Long seatId) {
@@ -68,7 +74,12 @@ public class SeatServiceImpl extends SecurityService implements HistoryService, 
         return Boolean.TRUE;
     }
 
-
+    /**
+     * @param merchantRegNum
+     * @param startDateTimeStr
+     * @return List<SeatDto.showByTime>
+     * - 이용 가능 좌석 조회
+     */
     public List<SeatDto.showByTime> searchUseAbleSeat(int merchantRegNum, String startDateTimeStr) {
         LocalDateTime startDateTime;
         if(startDateTimeStr == null) {
