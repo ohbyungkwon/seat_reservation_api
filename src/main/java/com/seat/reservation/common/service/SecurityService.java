@@ -3,17 +3,17 @@ package com.seat.reservation.common.service;
 import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.exception.NotFoundPrincipalException;
-import com.seat.reservation.common.repository.MerchantRepository;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.support.ApplicationContextProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.security.Principal;
 import java.util.Optional;
 
+/**
+ * This Service returns the current login user.
+ */
 public class SecurityService {
 
     protected UserDto.create getUserInfo() {
@@ -30,19 +30,5 @@ public class SecurityService {
         ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
         UserRepository userRepository = applicationContext.getBean(UserRepository.class);
         return userRepository.findByUserId(userDto.getUserId());
-    }
-    
-    // 확인 필요
-    protected Optional<Object> getMerchant() {
-        ApplicationContext applicationContext = ApplicationContextProvider.getApplicationContext();
-
-        MerchantRepository merchantRepository = applicationContext.getBean(MerchantRepository.class);
-
-        Principal principal = (Principal) Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                .map(Authentication::getPrincipal)
-                .orElseThrow(() -> new NotFoundPrincipalException("Principal 만료"));
-
-        // 이게 맞는건가?
-        return Optional.ofNullable(merchantRepository.findByMerchantRegNum(Integer.parseInt(principal.getName())));
     }
 }

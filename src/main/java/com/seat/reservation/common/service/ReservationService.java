@@ -8,8 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
+/**
+ * {@link com.seat.reservation.common.service.impl.ReservationServiceImpl}
+ */
 public interface ReservationService {
     Boolean saveReservation(ReservationDto.create dto, PayDto.InputPayDto inputPayDto) throws IOException;
 

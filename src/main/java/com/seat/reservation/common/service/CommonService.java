@@ -7,6 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Optional;
 
+
+/**
+ * {@link com.seat.reservation.common.service.impl.CommonServiceImpl}
+ */
 public interface CommonService {
     List<SearchDto.time> getReservationAbleHours(Integer merchantRegNum);
 

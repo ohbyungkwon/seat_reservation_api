@@ -1,12 +1,14 @@
 package com.seat.reservation.common.service;
 
-import com.seat.reservation.common.domain.Menu;
 import com.seat.reservation.common.dto.MenuDto;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * {@link com.seat.reservation.common.service.impl.MenuServiceImpl}
+ */
 public interface MenuService {
     List<MenuDto.search> searchAllMenu(MenuDto.search search);
 

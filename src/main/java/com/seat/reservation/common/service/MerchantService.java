@@ -1,17 +1,12 @@
 package com.seat.reservation.common.service;
 
-import com.querydsl.core.Tuple;
-import com.seat.reservation.common.domain.Merchant;
-import com.seat.reservation.common.dto.MerchantDetailDto;
 import com.seat.reservation.common.dto.MerchantDto;
-import com.seat.reservation.common.dto.ReservationDto;
-import com.seat.reservation.common.dto.SearchDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
-
+/**
+ * {@link com.seat.reservation.common.service.impl.MerchantServiceImpl}
+ */
 public interface MerchantService {
     void registerMerchant(MerchantDto.create merchantDto) throws Exception;
 
