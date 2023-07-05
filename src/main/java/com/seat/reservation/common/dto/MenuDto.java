@@ -1,5 +1,6 @@
 package com.seat.reservation.common.dto;
 
+import com.seat.reservation.common.domain.enums.Role;
 import lombok.*;
 
 public class MenuDto {
@@ -10,6 +11,7 @@ public class MenuDto {
     public static class search{
         private String menuId;
         private String menuName;
+        private Role role;
     }
 
     @Getter
@@ -17,9 +19,9 @@ public class MenuDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class searchAll{
-        private String userId;
+    public static class create{
         private String menuId;
         private String menuName;
+        private Role role;
     }
 }

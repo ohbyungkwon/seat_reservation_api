@@ -1,5 +1,6 @@
 package com.seat.reservation.common.domain;
 
+import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.dto.MenuDto;
 import com.seat.reservation.common.dto.ReservationDto;
 import lombok.*;
@@ -20,6 +21,9 @@ public class Menu {
 
     private String menuName;
 
+    @Enumerated(EnumType.STRING)
+    private Role role; // 최소 기준 권한
+
     public MenuDto.search convertMenuDtoShow() {
         return MenuDto.search.builder()
                 .menuId(this.menuId)
@@ -27,10 +31,11 @@ public class Menu {
                 .build();
     }
 
-    public static Menu createSimpleMenu(String menuId, String menuName){
+    public static Menu createMenu(String menuId, String menuName, Role role){
         return Menu.builder()
                 .menuId(menuId)
                 .menuName(menuName)
+                .role(role)
                 .build();
     }
 }

@@ -1,14 +1,9 @@
 package com.seat.reservation.admin.controller;
 
-
-/* 메뉴 등록, 수정 기능 (등록은 단일 혹은 엑셀로 일괄 등록) */
-
-import com.seat.reservation.common.domain.Item;
-import com.seat.reservation.common.domain.Merchant;
-import com.seat.reservation.common.dto.ItemDto;
+import com.seat.reservation.common.dto.MenuDto;
 import com.seat.reservation.common.dto.ResponseComDto;
-import com.seat.reservation.common.repository.ItemRepository;
-import com.seat.reservation.common.repository.MerchantRepository;
+import com.seat.reservation.common.service.MenuService;
+import com.seat.reservation.common.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,56 +14,53 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class MenuAdminController {
+public class MenuAdminController extends SecurityService {
 
-    private final ItemRepository itemRepository;
-    private final MerchantRepository merchantRepository;
+    private final MenuService menuService;
 
-    @PostMapping("/item")
-    public ResponseEntity<ResponseComDto> createMenu(@RequestBody List<ItemDto.create> creates){
 
-        Merchant merchant =  merchantRepository.findByMerchantRegNum(creates.get(0).getMerchantRegNum());
-
-        if(merchant == null){
-            System.out.println("존재하지 않는 가맹점입니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseComDto.builder()
-                            .resultMsg("존재하지 않는 가맹점입니다.")
-                            .resultObj(creates).build());
-        }
-
-        creates.forEach((createItem)-> {
-            Item item = Item.createItem(merchant, createItem.getMenuName(), createItem.getPrice());
-
-            itemRepository.save(item);
-        });
-
+    /**
+     * @param creates
+     * @return ResponseEntity<ResponseComDto>
+     * - 메뉴 등록
+     */
+    @PostMapping("/menu")
+    public ResponseEntity<ResponseComDto> createMenus(@RequestBody List<MenuDto.create> creates){
+        menuService.createMenus(creates);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseComDto.builder()
                 .resultMsg("메뉴 등록이 완료되었습니다.")
-                .resultObj(creates).build());
+                .resultObj(creates)
+                .build());
     }
 
-    @DeleteMapping("/item")
-    public ResponseEntity<ResponseComDto> deleteMenu(@RequestBody List<ItemDto.delete> deletes){
-
-        Merchant merchant =  merchantRepository.findByMerchantRegNum(deletes.get(0).getMerchantRegNum());
-
-        if(merchant == null){
-            System.out.println("존재하지 않는 가맹점입니다.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ResponseComDto.builder()
-                            .resultMsg("존재하지 않는 가맹점입니다.")
-                            .resultObj(deletes).build());
-        }
-
-        deletes.forEach((deleteItem) -> {
-            itemRepository.deleteByMerchantAndAndMenuName(merchant, deleteItem.getMenuName());
-        });
-
+    /**
+     * @param menuIds
+     * @return ResponseEntity<ResponseComDto>
+     * - 메뉴 삭제
+     */
+    @DeleteMapping("/menu")
+    public ResponseEntity<ResponseComDto> deleteMenus(@RequestBody List<String> menuIds){
+        menuService.deleteMenus(menuIds);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseComDto.builder()
                         .resultMsg("메뉴 삭제가 완료되었습니다.")
-                        .resultObj(deletes).build());
+                        .resultObj(null)
+                        .build());
+    }
+
+    /**
+     * @param search
+     * @return ResponseEntity<ResponseComDto>
+     * - 메뉴 조회
+     */
+    @GetMapping("/menu")
+    public ResponseEntity<ResponseComDto> searchMenus(@RequestBody MenuDto.search search){
+        List<MenuDto.search> menus = menuService.searchMenu(search);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseComDto.builder()
+                        .resultMsg("조회 완료되었습니다.")
+                        .resultObj(menus)
+                        .build());
     }
 }
