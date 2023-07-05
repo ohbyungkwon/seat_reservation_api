@@ -1,8 +1,8 @@
 package com.seat.reservation.common.controller;
 
-import com.seat.reservation.common.cache.CustomRedisCacheManager;
 import com.seat.reservation.common.dto.ResponseComDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,10 +15,10 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/common")
 public class CacheController {
-    private final CustomRedisCacheManager redisCacheManager;
+    private final RedisCacheManager redisCacheManager;
 
     @Autowired
-    public CacheController(CustomRedisCacheManager redisCacheManager) {
+    public CacheController(RedisCacheManager redisCacheManager) {
         this.redisCacheManager = redisCacheManager;
     }
 

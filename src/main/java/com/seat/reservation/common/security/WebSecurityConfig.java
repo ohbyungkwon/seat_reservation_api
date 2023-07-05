@@ -1,6 +1,7 @@
 package com.seat.reservation.common.security;
 
 import com.seat.reservation.common.cache.CustomRedisCache;
+import com.seat.reservation.common.domain.enums.CacheName;
 import com.seat.reservation.common.repository.RefreshTokenStoreRepository;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.util.CommonUtil;
@@ -17,14 +18,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.Map;
+
 /**
  * Config file about Spring Security.
  */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
-    private CustomRedisCache redisCache;
+    private Map<String, CustomRedisCache> redisCacheMap;
 
     @Autowired
     private UserRepository userRepository;
@@ -56,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CustomLoginSuccessHandler customLoginSuccessHandler() {
-        return new CustomLoginSuccessHandler(redisCache, refreshTokenStoreRepository);
+        return new CustomLoginSuccessHandler(redisCacheMap, refreshTokenStoreRepository);
     }
 
     @Bean
@@ -66,7 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtFilter jwtFilter() {
-        return new JwtFilter(redisCache, CommonUtil.allowUrls);
+        return new JwtFilter(
+                redisCacheMap.get(CacheName.TOKEN_CACHE.getValue()),
+                CommonUtil.allowUrls);
     }
 
     @Override

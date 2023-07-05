@@ -1,7 +1,5 @@
 package com.seat.reservation.common.cache;
 
-import com.seat.reservation.common.config.RedisConfig;
-import com.seat.reservation.common.util.CommonUtil;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnection;
@@ -11,7 +9,6 @@ import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collections;
@@ -45,10 +42,6 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
         this.sleepTime = sleepTime;
     }
 
-//    public void put(String key, Object value) throws IOException {
-//        this.put(RedisConfig.DEFAULT_REDIS_STORAGE, key.getBytes(), CommonUtil.convertByte(value), null);
-//    }
-
 
     /*
      * (non-Javadoc)
@@ -73,10 +66,6 @@ public class CustomRedisCacheWriter implements RedisCacheWriter {
         });
     }
 
-//    public Object get(String key) throws IOException, ClassNotFoundException {
-//        byte[] bytes = this.get(RedisConfig.DEFAULT_REDIS_STORAGE, key.getBytes());
-//        return CommonUtil.convertObj(bytes);
-//    }
 
     /*
      * (non-Javadoc)

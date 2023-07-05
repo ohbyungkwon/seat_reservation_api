@@ -47,7 +47,6 @@ dependencies {
 	//html 파일이 resource에 있어 핫로딩이 불가한데 devtools가 이를 지원함(재빌링만 진행하면 된다.)
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-    implementation 'org.jetbrains:annotations:20.1.0'
 
     compile("org.springframework.boot:spring-boot-starter-aop")
 	compile("org.springframework.boot:spring-boot-starter-batch")

@@ -21,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -30,7 +31,7 @@ public class UserServiceImpl extends SecurityService implements UserService {
 
     private final RefreshTokenStoreRepository refreshTokenStoreRepository;
 
-    private final CustomRedisCache redisCache;
+    private final Map<String, CustomRedisCache> redisCacheMap;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -107,7 +108,7 @@ public class UserServiceImpl extends SecurityService implements UserService {
 
         String accessToken = TokenUtils.generateJwtToken(user);
         String redisTokenKey = AuthConstants.getAccessTokenKey(userId);
-        redisCache.put(redisTokenKey, accessToken);
+        redisCacheMap.get("token_cache").put(redisTokenKey, accessToken);
         response.addHeader(AuthConstants.AUTH_HEADER,
                 AuthConstants.ACCESS_TOKEN_TYPE + " " + accessToken);
     }
