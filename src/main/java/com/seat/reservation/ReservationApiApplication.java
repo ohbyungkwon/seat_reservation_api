@@ -1,13 +1,16 @@
 package com.seat.reservation;
 
+import com.seat.reservation.common.dto.properties.MailProperties;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @SpringBootApplication
 @EnableBatchProcessing
-@EnableScheduling
+@EnableConfigurationProperties(MailProperties.class)
 public class ReservationApiApplication {
 
 	/*

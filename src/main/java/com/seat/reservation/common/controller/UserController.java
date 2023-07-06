@@ -1,8 +1,10 @@
 package com.seat.reservation.common.controller;
 
+import com.seat.reservation.common.dto.MailDto;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.exception.BadReqException;
+import com.seat.reservation.common.service.MailService;
 import com.seat.reservation.common.service.UserService;
 import com.seat.reservation.common.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -24,7 +24,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
+    private final MailService mailService;
 
     /**
      * @param dto
@@ -92,11 +92,30 @@ public class UserController {
 
     /**
      * @return ResponseEntity<ResponseComDto>
-     * - 이메일 인증
+     * - 이메일 인증 전송
      */
     @PostMapping("/auth/email")
-    public ResponseEntity<ResponseComDto> authEmail() {
-        // TODO) 이메일 인증 작업 후 임시 토큰 발급
-        return null;
+    public ResponseEntity<ResponseComDto> sendAuthEmail(@RequestBody MailDto mailDto) throws MessagingException {
+        mailService.sendAuthMail(mailDto);
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("메일 전송이 완료되었습니다.")
+                        .resultObj(null)
+                        .build(), HttpStatus.OK);
+    }
+
+
+    /**
+     * @return ResponseEntity<ResponseComDto>
+     * - 이메일 인증 검증
+     */
+    @PostMapping("/check/auth")
+    public ResponseEntity<ResponseComDto> checkAuthEmail(@RequestParam String authCode) throws MessagingException {
+        mailService.checkAuthMail(authCode);
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("메일 검증이 완료되었습니다.")
+                        .resultObj(null)
+                        .build(), HttpStatus.OK);
     }
 }
