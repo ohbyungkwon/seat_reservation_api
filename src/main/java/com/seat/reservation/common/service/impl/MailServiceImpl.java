@@ -1,8 +1,10 @@
 package com.seat.reservation.common.service.impl;
 
 import com.seat.reservation.common.cache.CustomRedisCache;
+import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.domain.enums.CacheName;
 import com.seat.reservation.common.domain.enums.Role;
+import com.seat.reservation.common.domain.enums.SmsOrEmailAuthGoal;
 import com.seat.reservation.common.dto.MailDto;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.dto.properties.MailProperties;
@@ -15,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import javax.mail.MessagingException;
@@ -34,6 +38,28 @@ public class MailServiceImpl extends SecurityService implements MailService {
 
     private final Map<String, CustomRedisCache> redisCacheMap;
 
+    private final PasswordEncoder passwordEncoder;
+
+
+    @Override
+    @Transactional
+    public String doAuthGoal(SmsOrEmailAuthGoal authGoal) {
+        User user = this.getUser().orElseThrow(() ->
+                new BadReqException("사용자를 찾지 못했습니다."));
+
+        if (authGoal.equals(SmsOrEmailAuthGoal.CHANGE_PW)) {
+            String randomPw = UUID.randomUUID().toString().substring(0, 6);
+            user.changePw(randomPw, passwordEncoder);
+            user.setIsNeedChangePw(true);
+            return "비밀번호: " + randomPw + "로 변경되었습니다.";
+        }
+
+        if (authGoal.equals(SmsOrEmailAuthGoal.CHANGE_ROLE)) {
+            user.setRole(Role.NORMAL_ROLE);
+            return "권한이 변경되었습니다.";
+        }
+        return null;
+    }
 
     @Override
     public void sendMail(MailDto mailDto) throws MessagingException {

@@ -52,6 +52,7 @@ public class User {
 
     private int loginFailCount; // 로그인 실패 횟수. 5회 이상 실패 시 계정 잠김 등 처리.
 
+    private boolean isNeedChangePw; // 비밀번호 찾기를 이용한 고객(임시비번 사용일 경우)
     private boolean isLocked; // 계정의 잠김 여부. ex) 비밀번호 다회 오입력 시 계정 잠김
 
     @Enumerated(EnumType.STRING)
@@ -72,8 +73,8 @@ public class User {
         this.isLocked = isLocked;
     }
 
-    public static User createUserSimple(String userId) {
-        return User.builder().userId(userId).build();
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public static User createUser(UserDto.create userDto, PasswordEncoder passwordEncoder) {
@@ -93,12 +94,15 @@ public class User {
                 .gender(userDto.getGender())
                 .role(role)
                 .age(getAge(userDto.getBirth()))
+                .isNeedChangePw(false)
+                .isLocked(false)
+                .loginFailCount(0)
                 .build();
     }
 
     public void updateUser(UserDto.update userDto, PasswordEncoder passwordEncoder) throws Exception {
         boolean isCorrect = passwordEncoder.matches(userDto.getOldPassword(), this.pw);
-        if(!isCorrect) {
+        if (!isCorrect) {
             throw new BadReqException("현재 비밀번호를 확인해주세요.");
         }
 
@@ -109,9 +113,18 @@ public class User {
 
         String password = userDto.getPassword();
         if (!StringUtils.isEmpty(password)) {
-            this.pw = passwordEncoder.encode(password);
+            this.changePw(password, passwordEncoder);
             this.setIsLocked(false);
+            this.setIsNeedChangePw(false);
         }
+    }
+
+    public void changePw(String password, PasswordEncoder passwordEncoder){
+        this.pw = passwordEncoder.encode(password);
+    }
+
+    public void setIsNeedChangePw(boolean isNeedChangePw){
+        this.isNeedChangePw = isNeedChangePw;
     }
 
     public UserDto.create convertDto(){

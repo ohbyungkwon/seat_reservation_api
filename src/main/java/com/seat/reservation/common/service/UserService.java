@@ -14,4 +14,5 @@ public interface UserService {
     void updateUser(UserDto.update user) throws Exception;
 
     void manageRefreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
 }

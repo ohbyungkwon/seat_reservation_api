@@ -1,5 +1,6 @@
 package com.seat.reservation.common.controller;
 
+import com.seat.reservation.common.domain.enums.SmsOrEmailAuthGoal;
 import com.seat.reservation.common.dto.MailDto;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
@@ -110,11 +111,15 @@ public class UserController {
      * - 이메일 인증 검증
      */
     @PostMapping("/check/auth")
-    public ResponseEntity<ResponseComDto> checkAuthEmail(@RequestParam String authCode) throws MessagingException {
+    public ResponseEntity<ResponseComDto> checkAuthEmail(
+            @RequestParam String authCode,
+            @RequestParam SmsOrEmailAuthGoal authGoal
+    ) throws MessagingException {
         mailService.checkAuthMail(authCode);
+        String msg = mailService.doAuthGoal(authGoal);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
-                        .resultMsg("메일 검증이 완료되었습니다.")
+                        .resultMsg(msg)
                         .resultObj(null)
                         .build(), HttpStatus.OK);
     }

@@ -49,7 +49,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return !user.isNeedChangePw();
     }
 
     @Override

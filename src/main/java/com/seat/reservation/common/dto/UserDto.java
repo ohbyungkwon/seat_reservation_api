@@ -57,12 +57,13 @@ public class UserDto {
     @AllArgsConstructor
     public static class update {
         @Length(min = 6)
-        @NotEmpty(message = "password null")
         private String oldPassword;
 
         @Length(min = 6)
         private String password;
 
         private String address;
+
+        private Role role;
     }
 }
