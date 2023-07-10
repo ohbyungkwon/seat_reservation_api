@@ -6,16 +6,15 @@ import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.exception.BadReqException;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.Years;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Slf4j
@@ -43,26 +42,33 @@ public class User {
 
     private String address;
 
-    private int age; // birth로부터 계산. 따로 입력 받지는 않음.
+    private int age; // 생일에서 계산. 따로 입력 받지는 않음.
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
-
-    private String snsType; // 로그인: sns 기반. ex ) kakao, apple, google, etc.
 
     private int loginFailCount; // 로그인 실패 횟수. 5회 이상 실패 시 계정 잠김 등 처리.
 
     private boolean isNeedChangePw; // 비밀번호 찾기를 이용한 고객(임시비번 사용일 경우)
     private boolean isLocked; // 계정의 잠김 여부. ex) 비밀번호 다회 오입력 시 계정 잠김
 
+    @Setter
+    private LocalDate lastLoginDate;
+
+    @CreatedDate
+    private LocalDate createdDate;
+
+    @LastModifiedDate
+    private LocalDate lastModifiedDate;
+
     @Enumerated(EnumType.STRING)
     private Role role; // 관리자/사용자
 
     public static int getAge(String birth) {
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
-        DateTime dt = formatter.parseDateTime(birth);
-        return Years.yearsBetween(dt.toLocalDate(), now).getYears();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        int nowYear = LocalDate.now().getYear();
+        int birthYear = LocalDate.parse(birth, formatter).getYear();
+        return nowYear - birthYear + 1; // 만 나이 x
     }
 
     public int plusLoginFailCount(){

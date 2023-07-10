@@ -1,5 +1,6 @@
 package com.seat.reservation.common.security;
 
+import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -10,6 +11,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
 
 /**
  * It is a custom provider to check validation.
@@ -41,8 +44,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException(userDetails.getUsername() + "use invalid password. please check it.");
         }
 
-        UserDto.create user = userDetails.getUser().convertDto();
-        Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(user, null, userDetails.getAuthorities());
+        User user = userDetails.getUser();
+        user.setLastLoginDate(LocalDate.now());
+
+        UserDto.create userDto = user.convertDto();
+        Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(userDto, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(workedAuthentication);
         return workedAuthentication;
     }
