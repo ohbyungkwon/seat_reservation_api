@@ -47,13 +47,15 @@ public class MailServiceImpl implements MailService {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new BadReqException("사용자를 찾지 못했습니다."));
 
+        // 비밀번호 찾기
         if (authGoal.equals(SmsOrEmailAuthGoal.CHANGE_PW)) {
             String randomPw = UUID.randomUUID().toString().substring(0, 6);
             user.changePw(randomPw, passwordEncoder);
             user.setIsNeedChangePw(true);
-            return "비밀번호: " + randomPw + "로 변경되었습니다.";
+            return "임시 비밀번호: " + randomPw + "로 변경되었습니다.";
         }
 
+        // 권한 변경
         if (authGoal.equals(SmsOrEmailAuthGoal.CHANGE_ROLE)) {
             user.setRole(Role.NORMAL_ROLE);
             return "권한이 변경되었습니다.";

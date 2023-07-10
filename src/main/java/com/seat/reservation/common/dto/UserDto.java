@@ -47,6 +47,8 @@ public class UserDto {
 
         @Enumerated(EnumType.STRING)
         private Role role;
+
+        private boolean isNeedChangePw;
     }
 
 

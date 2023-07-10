@@ -50,7 +50,7 @@ public class User {
     private int loginFailCount; // 로그인 실패 횟수. 5회 이상 실패 시 계정 잠김 등 처리.
 
     private boolean isNeedChangePw; // 비밀번호 찾기를 이용한 고객(임시비번 사용일 경우)
-    private boolean isLocked; // 계정의 잠김 여부. ex) 비밀번호 다회 오입력 시 계정 잠김
+    private boolean isLocked; // 계정의 잠김 여부. ex) 비밀번호 5회 오입력, 3달 이상 이용X
 
     @Setter
     private LocalDate lastLoginDate;
@@ -120,7 +120,6 @@ public class User {
         String password = userDto.getPassword();
         if (!StringUtils.isEmpty(password)) {
             this.changePw(password, passwordEncoder);
-            this.setIsLocked(false);
             this.setIsNeedChangePw(false);
         }
     }
@@ -131,6 +130,7 @@ public class User {
 
     public void setIsNeedChangePw(boolean isNeedChangePw){
         this.isNeedChangePw = isNeedChangePw;
+        this.setIsLocked(false); // 비밀번호 찾기시, 잠금 해제
     }
 
     public UserDto.create convertDto(){
@@ -144,6 +144,7 @@ public class User {
                 .gender(this.getGender())
                 .role(role)
                 .age(getAge(this.getBirth()))
+                .isNeedChangePw(this.isNeedChangePw())
                 .build();
     }
 }

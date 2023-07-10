@@ -37,7 +37,8 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
             User user = userOptional.get();
             int failCnt = user.plusLoginFailCount();
             if(failCnt == 5) {
-                errMsg += "(5회 이상 실패하여 계정이 잠금 처리되었습니다)";
+                errMsg += "\n(5회 이상 실패하여 계정이 잠금 처리되었습니다.\n" +
+                        "비밀번호 찾기를 이용해 주세요.)";
                 user.setIsLocked(true);
             }
         }
