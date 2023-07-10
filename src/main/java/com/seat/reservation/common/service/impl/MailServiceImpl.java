@@ -6,11 +6,10 @@ import com.seat.reservation.common.domain.enums.CacheName;
 import com.seat.reservation.common.domain.enums.Role;
 import com.seat.reservation.common.domain.enums.SmsOrEmailAuthGoal;
 import com.seat.reservation.common.dto.MailDto;
-import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.dto.properties.MailProperties;
 import com.seat.reservation.common.exception.BadReqException;
+import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.service.MailService;
-import com.seat.reservation.common.service.SecurityService;
 import com.seat.reservation.common.util.MailUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +24,12 @@ import org.thymeleaf.util.StringUtils;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MailServiceImpl extends SecurityService implements MailService {
+public class MailServiceImpl implements MailService {
     private final JavaMailSender javaMailSender;
 
     private final MailProperties mailProperties;
@@ -40,12 +38,14 @@ public class MailServiceImpl extends SecurityService implements MailService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final UserRepository userRepository;
+
 
     @Override
     @Transactional
-    public String doAuthGoal(SmsOrEmailAuthGoal authGoal) {
-        User user = this.getUser().orElseThrow(() ->
-                new BadReqException("사용자를 찾지 못했습니다."));
+    public String doAuthGoal(SmsOrEmailAuthGoal authGoal, String userId) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new BadReqException("사용자를 찾지 못했습니다."));
 
         if (authGoal.equals(SmsOrEmailAuthGoal.CHANGE_PW)) {
             String randomPw = UUID.randomUUID().toString().substring(0, 6);
@@ -74,35 +74,39 @@ public class MailServiceImpl extends SecurityService implements MailService {
 
     @Override
     public void sendAuthMail(MailDto mailDto) throws MessagingException {
-        UserDto.create user = this.getUserInfo();
-        String userId = user.getUserId();
-        Role role = user.getRole();
-        if(Role.SYSTEM_ROLE.equals(role)) {
-            // system 유저 권한으로 여러명에거 전송 가능
-            String[] toArr = mailDto.getToArr();
+        String[] toArr = mailDto.getToArr();
+        if(toArr.length != 0) {
             mailDto.setToArr(new String[]{});
-            for (String to : toArr) {
-                mailDto.setTo(to);
+
+            Arrays.sort(toArr); // 정렬
+            List<User> users = userRepository.findByEmailInOrderByEmail(toArr);
+            if(users.size() != toArr.length)
+                throw new BadReqException("부정확한 이메일이 포함되어 있습니다.");
+
+            for(int i = 0; i < users.size(); i++) {
+                String userId = users.get(i).getUserId();
+                String email = users.get(i).getEmail();
+                if(!StringUtils.equals(email, toArr[i])){
+                    log.error("[메일전송, {}]-{}, {} 정보가 다릅니다.",
+                            i, email, toArr[i]);
+                    throw new BadReqException("이메일이 정확하지 않습니다.");
+                }
+
+                mailDto.setTo(toArr[i]);
                 this.setAuthRandomValue(mailDto, userId);
                 this.sendMail(mailDto); // 내용이 모두 다르기 때문에 1건씩 전송
             }
             return;
         }
 
-        // system 유저 외 본인만 가능
-        String loginEmail = user.getEmail();
-        if(StringUtils.equals(loginEmail, mailDto.getTo())) {
-            throw new BadReqException("계정의 이메일 정보와 다릅니다.");
-        }
-
+        User user = userRepository.findByEmail(mailDto.getTo())
+                .orElseThrow(() -> new BadReqException("이메일이 정확하지 않습니다."));
+        String userId = user.getUserId();
         this.setAuthRandomValue(mailDto, userId);
         this.sendMail(mailDto);
     }
 
-    public void checkAuthMail(String authCode) throws MessagingException {
-        UserDto.create user = this.getUserInfo();
-        String userId = user.getUserId();
-
+    public void checkAuthMail(String authCode, String userId) {
         Cache.ValueWrapper wrapper =
                 redisCacheMap.get(CacheName.TOKEN_CACHE.getValue())
                         .get(userId + "AUTH_CODE");
@@ -116,8 +120,7 @@ public class MailServiceImpl extends SecurityService implements MailService {
         }
     }
 
-    private void setAuthRandomValue(MailDto mailDto, String userId)
-            throws MessagingException {
+    private void setAuthRandomValue(MailDto mailDto, String userId) {
         String random = UUID.randomUUID().toString().substring(0, 6);
         mailDto.convertAuthFormat(random, userId);
         redisCacheMap.get(CacheName.TOKEN_CACHE.getValue())

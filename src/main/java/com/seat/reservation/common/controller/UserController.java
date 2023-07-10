@@ -113,10 +113,10 @@ public class UserController {
     @PostMapping("/check/auth")
     public ResponseEntity<ResponseComDto> checkAuthEmail(
             @RequestParam String authCode,
-            @RequestParam SmsOrEmailAuthGoal authGoal
-    ) throws MessagingException {
-        mailService.checkAuthMail(authCode);
-        String msg = mailService.doAuthGoal(authGoal);
+            @RequestParam String userId,
+            @RequestParam SmsOrEmailAuthGoal authGoal) {
+        mailService.checkAuthMail(authCode, userId);
+        String msg = mailService.doAuthGoal(authGoal, userId);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg(msg)
