@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        try {
+//        try {
             String url = request.getRequestURI();
             log.debug("Url: {}", url);
 
@@ -79,17 +79,17 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        } catch (AuthenticationException e){
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-
-            String msg = e.getMessage();
-            ResponseComDto responseComDto = ResponseComDto.builder()
-                    .resultMsg(msg)
-                    .resultObj(null)
-                    .build();
-            ObjectMapper objectMapper = new ObjectMapper();
-            String body = objectMapper.writeValueAsString(responseComDto);
-            CommonUtil.writeResponse(response, body);
-        }
+//        } catch (AuthenticationException e){
+//            response.setStatus(HttpStatus.FORBIDDEN.value());
+//
+//            String msg = e.getMessage();
+//            ResponseComDto responseComDto = ResponseComDto.builder()
+//                    .resultMsg(msg)
+//                    .resultObj(null)
+//                    .build();
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            String body = objectMapper.writeValueAsString(responseComDto);
+//            CommonUtil.writeResponse(response, body);
+//        }
     }
 }

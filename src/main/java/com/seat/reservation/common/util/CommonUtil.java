@@ -1,7 +1,10 @@
 package com.seat.reservation.common.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seat.reservation.common.dto.ResponseComDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,6 +81,19 @@ public class CommonUtil {
         }
 
         return String.valueOf(Optional.of(obj).orElseGet(() -> ""));
+    }
+
+    public static void defaultExceptionHandler(HttpServletResponse response, HttpStatus status, Exception e) throws IOException {
+        response.setStatus(status.value());
+
+        String msg = e.getMessage();
+        ResponseComDto responseComDto = ResponseComDto.builder()
+                .resultMsg(msg)
+                .resultObj(null)
+                .build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String body = objectMapper.writeValueAsString(responseComDto);
+        writeResponse(response, body);
     }
 
     public static String getClientIpAddr(HttpServletRequest request) {
