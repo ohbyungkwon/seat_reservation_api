@@ -6,6 +6,7 @@ import com.seat.reservation.common.dto.MerchantDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -21,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(value = {AuditingEntityListener.class})
-public class Merchant {
+public class Merchant implements Persistable<Integer> {
 
     @Id
     @Column(length = 8)
@@ -68,6 +69,9 @@ public class Merchant {
     @LastModifiedDate
     private LocalDateTime modifyDate; // 가맹점 수정일자 -> 상호명 변경 등 변경이력 관리를 위해 사용
 
+    @Transient
+    private boolean isNewFlag = true;
+
 
     public static Merchant createMerchant(MerchantDto.create merchantDto,
                                               Upzong upzong, User user){
@@ -87,6 +91,7 @@ public class Merchant {
                 .openTime(openTime)
                 .closeTime(closeTime)
                 .reservationStdHour(merchantDto.getReservationStdHour())
+                .isNewFlag(true)
                 .build();
     }
 
@@ -134,5 +139,21 @@ public class Merchant {
                 .category(this.upzong.getCategory())
                 .itemList(itemDtoList)
                 .build();
+    }
+
+    @Override
+    public Integer getId() {
+        return this.merchantRegNum;
+    }
+
+    @Override
+    public boolean isNew() {
+        return this.isNewFlag;
+    }
+
+    @PostLoad
+    @PrePersist
+    public void setIsNotNewUser(){
+        this.isNewFlag = false;
     }
 }

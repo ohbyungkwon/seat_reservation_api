@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -25,7 +26,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(value = {AuditingEntityListener.class})
-public class User {
+public class User implements Persistable<String> {
 
     @Id
     private String userId; // userId. PK
@@ -63,6 +64,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role; // 관리자/사용자
+
+    @Transient
+    private boolean isNewFlag = true;
+
 
     public static int getAge(String birth) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -102,6 +107,7 @@ public class User {
                 .age(getAge(userDto.getBirth()))
                 .isNeedChangePw(false)
                 .isLocked(false)
+                .isNewFlag(true)
                 .loginFailCount(0)
                 .build();
     }
@@ -146,5 +152,21 @@ public class User {
                 .age(getAge(this.getBirth()))
                 .isNeedChangePw(this.isNeedChangePw())
                 .build();
+    }
+
+    @Override
+    public String getId() {
+        return this.getUserId();
+    }
+
+    @Override
+    public boolean isNew() {
+        return this.isNewFlag();
+    }
+
+    @PostLoad
+    @PrePersist
+    public void setIsNotNewUser(){
+        this.isNewFlag = false;
     }
 }
