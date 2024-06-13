@@ -3,6 +3,7 @@ package com.seat.reservation.common.service.impl;
 import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.domain.RefreshTokenStore;
 import com.seat.reservation.common.domain.User;
+import com.seat.reservation.common.domain.enums.CacheName;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.exception.BadReqException;
 import com.seat.reservation.common.exception.NotFoundUserException;
@@ -91,7 +92,7 @@ public class UserServiceImpl extends SecurityService implements UserService {
                 refreshTokenStoreRepository.findByCookieValue(cookieValue)
                         .orElseThrow(() -> new BadReqException("토큰이 존재하지 않습니다."));
         String oldRefreshToken = refreshTokenStore.getRefreshToken();
-        boolean isValid = TokenUtils.isValidToken(oldRefreshToken, AuthConstants.REFRESH_TOKEN_KEY_PART);
+        boolean isValid = TokenUtils.isValidToken(oldRefreshToken, "");
         if(!isValid) throw new BadReqException("토큰 정보가 불일치합니다.");
 
         // refresh-token, cookie value 변경
@@ -108,7 +109,7 @@ public class UserServiceImpl extends SecurityService implements UserService {
 
         String accessToken = TokenUtils.generateJwtToken(user);
         String redisTokenKey = AuthConstants.getAccessTokenKey(userId);
-        redisCacheMap.get("token_cache").put(redisTokenKey, accessToken);
+        redisCacheMap.get(CacheName.TOKEN_CACHE.getValue()).put(redisTokenKey, accessToken);
         response.addHeader(AuthConstants.AUTH_HEADER,
                 AuthConstants.ACCESS_TOKEN_TYPE + " " + accessToken);
     }

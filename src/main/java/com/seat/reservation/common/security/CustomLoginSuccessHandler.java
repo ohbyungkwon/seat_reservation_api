@@ -9,8 +9,10 @@ import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.repository.RefreshTokenStoreRepository;
 import com.seat.reservation.common.util.CommonUtil;
+import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.cache.Cache;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -53,14 +56,24 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         response.addHeader(AuthConstants.AUTH_HEADER,
                 AuthConstants.ACCESS_TOKEN_TYPE + " " + accessToken);
 
-        RefreshTokenStore refreshToken = RefreshTokenStore.createRefreshTokenStore(userId);
+        RefreshTokenStore refreshToken;
+        Optional<RefreshTokenStore> savedRefreshToken = refreshTokenStoreRepository.findById(userId);
+        if(savedRefreshToken.isPresent()) {
+            refreshToken = savedRefreshToken.get();
+            boolean isValid = TokenUtils.isValidToken(refreshToken.getRefreshToken(), "");
+            if(!isValid) {
+                refreshToken.renewRefreshTokenStore();
+            }
+        } else {
+            refreshToken = RefreshTokenStore.createRefreshTokenStore(userId);
+            refreshTokenStoreRepository.save(refreshToken);
+        }
+
         String cookieValue = refreshToken.getCookieValue();
         Cookie cookie = new Cookie(AuthConstants.getRefreshTokenKey(), cookieValue);
         response.addCookie(cookie);
-        refreshTokenStoreRepository.save(refreshToken);
 
         String key = user.getRole().getValue() + "_menu_list";
-
         Cache.ValueWrapper wrapper = redisCacheMap.get(CacheName.MENU_CACHE.getValue()).get(key);
         List<MenuDto.search> menus = (wrapper == null ? null : (List<MenuDto.search>) wrapper.get());
 

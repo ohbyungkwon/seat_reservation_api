@@ -39,26 +39,26 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-//        try {
+        try {
             String url = request.getRequestURI();
             log.debug("Url: {}", url);
 
             if(!ArrayUtils.contains(allowUrl, url)) {
                 String token = TokenUtils.removeTokenType(request.getHeader(AuthConstants.AUTH_HEADER));
                 if (StringUtils.isEmpty(token)) {
-                    throw new CustomAuthenticationException("토큰이 필요합니다.");
+                    throw new CustomForbiddenException("토큰이 필요합니다.");
                 }
 
                 boolean isValid = TokenUtils.isValidToken(token, AuthConstants.ACCESS_TOKEN_TYPE);
                 if (!isValid) {
-                    throw new CustomAuthenticationException("토큰이 만료되었습니다.");
+                    throw new CustomForbiddenException("토큰이 만료되었습니다.");
                 }
 
                 UserDto.create user = TokenUtils.getUser(token);
                 String firstPath = url.split("/")[1];
                 if(firstPath.equals("admin")){
                     if(!user.getRole().isAccessAdminPage()){
-                        throw new CustomAuthenticationException("Admin 사용자가 아닙니다.");
+                        throw new CustomForbiddenException("Admin 사용자가 아닙니다.");
                     }
                 }
 
@@ -66,10 +66,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 try {
                     String tokenInRedis = (String) redisCache.getValue(redisTokenKey);
                     if(!token.equals(tokenInRedis)) {
-                        throw new CustomAuthenticationException("만료된 토근입니다.");
+                        throw new CustomForbiddenException("만료된 토근입니다.");
                     }
                 } catch (Exception cle) {
-                    throw new CustomAuthenticationException("사용자 정보를 가져오는데 실패했습니다.");
+                    throw new CustomForbiddenException("사용자 정보를 가져오는데 실패했습니다.");
                 }
 
                 // Save an authenticated object at ContextHolder
@@ -79,17 +79,16 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-//        } catch (AuthenticationException e){
-//            response.setStatus(HttpStatus.FORBIDDEN.value());
-//
-//            String msg = e.getMessage();
-//            ResponseComDto responseComDto = ResponseComDto.builder()
-//                    .resultMsg(msg)
-//                    .resultObj(null)
-//                    .build();
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            String body = objectMapper.writeValueAsString(responseComDto);
-//            CommonUtil.writeResponse(response, body);
-//        }
+        } catch (Exception e){
+            String msg = "토큰 검증과정에 문제가 발생하였습니다.";
+            if(e instanceof CustomForbiddenException){
+                msg = e.getMessage();
+            }
+
+            Authentication tmpAuthentication = new UsernamePasswordAuthenticationToken(
+                    null, null, Collections.emptyList());
+            SecurityContextHolder.getContext().setAuthentication(tmpAuthentication);
+            throw new CustomForbiddenException(msg);
+        }
     }
 }
