@@ -9,6 +9,7 @@ import com.seat.reservation.common.service.MailService;
 import com.seat.reservation.common.service.UserService;
 import com.seat.reservation.common.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -42,7 +43,7 @@ public class UserController {
             throw new BadReqException(errMsg);
         }
 
-        UserDto.create createdUser = userService.createUser(dto);
+        UserDto.search createdUser = userService.createUser(dto);
         return new ResponseEntity<ResponseComDto>(
                 ResponseComDto.builder()
                         .resultMsg("회원가입 완료되었습니다.")
@@ -121,6 +122,21 @@ public class UserController {
                 ResponseComDto.builder()
                         .resultMsg(msg)
                         .resultObj(null)
+                        .build(), HttpStatus.OK);
+    }
+
+    /**
+     * @return ResponseEntity<ResponseComDto>
+     * - 내 정보 조회
+     */
+    @GetMapping("/search/me")
+    public ResponseEntity<ResponseComDto> searchMe() {
+        UserDto.search userDto = userService.getMyInfo();
+
+        return new ResponseEntity<ResponseComDto>(
+                ResponseComDto.builder()
+                        .resultMsg("내정보를 조회하였습니다.")
+                        .resultObj(userDto)
                         .build(), HttpStatus.OK);
     }
 }

@@ -4,9 +4,12 @@ import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.domain.enums.CacheName;
 import com.seat.reservation.common.repository.RefreshTokenStoreRepository;
 import com.seat.reservation.common.repository.UserRepository;
+import com.seat.reservation.common.security.oauth.CustomOAuth2ClientUserService;
+import com.seat.reservation.common.security.oauth.CustomOAuth2LoginFailureHandler;
+import com.seat.reservation.common.security.oauth.CustomOAuth2LoginSuccessHandler;
 import com.seat.reservation.common.util.CommonUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +32,12 @@ import java.util.Map;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Value("${oauth2.login.success-callback-url}")
+    private String oauthLoginSuccessCallbackUrl;
+
+    @Value("${oauth2.login.failure-callback-url}")
+    private String oauthLoginFailureCallbackUrl;
+
     @Autowired
     private Map<String, CustomRedisCache> redisCacheMap;
 
@@ -38,6 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RefreshTokenStoreRepository refreshTokenStoreRepository;
 
+    @Autowired
+    private CustomOAuth2ClientUserService customOAuth2ClientUserService;
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -66,8 +77,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler() {
+        return new CustomOAuth2LoginSuccessHandler(redisCacheMap, refreshTokenStoreRepository,
+                oauthLoginSuccessCallbackUrl);
+    }
+
+    @Bean
     public CustomLoginFailureHandler customLoginFailureHandler() {
         return new CustomLoginFailureHandler(userRepository);
+    }
+
+    @Bean
+    public CustomOAuth2LoginFailureHandler customOAuth2LoginFailureHandler() {
+        return new CustomOAuth2LoginFailureHandler(oauthLoginFailureCallbackUrl);
     }
 
     @Bean
@@ -104,6 +126,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint())
-                .accessDeniedHandler(accessDeniedHandler());
+                .accessDeniedHandler(accessDeniedHandler())
+            .and()
+                .oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/oauth2/authorize") //클라이언트 첫 로그인 URI
+            .and()
+                .redirectionEndpoint()
+                .baseUri("/oauth2/code/**")
+            .and()
+                .userInfoEndpoint()
+                .userService(customOAuth2ClientUserService)
+            .and()
+                .successHandler(customOAuth2LoginSuccessHandler())
+                .failureHandler(customOAuth2LoginFailureHandler());
     }
 }

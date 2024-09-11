@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * Spring Security supports 'UserDetails'
@@ -19,12 +21,17 @@ import java.util.Collections;
  */
 @Getter
 @RequiredArgsConstructor
-public class MyUserDetails implements UserDetails {
+public class MyUserDetails implements UserDetails, OAuth2User {
     private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(new SimpleGrantedAuthority(user.getRole().getValue()));
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return Collections.emptyMap();
     }
 
     @Override
@@ -55,5 +62,10 @@ public class MyUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return !user.isLocked();
+    }
+
+    @Override
+    public String getName() {
+        return user.getName();
     }
 }

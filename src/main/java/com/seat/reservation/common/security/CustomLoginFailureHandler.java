@@ -39,17 +39,14 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
             if(failCnt == 5) {
                 errMsg += "\n(5회 이상 실패하여 계정이 잠금 처리되었습니다.\n" +
                         "비밀번호 찾기를 이용해 주세요.)";
-                user.setIsLocked(true);
+                user.setLocked(true);
             }
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
         ResponseComDto responseComDto = ResponseComDto.builder()
                 .resultMsg(errMsg)
                 .resultObj(null)
                 .build();
-
-        String responseBody = objectMapper.writeValueAsString(responseComDto);
-        CommonUtil.writeResponse(response, responseBody);
+        CommonUtil.writeResponse(response, responseComDto);
     }
 }

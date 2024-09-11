@@ -3,6 +3,7 @@ spring:
     allow-bean-definition-overriding: true
   profiles:
     active: local
+    include: oauth
   batch:
     initialize-schema: always # 운영환경에서는 never 로 변경
     job:
@@ -39,7 +40,11 @@ spring:
     host: 127.0.0.1
     port: 6379
     #caches: token_cache,menu_cache
-
 logging.level:
   org.hibernate.SQL: debug #SQL log? ??.
   org.hibernate.type: trace #SQL parameters ?? ??
+
+oauth2:
+  login:
+    success-callback-url: 'localhost:8080/success_callback'
+    failure-callback-url: 'localhost:8080/failure_callback'

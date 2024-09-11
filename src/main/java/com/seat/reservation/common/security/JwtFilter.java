@@ -54,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
                     throw new CustomForbiddenException("토큰이 만료되었습니다.");
                 }
 
-                UserDto.create user = TokenUtils.getUser(token);
+                UserDto.search user = TokenUtils.getUser(token);
                 String firstPath = url.split("/")[1];
                 if(firstPath.equals("admin")){
                     if(!user.getRole().isAccessAdminPage()){

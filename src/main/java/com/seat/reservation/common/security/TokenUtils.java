@@ -24,7 +24,7 @@ public final class TokenUtils {
     public static String generateJwtToken(Object target) throws JsonProcessingException {
         LocalDateTime now = CommonUtil.getNowDateTime();
         LocalDateTime expiredDate;
-        if(target instanceof UserDto.create) {
+        if(target instanceof UserDto.search) {
             expiredDate = now.plusHours(1);
         } else {
             expiredDate = now.plusWeeks(1);
@@ -53,11 +53,11 @@ public final class TokenUtils {
         return token;
     }
 
-    public static UserDto.create getUser(String token) throws IOException {
+    public static UserDto.search getUser(String token) throws IOException {
         token = removeTokenType(token);
         String claims = getClaimsFormToken(token);
         ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.readValue(claims, UserDto.create.class);
+        return objectMapper.readValue(claims, UserDto.search.class);
     }
 
     public static boolean isValidToken(String token, String tokenType){
@@ -67,7 +67,7 @@ public final class TokenUtils {
             ObjectMapper objectMapper = new ObjectMapper();
 
             if(AuthConstants.ACCESS_TOKEN_TYPE.equals(tokenType)){
-                UserDto.create user = objectMapper.readValue(claims, UserDto.create.class);
+                UserDto.search user = objectMapper.readValue(claims, UserDto.search.class);
                 log.debug("User: {}", user);
             } else {
                 String content = objectMapper.readValue(claims, String.class);

@@ -1,5 +1,6 @@
 package com.seat.reservation.common.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.seat.reservation.common.cache.CustomRedisCache;
 import com.seat.reservation.common.domain.RefreshTokenStore;
@@ -8,11 +9,10 @@ import com.seat.reservation.common.dto.MenuDto;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.dto.UserDto;
 import com.seat.reservation.common.repository.RefreshTokenStoreRepository;
+import com.seat.reservation.common.security.oauth.RelatedOAuth2Factory;
 import com.seat.reservation.common.util.CommonUtil;
-import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.cache.Cache;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +33,8 @@ import java.util.Optional;
  */
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final Map<String, CustomRedisCache> redisCacheMap;
-    private final RefreshTokenStoreRepository refreshTokenStoreRepository;
+    protected final Map<String, CustomRedisCache> redisCacheMap;
+    protected final RefreshTokenStoreRepository refreshTokenStoreRepository;
 
     public CustomLoginSuccessHandler(Map<String, CustomRedisCache> redisCacheMap,
                      RefreshTokenStoreRepository refreshTokenStoreRepository) {
@@ -44,18 +44,39 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     @Transactional
-    @SuppressWarnings({"unchecked"})
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException {
+        UserDto.search userDto = (UserDto.search) authentication.getPrincipal();
 
-        UserDto.create user = (UserDto.create) authentication.getPrincipal();
-        String userId = user.getUserId();
-        String accessToken = TokenUtils.generateJwtToken(user);
-        String redisTokenKey = AuthConstants.getAccessTokenKey(userId);
-        redisCacheMap.get(CacheName.TOKEN_CACHE.getValue()).put(redisTokenKey, accessToken);
+        String accessToken = this.generateAccessToken(userDto);
         response.addHeader(AuthConstants.AUTH_HEADER,
                 AuthConstants.ACCESS_TOKEN_TYPE + " " + accessToken);
 
+        String userId = userDto.getUserId();
+        RefreshTokenStore refreshToken = this.generateRefreshToken(userId);
+        String cookieValue = refreshToken.getCookieValue();
+        Cookie cookie = new Cookie(AuthConstants.getRefreshTokenKey(), cookieValue);
+        response.addCookie(cookie);
+
+//        - OAuth2와 형식 통일을 위한 주석(기타 정보는 부여받은 토큰으로 API 통하여 요청)
+//        String key = user.getRole().getValue() + "_menu_list";
+//        Cache.ValueWrapper wrapper = redisCacheMap.get(CacheName.MENU_CACHE.getValue()).get(key);
+//        List<MenuDto.search> menus = (wrapper == null ? null : (List<MenuDto.search>) wrapper.get());
+
+//        Map<String, Object> resBody = new HashMap<>();
+//        resBody.put("user", user);
+//        resBody.put("menus", menus);
+//        resBody.put("redirectUrl", oauthLoginSuccessCallbackUrl);
+
+        ResponseComDto responseComDto = ResponseComDto.builder()
+                .resultMsg("로그인하였습니다.")
+                .resultObj(null)
+                .build();
+
+        CommonUtil.writeResponse(response, responseComDto);
+    }
+
+    protected RefreshTokenStore generateRefreshToken(String userId) throws JsonProcessingException {
         RefreshTokenStore refreshToken;
         Optional<RefreshTokenStore> savedRefreshToken = refreshTokenStoreRepository.findById(userId);
         if(savedRefreshToken.isPresent()) {
@@ -68,26 +89,15 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
             refreshToken = RefreshTokenStore.createRefreshTokenStore(userId);
             refreshTokenStoreRepository.save(refreshToken);
         }
+        return refreshToken;
+    }
 
-        String cookieValue = refreshToken.getCookieValue();
-        Cookie cookie = new Cookie(AuthConstants.getRefreshTokenKey(), cookieValue);
-        response.addCookie(cookie);
+    protected String generateAccessToken(UserDto.search userDto) throws JsonProcessingException {
+        String userId = userDto.getUserId();
+        String accessToken = TokenUtils.generateJwtToken(userDto);
+        String redisTokenKey = AuthConstants.getAccessTokenKey(userId);
+        redisCacheMap.get(CacheName.TOKEN_CACHE.getValue()).put(redisTokenKey, accessToken);
 
-        String key = user.getRole().getValue() + "_menu_list";
-        Cache.ValueWrapper wrapper = redisCacheMap.get(CacheName.MENU_CACHE.getValue()).get(key);
-        List<MenuDto.search> menus = (wrapper == null ? null : (List<MenuDto.search>) wrapper.get());
-
-        Map<String, Object> resBody = new HashMap<>();
-        resBody.put("user", user);
-        resBody.put("menus", menus);
-
-        ResponseComDto responseComDto = ResponseComDto.builder()
-                .resultMsg("로그인하였습니다.")
-                .resultObj(resBody)
-                .build();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String responseBody = objectMapper.writeValueAsString(responseComDto);
-        CommonUtil.writeResponse(response, responseBody);
+        return accessToken;
     }
 }

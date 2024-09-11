@@ -51,6 +51,8 @@ public class User implements Persistable<String> {
     private int loginFailCount; // 로그인 실패 횟수. 5회 이상 실패 시 계정 잠김 등 처리.
 
     private boolean isNeedChangePw; // 비밀번호 찾기를 이용한 고객(임시비번 사용일 경우)
+
+    @Setter
     private boolean isLocked; // 계정의 잠김 여부. ex) 비밀번호 5회 오입력, 3달 이상 이용X
 
     @Setter
@@ -62,12 +64,15 @@ public class User implements Persistable<String> {
     @LastModifiedDate
     private LocalDate lastModifiedDate;
 
+    @Setter
     @Enumerated(EnumType.STRING)
     private Role role; // 관리자/사용자
 
     @Transient
     private boolean isNewFlag = true;
 
+    @Transient
+    private boolean isAuthLogin = false;
 
     public static int getAge(String birth) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -78,14 +83,6 @@ public class User implements Persistable<String> {
 
     public int plusLoginFailCount(){
         return (this.loginFailCount == 5 ? loginFailCount : (this.loginFailCount += 1));
-    }
-
-    public void setIsLocked(boolean isLocked) {
-        this.isLocked = isLocked;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public static User createUser(UserDto.create userDto, PasswordEncoder passwordEncoder) {
@@ -136,11 +133,11 @@ public class User implements Persistable<String> {
 
     public void setIsNeedChangePw(boolean isNeedChangePw){
         this.isNeedChangePw = isNeedChangePw;
-        this.setIsLocked(false); // 비밀번호 찾기시, 잠금 해제
+        this.setLocked(false); // 비밀번호 찾기시, 잠금 해제
     }
 
-    public UserDto.create convertDto(){
-        return UserDto.create.builder()
+    public UserDto.search convertDto(){
+        return UserDto.search.builder()
                 .userId(this.getUserId())
                 .password("")
                 .name(this.getName())
@@ -151,6 +148,7 @@ public class User implements Persistable<String> {
                 .role(role)
                 .age(getAge(this.getBirth()))
                 .isNeedChangePw(this.isNeedChangePw())
+                .isAuthLogin(this.isAuthLogin())
                 .build();
     }
 
@@ -168,5 +166,9 @@ public class User implements Persistable<String> {
     @PrePersist
     public void setIsNotNewUser(){
         this.isNewFlag = false;
+    }
+
+    public void doAuthLogin() {
+        this.isAuthLogin = true;
     }
 }

@@ -79,6 +79,8 @@ dependencies {
 	testImplementation("org.junit.vintage:junit-vintage-engine") {
 		exclude group: "org.hamcrest", module: "hamcrest-core"
 	}
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5' //querydsl 추가
 	implementation 'com.querydsl:querydsl-jpa' //querydsl 추가
 	implementation 'com.querydsl:querydsl-apt' //querydsl 추가

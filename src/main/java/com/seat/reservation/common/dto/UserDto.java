@@ -68,4 +68,34 @@ public class UserDto {
 
         private Role role;
     }
+
+
+    @Setter
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class search {
+        private String userId;
+
+        private String password;
+
+        private String name;
+
+        private String email;
+
+        private String birth;
+
+        private int age;
+
+        private String address;
+
+        private Gender gender;
+
+        private Role role;
+
+        private boolean isNeedChangePw;
+
+        private boolean isAuthLogin;
+    }
 }

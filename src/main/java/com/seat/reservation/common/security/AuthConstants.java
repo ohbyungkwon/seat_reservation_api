@@ -14,6 +14,10 @@ public final class AuthConstants {
 
     public static final String SEPARATOR = ".";
 
+    public static String getAccessTokenKey() {
+        return ACCESS_TOKEN_KEY_PART;
+    }
+
     public static String getAccessTokenKey(String userId) {
         return userId + SEPARATOR + ACCESS_TOKEN_KEY_PART;
     }

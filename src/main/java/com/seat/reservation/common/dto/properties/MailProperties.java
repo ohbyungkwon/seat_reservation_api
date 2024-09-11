@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "gmail")
-@PropertySource("classpath:mail.properties")
+//@PropertySource("classpath:mail.properties")
 public class MailProperties {
     private String host;
     private int port;

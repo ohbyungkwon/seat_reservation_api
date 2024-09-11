@@ -47,7 +47,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         User user = userDetails.getUser();
         user.setLastLoginDate(LocalDate.now());
 
-        UserDto.create userDto = user.convertDto();
+        UserDto.search userDto = user.convertDto();
         Authentication workedAuthentication = new UsernamePasswordAuthenticationToken(userDto, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(workedAuthentication);
         return workedAuthentication;

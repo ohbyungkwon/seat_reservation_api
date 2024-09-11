@@ -44,7 +44,7 @@ public class UserServiceImpl extends SecurityService implements UserService {
      */
     @Override
     @Transactional
-    public UserDto.create createUser(UserDto.create dto) throws Exception {
+    public UserDto.search createUser(UserDto.create dto) throws Exception {
         Optional<User> user = userRepository.findByUserId(dto.getUserId());
         if(user.isPresent()){
             throw new BadReqException("이미 가입된 사용자입니다.");
@@ -103,7 +103,7 @@ public class UserServiceImpl extends SecurityService implements UserService {
 
         // access-token 재발급
         String userId = refreshTokenStore.getUserId();
-        UserDto.create user = userRepository.findByUserId(userId)
+        UserDto.search user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new BadReqException("존재하지 않는 사용자 입니다."))
                 .convertDto();
 
@@ -112,5 +112,10 @@ public class UserServiceImpl extends SecurityService implements UserService {
         redisCacheMap.get(CacheName.TOKEN_CACHE.getValue()).put(redisTokenKey, accessToken);
         response.addHeader(AuthConstants.AUTH_HEADER,
                 AuthConstants.ACCESS_TOKEN_TYPE + " " + accessToken);
+    }
+
+
+    public UserDto.search getMyInfo() {
+        return this.getUserInfo();
     }
 }

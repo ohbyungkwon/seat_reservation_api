@@ -35,12 +35,12 @@ public class CommonLogAop extends SecurityService {
         if(ArrayUtils.contains(CommonUtil.allowUrls, request.getRequestURI())) {
             return printRunTimeLog(joinPoint, CommonUtil.getClientIpAddr(request));
         } else {
-            UserDto.create userDto = this.getUserInfo();
+            UserDto.search userDto = this.getUserInfo();
             return printCommonLog(joinPoint, userDto);
         }
     }
 
-    private Object printCommonLog(ProceedingJoinPoint joinPoint, UserDto.create userDto) throws Throwable {
+    private Object printCommonLog(ProceedingJoinPoint joinPoint, UserDto.search userDto) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         log.info("{} USER, ACCESS METHOD: {}", userDto.getUserId(), method);

@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -24,7 +27,11 @@ public class CommonUtil {
         "/login", // 첫번째 항목 수정X
         "/signUp",
         "/renew/token",
-        "/auth/email"
+        "/auth/email",
+        "/oauth2/authorize",
+        "/oauth2/authorization",
+        "/oauth2/code/naver",
+        "/oauth2/code/kakao"
     };
 
     /**
@@ -53,13 +60,28 @@ public class CommonUtil {
         return Date.from(instant);
     }
 
-    public static void writeResponse(HttpServletResponse response, String body) throws IOException {
+    public static void writeResponse(HttpServletResponse response, ResponseComDto body) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String resBodyStr = objectMapper.writeValueAsString(body);
+
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json;charset=UTF-8");
 
         PrintWriter printWriter = response.getWriter();
-        printWriter.write(body);
+        printWriter.write(resBodyStr);
         printWriter.flush();
+    }
+
+    public static void redirectResponse(HttpServletResponse response, Map<String, Object> resBodyMap) throws IOException {
+        String redirectUrl = (String) resBodyMap.get("redirectUrl");
+        resBodyMap.remove(redirectUrl);
+
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromUriString(redirectUrl);
+        for(Map.Entry<String, Object> entry : resBodyMap.entrySet()) {
+            uriComponentsBuilder.queryParam(entry.getKey(), entry.getValue().toString());
+        }
+        UriComponents uriComponents = uriComponentsBuilder.build();
+        response.sendRedirect(uriComponents.toUriString());
     }
 
     public static byte[] convertByte(Object obj) throws IOException {
@@ -91,26 +113,25 @@ public class CommonUtil {
                 .resultMsg(msg)
                 .resultObj(null)
                 .build();
-        ObjectMapper objectMapper = new ObjectMapper();
-        String body = objectMapper.writeValueAsString(responseComDto);
-        writeResponse(response, body);
+
+        writeResponse(response, responseComDto);
     }
 
     public static String getClientIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if(ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if(ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if(ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
         }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if(ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
-        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if(ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;
