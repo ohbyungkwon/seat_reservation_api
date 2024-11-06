@@ -5,9 +5,12 @@ import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.dto.ResponseComDto;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.util.CommonUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +22,7 @@ import java.util.Optional;
  * Create Bean at {@link com.seat.reservation.common.security.WebSecurityConfig}
  * Spring Security access this when login is failed.
  */
+@Slf4j
 public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
     private final UserRepository userRepository;
 
@@ -30,6 +34,10 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
     @Transactional
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String errMsg = exception.getMessage();
+        log.info("========= Access CustomLoginFailureHandler =========");
+        log.info("error message: {}", errMsg);
+        log.info("exception class: {}", exception.getClass().getName());
+        log.info("localized message: {}", exception.getLocalizedMessage());
 
         String userId = CommonUtil.getStr(request.getAttribute("userId"));
         Optional<User> userOptional = userRepository.findByUserId(userId);
@@ -42,6 +50,13 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
                 user.setLocked(true);
             }
         }
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ResponseStatus exceptionStatus = exception.getClass().getAnnotation(ResponseStatus.class);
+        if(exceptionStatus != null) {
+            status = exceptionStatus.value();
+        }
+        response.setStatus(status.value());
 
         ResponseComDto responseComDto = ResponseComDto.builder()
                 .resultMsg(errMsg)

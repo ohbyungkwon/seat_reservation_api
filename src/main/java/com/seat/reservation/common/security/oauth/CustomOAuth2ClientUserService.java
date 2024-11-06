@@ -4,7 +4,9 @@ import com.seat.reservation.common.domain.User;
 import com.seat.reservation.common.repository.UserRepository;
 import com.seat.reservation.common.security.CustomAuthenticationException;
 import com.seat.reservation.common.security.MyUserDetails;
+import com.seat.reservation.common.util.CommonUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -15,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2ClientUserService extends DefaultOAuth2UserService {
@@ -37,6 +40,11 @@ public class CustomOAuth2ClientUserService extends DefaultOAuth2UserService {
         if(StringUtils.isEmpty(email)){
             throw new CustomAuthenticationException(provider + "에 존재하지 않는 정보입니다.");
         }
+
+        log.info("=========================================");
+        log.info("Do OAuth2 Login[provider : {}]", provider);
+        log.info("Do OAuth2 Login[email : {}]", email);
+        log.info("Do OAuth2 Login[date : {}]", CommonUtil.getNowDate());
 
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomAuthenticationException("존재하지 않는 회원입니다."));

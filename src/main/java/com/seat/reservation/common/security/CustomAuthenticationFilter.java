@@ -25,8 +25,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         ObjectMapper mapper = new ObjectMapper();
         UsernamePasswordAuthenticationToken authRequest;
         try{
-            Map<String, String> map = mapper.readValue(request.getReader().lines().collect(Collectors
-                            .joining()), new TypeReference<Map<String, String>>(){});
+            Map<String, String> map = mapper.readValue(request.getReader().lines().collect(
+                    Collectors.joining()), new TypeReference<Map<String, String>>(){});
 
             String userId = map.get("userId");
             String password = map.get("password");

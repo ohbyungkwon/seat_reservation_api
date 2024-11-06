@@ -1,3 +1,4 @@
+
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -48,3 +49,6 @@ oauth2:
   login:
     success-callback-url: 'localhost:8080/success_callback'
     failure-callback-url: 'localhost:8080/failure_callback'
+
+server:
+  port: 18080

@@ -41,7 +41,11 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String url = request.getRequestURI();
-            log.debug("Url: {}", url);
+
+            log.info("======= Access JwtFilter =======");
+            log.info("addr: {}", request.getRemoteAddr());
+            log.info("request url: {}", url);
+            log.info("http method: {}", request.getMethod());
 
             if(!ArrayUtils.contains(allowUrl, url)) {
                 String token = TokenUtils.removeTokenType(request.getHeader(AuthConstants.AUTH_HEADER));
